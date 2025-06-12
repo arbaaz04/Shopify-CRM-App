@@ -134,7 +134,7 @@ async function findFirstEmptyRow(sheets: any, spreadsheetId: string, sheetName: 
     const values = result.data.values || [];
     
     // Start from row 6 (after headers) and find the first empty row in column A
-    for (let i = 5; i < Math.max(values.length, 1000); i++) { // Check up to row 1000 or actual data length
+    for (let i = 6; i < Math.max(values.length, 1000); i++) { // Check up to row 1000 or actual data length
       // Check if this row index exists and has data in column A
       if (!values[i] || !values[i][0] || values[i][0].toString().trim() === '') {
         return i + 1; // Convert to 1-based row number (i+1 because i is 0-based)
