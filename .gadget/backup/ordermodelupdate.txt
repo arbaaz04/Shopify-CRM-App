@@ -1,0 +1,1171 @@
+import { applyParams, save, ActionOptions } from "gadget-server";
+import { preventCrossShopDataAccess } from "gadget-server/shopify";
+import { google } from "googleapis";
+import { standardizeMoroccanCity, standardizeMoroccanCitySync } from "../../../utils/cityStandardization";
+import { moveOrderToOrdersSheet as moveOrderToSheet } from "./moveOrder";
+
+interface ActionContext {
+  params: any;
+  record: any;
+  logger: any;
+  api: any;
+  connections: any;
+}
+
+// List of confirmation tags to check for
+const CONFIRMATION_TAGS = [
+  "confirmed",
+  "✅ WhatF Confirmed",
+  "Confirmed By Wtp 💬",
+  "Confirmed By Call 📞",
+  "Confirmed IG 📷",
+  "Confirmed ✅"
+];
+
+// Helper function to check if any tag is a confirmation tag
+function hasConfirmationTag(tags: string[]): boolean {
+  const normalizedTags = tags.map(tag => tag.toLowerCase().trim());
+  return normalizedTags.some(tag => 
+    CONFIRMATION_TAGS.some(confirmTag => 
+      tag.includes(confirmTag.toLowerCase()) || tag.includes('confirm')
+    )
+  );
+}
+
+// Helper function to check if an order is cancelled
+function hasCancellationTag(tags: string[]): boolean {
+  const normalizedTags = tags.map(tag => tag.toLowerCase().trim());
+  return normalizedTags.some(tag => 
+    tag.includes('cancel') || tag.includes('annul') || tag.includes('refund')
+  );
+}
+
+// ======== UTILITY FUNCTIONS =========
+
+/**
+ * Format phone number to a standardized format
+ */
+function formatMoroccanPhoneNumber(phone: string | null | undefined): string {
+  if (!phone) return "";
+  
+  // Remove all non-digit characters
+  let digits = phone.replace(/\D/g, "");
+  
+  // If number starts with 212 (country code), remove it
+  if (digits.startsWith("212")) {
+    // If it's +212 followed by 0, remove the 0 (to avoid 00...)
+    if (digits.length > 3 && digits[3] === '0') {
+      digits = '0' + digits.substring(4);
+    } else {
+      digits = '0' + digits.substring(3);
+    }
+  }
+  
+  // If number starts with 0, keep it
+  if (digits.startsWith("0")) {
+    return digits;
+  }
+  
+  // If number starts with 6 or 5 (mobile) or 2 (landline), add 0
+  if (digits.startsWith("6") || digits.startsWith("5") || digits.startsWith("2")) {
+    return "0" + digits;
+  }
+  
+  // If we get here, return the cleaned number
+  return digits;
+}
+
+/**
+ * Extract phone number from order data
+ */
+function extractPhoneNumber(orderData: any): string {
+  const phone = orderData.customer?.phone || orderData.shippingAddress?.phone || '';
+  return formatMoroccanPhoneNumber(phone);
+}
+
+/**
+ * Format address into a single line
+ */
+function formatAddress(shippingAddress: any): string {
+  if (!shippingAddress) return "";
+  
+  return [
+    shippingAddress.address1,
+    shippingAddress.address2,
+    shippingAddress.zip,
+    shippingAddress.province
+  ].filter(Boolean).join(", ");
+}
+
+/**
+ * Get the customer name as a formatted string
+ */
+function formatCustomerName(customer: any): string {
+  if (!customer) return "Unknown Customer";
+  
+  return [customer.firstName, customer.lastName]
+    .filter(Boolean)
+    .join(" ") || "Unknown Customer";
+}
+
+/**
+ * Initialize Google Sheets API client
+ */
+async function initGoogleSheetsClient(logger: any) {
+  try {
+    // Get service account credentials
+    const serviceAccountKey = process.env.GOOGLE_SERVICE_ACCOUNT_KEY || "{}";
+    let credentials;
+    
+    try {
+      credentials = JSON.parse(serviceAccountKey);
+    } catch (e) {
+      throw new Error("Invalid Google service account key format");
+    }
+    
+    if (!credentials.client_email || !credentials.private_key) {
+      throw new Error("Google service account credentials missing required fields");
+    }
+    
+    // Create JWT client
+    const auth = new google.auth.JWT({
+      email: credentials.client_email,
+      key: credentials.private_key,
+      scopes: ['https://www.googleapis.com/auth/spreadsheets']
+    });
+    
+    return google.sheets({ version: 'v4', auth });
+  } catch (error) {
+    throw error;
+  }
+}
+
+/**
+ * Find rows by order ID in a specific column
+ */
+async function findRowsByOrderId(
+  sheets: any,
+  spreadsheetId: string,
+  sheetName: string,
+  columnLetter: string, // e.g., "AF" for column AF
+  orderId: string,
+  logger: any
+): Promise<number[]> {
+  try {
+    // Get the entire column
+    const result = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: `${sheetName}!${columnLetter}:${columnLetter}`
+    });
+    
+    const values = result.data.values || [];
+    const rowIndices: number[] = [];
+    
+    // Find all rows with matching order ID (1-indexed rows)
+    for (let i = 0; i < values.length; i++) {
+      if (values[i] && values[i][0] === orderId) {
+        // Add 1 to convert to 1-indexed rows, as i is 0-indexed
+        rowIndices.push(i + 1);
+      }
+    }
+    
+    return rowIndices;
+  } catch (error) {
+    return [];
+  }
+}
+
+/**
+ * Delete specific rows from a sheet
+ */
+async function deleteRows(
+  sheets: any,
+  spreadsheetId: string,
+  sheetName: string,
+  rowsToDelete: number[],
+  logger: any
+): Promise<boolean> {
+  if (!rowsToDelete.length) {
+    return true;
+  }
+  
+  try {
+    // Get sheet ID first
+    const spreadsheet = await sheets.spreadsheets.get({
+      spreadsheetId,
+      fields: 'sheets.properties'
+    });
+    
+    const sheet = spreadsheet.data.sheets.find(
+      (s: any) => s.properties.title === sheetName
+    );
+    
+    if (!sheet) {
+      throw new Error(`Sheet ${sheetName} not found`);
+    }
+    
+    const sheetId = sheet.properties.sheetId;
+    
+    // Sort rows in descending order to avoid shifting issues
+    const sortedRows = [...rowsToDelete].sort((a, b) => b - a);
+    
+    // Create delete requests for each row
+    const requests = sortedRows.map(rowIndex => ({
+      deleteDimension: {
+        range: {
+          sheetId,
+          dimension: 'ROWS',
+          startIndex: rowIndex - 1, // Convert 1-indexed to 0-indexed
+          endIndex: rowIndex // Range is exclusive of end index
+        }
+      }
+    }));
+    
+    // Execute all deletions in a single batch request
+    await sheets.spreadsheets.batchUpdate({
+      spreadsheetId,
+      requestBody: { requests }
+    });
+    
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
+/**
+ * Ensure sheet exists
+ */
+async function ensureSheetExists(
+  sheets: any,
+  spreadsheetId: string, 
+  sheetName: string,
+  headers: string[],
+  logger: any
+): Promise<void> {
+  try {
+    // Get the list of sheets in the spreadsheet
+    const response = await sheets.spreadsheets.get({
+      spreadsheetId,
+      fields: 'sheets.properties.title'
+    });
+    
+    // Check if the sheet exists
+    const sheetExists = response.data.sheets?.some(
+      (sheet: any) => sheet.properties?.title === sheetName
+    );
+    
+    if (!sheetExists) {
+      // Add the sheet
+      await sheets.spreadsheets.batchUpdate({
+        spreadsheetId,
+        requestBody: {
+          requests: [{
+              addSheet: {
+              properties: { title: sheetName }
+            }
+          }]
+        }
+      });
+      
+      // Add headers
+      await sheets.spreadsheets.values.update({
+        spreadsheetId,
+        range: `${sheetName}!A1:${String.fromCharCode(65 + headers.length - 1)}1`,
+        valueInputOption: 'RAW',
+        requestBody: {
+          values: [headers]
+        }
+      });
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+/**
+ * Fetch order data from Shopify using GraphQL
+ */
+async function fetchOrderData(
+  orderId: string,
+  connections: any,
+  logger: any
+): Promise<any> {
+  try {
+    // Clear any request cache to ensure fresh data
+    const cacheOptions = { 
+      disableCache: true,
+      cacheTTL: 0,
+      forceRefresh: true
+    };
+    
+    // Optimized GraphQL query - fetching only what we need
+    const graphqlQuery = `
+      query GetOrder($id: ID!) {
+        order(id: $id) {
+          id
+          name
+          createdAt
+          displayFinancialStatus
+          displayFulfillmentStatus
+          tags
+          totalPriceSet {
+            shopMoney {
+              amount
+              currencyCode
+            }
+          }
+          currentTotalPriceSet {
+            shopMoney {
+              amount
+              currencyCode
+            }
+          }
+          customer {
+            firstName
+            lastName
+            phone
+          }
+          shippingAddress {
+            address1
+            address2
+            city
+            province
+            zip
+            phone
+          }
+          fulfillments {
+            trackingInfo {
+              number
+            }
+          }
+          lineItems(first: 50) {
+            edges {
+              node {
+                name
+                quantity
+                currentQuantity
+                sku
+                originalUnitPriceSet {
+                  shopMoney {
+                    amount
+                  }
+                }
+                variant {
+                  sku
+                }
+                refundableQuantity
+              }
+            }
+          }
+          refunds {
+            id
+          }
+        }
+      }
+    `;
+    
+    const variables = {
+      id: `gid://shopify/Order/${orderId}`
+    };
+    
+    const result = await connections.shopify.current.graphql(graphqlQuery, variables, cacheOptions);
+    
+    // Extract order data efficiently
+    const orderData = result.data?.order || result.body?.data?.order || result.order;
+    
+    if (!orderData) {
+      throw new Error("Order data not found in GraphQL response");
+    }
+    
+    // Use current price totals if available
+    if (orderData.currentTotalPriceSet?.shopMoney?.amount) {
+      orderData.totalPriceSet = {
+        shopMoney: {
+          amount: orderData.currentTotalPriceSet.shopMoney.amount,
+          currencyCode: orderData.currentTotalPriceSet.shopMoney.currencyCode
+        }
+      };
+    }
+    
+    // Transform line items to a more usable format, filtering out refunded items
+    if (orderData?.lineItems?.edges) {
+      orderData.lineItems = orderData.lineItems.edges
+        .map((edge: any) => {
+        const node = edge?.node || {};
+          const originalQuantity = Number(node.quantity) || 0;
+          const currentQuantity = Number(node.currentQuantity) || 0;
+          
+          // Skip items that have been fully refunded
+          if (currentQuantity <= 0) return null;
+          
+        return {
+          name: node.name || 'Unknown Item',
+            quantity: currentQuantity,
+            originalQuantity,
+          sku: node.sku || node.variant?.sku || '',
+          price: node.originalUnitPriceSet?.shopMoney?.amount || '0.00',
+            refundableQuantity: Number(node.refundableQuantity) || 0
+        };
+        })
+        .filter((item: any) => item !== null);
+    } else {
+      orderData.lineItems = [];
+    }
+    
+    // Extract tracking number
+    if (orderData.fulfillments && orderData.fulfillments.length > 0) {
+      const trackingInfo = orderData.fulfillments[0]?.trackingInfo;
+      orderData.trackingNumber = trackingInfo && trackingInfo.length > 0 
+        ? trackingInfo[0].number 
+        : '';
+    } else {
+      orderData.trackingNumber = '';
+    }
+    
+    return orderData;
+  } catch (error) {
+    // Return basic order info if we can't get detailed data
+    return {
+      id: orderId,
+      name: `#${orderId}`,
+      createdAt: new Date().toISOString(),
+      lineItems: [],
+      trackingNumber: ''
+    };
+  }
+}
+
+/**
+ * Update tracking number in column C
+ */
+async function updateTrackingNumber(
+  sheets: any,
+  spreadsheetId: string,
+  sheetName: string,
+  rowIndices: number[],
+  trackingNumber: string,
+  logger: any
+): Promise<boolean> {
+  if (!rowIndices.length || !trackingNumber) {
+    return true;
+  }
+  
+  try {
+    // Create one update request for each row
+    const updateRequests = rowIndices.map(rowIndex => ({
+      range: `${sheetName}!C${rowIndex}`,
+      values: [[trackingNumber]]
+    }));
+    
+    // Execute all updates in a single batch request
+    await sheets.spreadsheets.values.batchUpdate({
+      spreadsheetId,
+      requestBody: {
+        valueInputOption: 'USER_ENTERED',
+        data: updateRequests
+      }
+    });
+    
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
+/**
+ * Write order data to Google Sheets
+ */
+async function writeOrderToSheet(
+  sheets: any,
+  spreadsheetId: string,
+  sheetName: string,
+  orderId: string,
+  orderData: any,
+  logger: any
+): Promise<boolean> {
+  try {
+    // Extract order information once
+    const customerName = formatCustomerName(orderData.customer);
+    const phone = extractPhoneNumber(orderData);
+    const address = formatAddress(orderData.shippingAddress);
+    const city = standardizeMoroccanCitySync(orderData.shippingAddress?.city || '');
+    const formattedDate = new Date(orderData.createdAt).toLocaleDateString('en-US');
+    
+    // Use current total price if available from the currentTotalPriceSet
+    const netAmount = orderData.currentTotalPriceSet?.shopMoney?.amount || 
+                      orderData.totalPriceSet?.shopMoney?.amount || 
+                      "0.00";
+    const brutAmount = netAmount;
+    const trackingNumber = orderData.trackingNumber || '';
+    
+    // Find the first empty row in column H (not A, since A uses a formula)
+    const result = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: `${sheetName}!H6:H`
+    });
+    
+    // Find the first empty cell in column H
+    const values = result.data.values || [];
+    let startRow = 6; // Starting from row 6
+    
+    for (let i = 0; i < values.length; i++) {
+      if (!values[i] || !values[i][0] || values[i][0] === "") {
+        startRow = i + 6; // Add 6 because we started from row 6
+        break;
+      }
+      
+      // If we reach the end without finding an empty cell, append after the last row
+      if (i === values.length - 1) {
+        startRow = 6 + values.length;
+      }
+    }
+    
+    // Calculate position for order ID and order name columns
+    const orderIdColumnIndex = 31; // For column AF (0-indexed)
+    const orderNameColumnIndex = 25; // For column Z (0-indexed)
+    
+    // Prepare row data for each line item
+    const allRows = [];
+    const lineItems = orderData.lineItems || [];
+    
+    if (lineItems.length === 0) {
+      // No line items, create a single row with empty SKU
+      // Only include columns B through L (indices 0-10 after slicing)
+      const row = Array(11).fill(""); // B through L (11 columns)
+      
+      // Fill in the known values - Starting from B (index 0 after slicing)
+      row[0] = formattedDate;                        // Date - B
+      row[1] = trackingNumber;                       // Tracking - C
+      row[2] = "";                                   // Post (left blank) - D
+      row[3] = "";                                   // SKU (empty) - E
+      row[4] = customerName;                         // Full name - F
+      row[5] = address;                              // Address - G
+      row[6] = phone;                                // Phone - H
+      row[7] = city;                                 // City - I
+      row[8] = netAmount;                            // NET Amount - J
+      row[9] = brutAmount;                           // Brut Amount - K
+      row[10] = "";                                  // Return Status - L
+      
+      // Additional update for column Z (order name) and AF (order ID)
+      allRows.push(row);
+      
+      // Separate update for columns Z and AF
+      await updateSpecificColumns(
+        sheets,
+      spreadsheetId,
+        sheetName,
+        startRow,
+        {
+          'Z': orderData.name || `#${orderId}`,
+          'AF': orderId
+        },
+        logger
+      );
+    } else {
+      // Create a row for each quantity of each line item
+      let isFirstLineItem = true;
+      
+      for (const item of lineItems) {
+        const itemSku = item.sku || '';
+        const quantity = item.quantity || 0; // This now comes from currentQuantity in the GraphQL response
+        
+        // Skip items with 0 quantity (fully refunded)
+        if (quantity <= 0) {
+          continue;
+        }
+        
+        // Create one row per quantity value
+        for (let i = 0; i < quantity; i++) {
+          // Only include columns B through L (indices 0-10 after slicing)
+          const row = Array(11).fill(""); // B through L (11 columns)
+          
+          // Fill in the known values - Starting from B (index 0 after slicing)
+          row[0] = formattedDate;                        // Date - B
+          row[1] = trackingNumber;                       // Tracking - C
+          row[2] = "";                                   // Post (left blank) - D
+          row[3] = itemSku;                              // SKU - E
+          row[4] = customerName;                         // Full name - F
+          row[5] = address;                              // Address - G
+          row[6] = phone;                                // Phone - H
+          row[7] = city;                                 // City - I
+          row[8] = item.price || "0.00";                 // NET Amount - J
+          // Only the first line item gets the brut amount (total order price)
+          row[9] = isFirstLineItem ? brutAmount : "0.00"; // Brut Amount - K
+          row[10] = "";                                  // Return Status - L
+          
+          allRows.push(row);
+          
+          if (isFirstLineItem) {
+            isFirstLineItem = false;
+          }
+        }
+      }
+      
+      // Update order ID and name in columns Z and AF
+      const batchUpdates = [];
+      for (let i = 0; i < allRows.length; i++) {
+        const currentRow = startRow + i;
+        batchUpdates.push({
+          row: currentRow,
+          columns: {
+            'Z': orderData.name || `#${orderId}`,
+            'AF': orderId
+          }
+        });
+      }
+      
+      // Process batch updates for Z and AF columns
+      await updateBatchSpecificColumns(
+        sheets,
+        spreadsheetId,
+        sheetName,
+        batchUpdates,
+        logger
+      );
+    }
+    
+    // Insert data at the identified first empty row, starting from column B to L only
+    if (allRows.length > 0) {
+      await sheets.spreadsheets.values.update({
+        spreadsheetId,
+        range: `${sheetName}!B${startRow}:L${startRow + allRows.length - 1}`,
+        valueInputOption: 'USER_ENTERED',
+        requestBody: {
+          values: allRows
+        }
+      });
+    }
+    
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
+/**
+ * Update specific columns in a row without affecting others
+ */
+async function updateSpecificColumns(
+  sheets: any,
+  spreadsheetId: string,
+  sheetName: string,
+  rowIndex: number,
+  columnValues: { [key: string]: string },
+  logger: any
+): Promise<boolean> {
+  try {
+    const batchRequests = Object.entries(columnValues).map(([column, value]) => ({
+      range: `${sheetName}!${column}${rowIndex}`,
+      values: [[value]]
+    }));
+    
+    await sheets.spreadsheets.values.batchUpdate({
+      spreadsheetId,
+      requestBody: {
+        valueInputOption: 'USER_ENTERED',
+        data: batchRequests
+      }
+    });
+    
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
+/**
+ * Update specific columns in multiple rows without affecting others
+ */
+async function updateBatchSpecificColumns(
+  sheets: any,
+  spreadsheetId: string,
+  sheetName: string,
+  batchUpdates: Array<{ row: number, columns: { [key: string]: string } }>,
+  logger: any
+): Promise<boolean> {
+  try {
+    if (batchUpdates.length === 0) return true;
+    
+    const batchRequests = [];
+    
+    for (const update of batchUpdates) {
+      for (const [column, value] of Object.entries(update.columns)) {
+        batchRequests.push({
+          range: `${sheetName}!${column}${update.row}`,
+          values: [[value]]
+        });
+      }
+    }
+    
+    await sheets.spreadsheets.values.batchUpdate({
+        spreadsheetId,
+      requestBody: {
+        valueInputOption: 'USER_ENTERED',
+        data: batchRequests
+        }
+      });
+    
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
+/**
+ * Handle order with updated tracking
+ */
+async function handleTrackingUpdate(
+  orderId: string,
+  shopId: string,
+  trackingNumber: string,
+  connections: any,
+  api: any,
+  logger: any
+): Promise<boolean> {
+  if (!trackingNumber) {
+    return true;
+  }
+  
+  try {
+    // Get Google Sheet configuration
+    const sheetConfig = await api.googleSheetConfig.findFirst({
+      filter: { shopId: { equals: shopId } }
+    });
+    
+    if (!sheetConfig) {
+      throw new Error(`Google Sheet configuration not found for shop ${shopId}`);
+    }
+    
+    // Initialize Sheets client
+    const sheets = await initGoogleSheetsClient(logger);
+    
+    // Look for the order in both sheets
+    const pendingRowIndices = await findRowsByOrderId(
+      sheets, 
+      sheetConfig.spreadsheetId, 
+      "Pending Orders", 
+      "AF", 
+      orderId,
+      logger
+    );
+    
+    const ordersRowIndices = await findRowsByOrderId(
+        sheets,
+        sheetConfig.spreadsheetId,
+      "Orders", 
+      "AF", 
+        orderId,
+        logger
+      );
+      
+    // Update tracking number in whichever sheet the order is found
+    if (pendingRowIndices.length > 0) {
+      await updateTrackingNumber(
+        sheets, 
+        sheetConfig.spreadsheetId, 
+        "Pending Orders",
+        pendingRowIndices,
+        trackingNumber,
+        logger
+      );
+    }
+    
+    if (ordersRowIndices.length > 0) {
+      await updateTrackingNumber(
+          sheets,
+          sheetConfig.spreadsheetId,
+        "Orders",
+        ordersRowIndices,
+        trackingNumber,
+          logger
+        );
+      }
+      
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
+/**
+ * Handle line item changes
+ */
+async function handleLineItemChanges(
+  orderId: string,
+  shopId: string,
+  connections: any,
+  api: any,
+  logger: any,
+  isFulfillmentUpdate: boolean = false,
+  orderTags: string[] = []
+): Promise<boolean> {
+  try {
+    // Get Google Sheet configuration
+    const sheetConfig = await api.googleSheetConfig.findFirst({
+      filter: { shopId: { equals: shopId } }
+    });
+    
+    if (!sheetConfig) {
+      throw new Error(`Google Sheet configuration not found for shop ${shopId}`);
+    }
+    
+    // Initialize Sheets client
+    const sheets = await initGoogleSheetsClient(logger);
+    
+    // Get current order data directly from Shopify with cache busting
+    const orderData = await fetchOrderData(orderId, connections, logger);
+    
+    // Check both sheets
+    const sheetNames = ["Pending Orders", "Orders"];
+    for (const sheetName of sheetNames) {
+      // Find rows with this order ID
+      const rowIndices = await findRowsByOrderId(
+          sheets,
+          sheetConfig.spreadsheetId,
+        sheetName, 
+        "AF", 
+        orderId,
+          logger
+        );
+      
+      if (rowIndices.length > 0) {
+        if (isFulfillmentUpdate) {
+          // For fulfillment updates, only update the tracking number in column C
+          await updateTrackingNumber(
+            sheets,
+            sheetConfig.spreadsheetId,
+            sheetName,
+            rowIndices,
+            orderData.trackingNumber,
+            logger
+          );
+          
+          // Check if this is an "Echange" order that was fulfilled
+          const hasExchangeTag = orderTags.some(tag => 
+            tag.toLowerCase().includes('echange') || tag.toLowerCase().includes('exchange')
+          );
+          
+          // If it's an exchange order, mark checkbox in column AA
+          if (hasExchangeTag && orderData.trackingNumber) {
+            logger.info(`Exchange order ${orderId} fulfilled - marking checkbox in column AA`);
+            // Mark the checkbox in column AA
+            await markExchangeCheckbox(
+              sheets,
+              sheetConfig.spreadsheetId,
+              sheetName,
+              rowIndices,
+              logger
+            );
+          }
+        } else {
+          // For all other updates, perform full refresh
+          // Delete all existing rows for this order
+          await deleteRows(
+            sheets,
+            sheetConfig.spreadsheetId,
+            sheetName,
+            rowIndices,
+            logger
+          );
+          
+          // Wait to ensure deletion completes
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          
+          // Only write new data if there are active line items
+          if (orderData.lineItems.length > 0) {
+            // Write the updated order data
+          await writeOrderToSheet(
+            sheets,
+            sheetConfig.spreadsheetId,
+            sheetName,
+            orderId,
+            orderData,
+            logger
+          );
+          }
+        }
+      }
+    }
+    
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
+/**
+ * Mark exchange checkbox in column AA
+ */
+async function markExchangeCheckbox(
+  sheets: any,
+  spreadsheetId: string,
+  sheetName: string,
+  rowIndices: number[],
+  logger: any
+): Promise<boolean> {
+  if (!rowIndices.length) {
+    return true;
+  }
+  
+  try {
+    // Column AA is where the exchange checkbox is located
+    const checkboxColumn = "AA";
+    
+    // Create checkbox update requests
+    const checkboxUpdateRequests = rowIndices.map(rowIndex => ({
+      range: `${sheetName}!${checkboxColumn}${rowIndex}`,
+      values: [[true]] // Set to TRUE to check the checkbox
+    }));
+    
+    // Execute update
+    await sheets.spreadsheets.values.batchUpdate({
+      spreadsheetId,
+      requestBody: {
+        valueInputOption: 'USER_ENTERED',
+        data: checkboxUpdateRequests
+      }
+    });
+    
+    logger.info(`Successfully marked exchange checkbox for ${rowIndices.length} rows`);
+    return true;
+  } catch (error) {
+    logger.error(`Error marking exchange checkbox: ${error}`);
+    return false;
+  }
+}
+
+/**
+ * Handle cancelled order
+ */
+async function handleCancelledOrder(
+  orderId: string,
+  shopId: string,
+  api: any,
+  logger: any
+): Promise<boolean> {
+  try {
+    // Get Google Sheet configuration
+    const sheetConfig = await api.googleSheetConfig.findFirst({
+      filter: { shopId: { equals: shopId } }
+    });
+    
+    if (!sheetConfig) {
+      throw new Error(`Google Sheet configuration not found for shop ${shopId}`);
+    }
+    
+    // Initialize Sheets client
+    const sheets = await initGoogleSheetsClient(logger);
+    
+    // Delete from both sheets to be safe
+    const sheetNames = ["Pending Orders", "Orders"];
+    
+    for (const sheetName of sheetNames) {
+      // Find rows with this order ID
+      const rowIndices = await findRowsByOrderId(
+      sheets, 
+      sheetConfig.spreadsheetId, 
+        sheetName, 
+      "AF", 
+      orderId,
+      logger
+    );
+    
+      if (rowIndices.length > 0) {
+        // Delete rows
+        await deleteRows(
+        sheets,
+        sheetConfig.spreadsheetId,
+          sheetName,
+          rowIndices,
+        logger
+      );
+      }
+    }
+    
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
+/**
+ * Extract numeric ID from various formats
+ */
+function extractNumericId(id: any): string {
+  if (!id) return '';
+  
+  // If id is already a string that's just numbers, return it directly
+  if (typeof id === 'string' && /^\d+$/.test(id)) {
+    return id;
+  }
+  
+  // Convert to string and handle Shopify gid format
+  const idStr = String(id);
+  if (idStr.includes('gid://')) {
+    const parts = idStr.split('/');
+    const lastPart = parts[parts.length - 1];
+    if (lastPart && /^\d+$/.test(lastPart)) {
+      return lastPart;
+    }
+  }
+  
+  // Extract only numeric characters
+  return idStr.replace(/[^0-9]/g, '');
+}
+
+export const run = async ({ params, record, logger, api, connections }: ActionContext) => {
+  // Apply the updates to the record
+  applyParams(params, record);
+  await preventCrossShopDataAccess(params, record, { shopBelongsToField: "shop" });
+  await save(record);
+};
+
+export const onSuccess = async ({ record, logger, api, connections }: ActionContext) => {
+  try {
+    // Extract clean numeric order ID
+    const orderId = extractNumericId(record.id);
+        
+    // Get shop ID
+    const shop = await api.shopifyShop.findFirst();
+    if (!shop) {
+      throw new Error("Shop not found");
+    }
+    const shopId = extractNumericId(shop.id);
+    
+    // First, check if this is a fulfillment cancellation by examining the order data
+    try {
+      const orderData = await fetchOrderData(orderId, connections, logger);
+      
+      // Check for cancelled fulfillments
+      if (orderData.fulfillments && orderData.fulfillments.length > 0) {
+        for (const fulfillment of orderData.fulfillments) {
+          const status = fulfillment.status ? String(fulfillment.status).toUpperCase() : '';
+          if (status === 'CANCELLED' || status === 'CANCELED' || status.includes('CANCEL')) {
+            logger.info(`Fulfillment cancelled for order ${orderId}, skipping sheet updates completely`);
+            return; // Exit early, do no processing
+          }
+        }
+      }
+    } catch (error: any) {
+      // If we can't fetch the order data, continue with regular processing
+      logger.error(`Error checking fulfillment status: ${error.message}`);
+    }
+    
+    // Handle tags safely - convert to array regardless of the input format
+    const parseTags = (tagsInput: any): string[] => {
+      if (!tagsInput) return [];
+      
+      // Handle array input
+      if (Array.isArray(tagsInput)) {
+        return tagsInput.map(tag => String(tag).trim());
+      }
+      
+      // Handle string input
+      if (typeof tagsInput === 'string') {
+        return tagsInput.split(',').map(tag => tag.trim());
+      }
+      
+      return [];
+    };
+    
+    const oldTags = parseTags(record.previous?.tags);
+    const newTags = parseTags(record.tags);
+    
+    // Check if order is cancelled through status changes
+    const oldFinancialStatus = record.previous?.financialStatus || '';
+    const newFinancialStatus = record.financialStatus || '';
+    const oldFulfillmentStatus = record.previous?.fulfillmentStatus || '';
+    const newFulfillmentStatus = record.fulfillmentStatus || '';
+    
+    // Check if the order has been cancelled
+    const isCancelledByFinancialStatus = 
+      (newFinancialStatus.toUpperCase().includes('CANCEL') || 
+       newFinancialStatus.toUpperCase() === 'VOIDED') && 
+      (oldFinancialStatus.toUpperCase() !== 'CANCELLED' && 
+       oldFinancialStatus.toUpperCase() !== 'VOIDED');
+       
+    const isCancelledByFulfillmentStatus = 
+      newFulfillmentStatus.toUpperCase().includes('CANCEL') && 
+      !oldFulfillmentStatus.toUpperCase().includes('CANCEL');
+    
+    // Check for cancelledAt field which would indicate definitive cancellation
+    const wasCancelledAt = record.previous?.cancelledAt ? true : false;
+    const isCancelledAt = record.cancelledAt ? true : false;
+    const isCancelledAtChanged = !wasCancelledAt && isCancelledAt;
+    
+    // To get more accurate cancellation status, fetch the full order data
+    let isCancelledByExtendedCheck = false;
+    try {
+      // Use the extractOrderSKUs action to check for cancellation
+      const orderDataResponse = await api.extractOrderSKUs({
+        orderId: orderId,
+        shopId: shopId
+      });
+      
+      if (orderDataResponse?.success && orderDataResponse?.order?.isCancelled) {
+        isCancelledByExtendedCheck = true;
+      }
+      
+      // Also check if fulfillment was cancelled
+      if (orderDataResponse?.success && orderDataResponse?.order?.isFulfillmentCancelled) {
+        logger.info(`Fulfillment cancelled for order ${orderId} detected via extractOrderSKUs, skipping sheet updates`);
+        return; // Exit early, do no processing
+      }
+    } catch (error: any) {
+      // If there's an error fetching the data, fall back to the other checks
+      logger.error(`Error checking cancellation status through extractOrderSKUs: ${error.message}`);
+    }
+    
+    // If fulfillment status changes to fulfilled, update tracking only
+    if (oldFulfillmentStatus !== 'fulfilled' && newFulfillmentStatus === 'fulfilled') {
+      // For fulfillment updates, only update tracking number
+      await handleLineItemChanges(orderId, shopId, connections, api, logger, true, newTags);
+      return;
+    }
+    
+    // Skip processing when fulfillment is cancelled (changes from 'fulfilled' to something else)
+    if (oldFulfillmentStatus === 'fulfilled' && newFulfillmentStatus !== 'fulfilled') {
+      logger.info(`Fulfillment cancelled for order ${orderId}, skipping sheet updates`);
+      return;
+    }
+    
+    // Handle order cancellation from any detection method
+    if (isCancelledByFinancialStatus || 
+        isCancelledByFulfillmentStatus || 
+        isCancelledAtChanged || 
+        isCancelledByExtendedCheck) {
+      logger.info(`Order ${orderId} detected as cancelled, removing from Google Sheets`);
+      await handleCancelledOrder(orderId, shopId, api, logger);
+      return; // Stop processing after handling cancellation
+    }
+    
+    // For all other updates, perform full refresh
+    await handleLineItemChanges(orderId, shopId, connections, api, logger, false, newTags);
+    
+    // Now check for other tag-related actions
+    
+    // Case 1: Order confirmed (tag added)
+    const wasConfirmed = hasConfirmationTag(oldTags);
+    const isConfirmed = hasConfirmationTag(newTags);
+    
+    if (!wasConfirmed && isConfirmed) {
+      await moveOrderToSheet(orderId, shopId, connections, api, logger, 'tags');
+    }
+    
+    // Case 4: Order cancelled by tags
+    const wasCancelled = hasCancellationTag(oldTags);
+    const isCancelled = hasCancellationTag(newTags);
+    
+    if (!wasCancelled && isCancelled) {
+      await handleCancelledOrder(orderId, shopId, api, logger);
+    }
+  } catch (error: any) {
+    // Error handling without logging
+    logger.error(`Error in onSuccess handler for order update: ${error.message}`);
+  }
+};
+
+export const options: ActionOptions = {
+  actionType: "update"
+};

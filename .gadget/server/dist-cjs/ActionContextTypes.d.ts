@@ -1,0 +1,468 @@
+import "path";
+
+import { CreateShopifyCustomerActionContext } from "./models/ShopifyCustomer";
+
+import { UpdateShopifyCustomerActionContext } from "./models/ShopifyCustomer";
+
+import { DeleteShopifyCustomerActionContext } from "./models/ShopifyCustomer";
+
+import { CreateShopifyGdprRequestActionContext } from "./models/ShopifyGdprRequest";
+
+import { UpdateShopifyGdprRequestActionContext } from "./models/ShopifyGdprRequest";
+
+import { CreateShopifyOrderActionContext } from "./models/ShopifyOrder";
+
+import { UpdateShopifyOrderActionContext } from "./models/ShopifyOrder";
+
+import { DeleteShopifyOrderActionContext } from "./models/ShopifyOrder";
+
+import { UpdateShopifyShopActionContext } from "./models/ShopifyShop";
+
+import { InstallShopifyShopActionContext } from "./models/ShopifyShop";
+
+import { ReinstallShopifyShopActionContext } from "./models/ShopifyShop";
+
+import { UninstallShopifyShopActionContext } from "./models/ShopifyShop";
+
+import { AbortShopifySyncActionContext } from "./models/ShopifySync";
+
+import { CompleteShopifySyncActionContext } from "./models/ShopifySync";
+
+import { ErrorShopifySyncActionContext } from "./models/ShopifySync";
+
+import { RunShopifySyncActionContext } from "./models/ShopifySync";
+
+import { CreateGoogleSheetConfigActionContext } from "./models/GoogleSheetConfig";
+
+import { UpdateGoogleSheetConfigActionContext } from "./models/GoogleSheetConfig";
+
+import { DeleteGoogleSheetConfigActionContext } from "./models/GoogleSheetConfig";
+
+import { CreateShopifyFulfillmentActionContext } from "./models/ShopifyFulfillment";
+
+import { UpdateShopifyFulfillmentActionContext } from "./models/ShopifyFulfillment";
+
+import { DeleteShopifyFulfillmentActionContext } from "./models/ShopifyFulfillment";
+
+import { CreateShopifyFulfillmentOrderActionContext } from "./models/ShopifyFulfillmentOrder";
+
+import { UpdateShopifyFulfillmentOrderActionContext } from "./models/ShopifyFulfillmentOrder";
+
+import { DeleteShopifyFulfillmentOrderActionContext } from "./models/ShopifyFulfillmentOrder";
+
+import { CreateShopifyFulfillmentServiceActionContext } from "./models/ShopifyFulfillmentService";
+
+import { UpdateShopifyFulfillmentServiceActionContext } from "./models/ShopifyFulfillmentService";
+
+import { DeleteShopifyFulfillmentServiceActionContext } from "./models/ShopifyFulfillmentService";
+
+import { CreateShopifyProductActionContext } from "./models/ShopifyProduct";
+
+import { UpdateShopifyProductActionContext } from "./models/ShopifyProduct";
+
+import { DeleteShopifyProductActionContext } from "./models/ShopifyProduct";
+
+import { CreateShopifyProductVariantActionContext } from "./models/ShopifyProductVariant";
+
+import { UpdateShopifyProductVariantActionContext } from "./models/ShopifyProductVariant";
+
+import { DeleteShopifyProductVariantActionContext } from "./models/ShopifyProductVariant";
+
+import { CreateSenditConfigActionContext } from "./models/SenditConfig";
+
+import { UpdateSenditConfigActionContext } from "./models/SenditConfig";
+
+import { DeleteSenditConfigActionContext } from "./models/SenditConfig";
+
+import { CreateSpeedafConfigActionContext } from "./models/SpeedafConfig";
+
+import { UpdateSpeedafConfigActionContext } from "./models/SpeedafConfig";
+
+import { DeleteSpeedafConfigActionContext } from "./models/SpeedafConfig";
+
+import { FindFirstSpeedafConfigActionContext } from "./models/SpeedafConfig";
+
+import { CreateSenditOrderGlobalActionContext } from "./global-actions";
+
+import { DirectOrderTestGlobalActionContext } from "./global-actions";
+
+import { ExtractOrderSKUsGlobalActionContext } from "./global-actions";
+
+import { FulfillOrderGlobalActionContext } from "./global-actions";
+
+import { GetSenditDistrictIdGlobalActionContext } from "./global-actions";
+
+import { ProcessSpeedafAPIGlobalActionContext } from "./global-actions";
+
+import { SenditFulfillOrderGlobalActionContext } from "./global-actions";
+
+import { StandardizeMoroccanAddressGlobalActionContext } from "./global-actions";
+
+import { StandardizeMoroccanCityGlobalActionContext } from "./global-actions";
+
+import { SyncOrdersGlobalActionContext } from "./global-actions";
+
+import { TestGoogleAuthGlobalActionContext } from "./global-actions";
+
+import { TestSenditConnectionGlobalActionContext } from "./global-actions";
+
+import { TestWriteToSheetGlobalActionContext } from "./global-actions";
+
+import { UpdateReferenceTrackingGlobalActionContext } from "./global-actions";
+
+import { WriteBatchOrdersToSheetsGlobalActionContext } from "./global-actions";
+
+import { WriteToShopifyGlobalActionContext } from "./global-actions";
+
+import { RemoveOrderFromSheetsGlobalActionContext } from "./global-actions";
+
+
+
+
+declare module "../../../api/models/shopifyCustomer/actions/create" {
+  export type ActionRun = (params: CreateShopifyCustomerActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: CreateShopifyCustomerActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/shopifyCustomer/actions/update" {
+  export type ActionRun = (params: UpdateShopifyCustomerActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: UpdateShopifyCustomerActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/shopifyCustomer/actions/delete" {
+  export type ActionRun = (params: DeleteShopifyCustomerActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: DeleteShopifyCustomerActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/shopifyGdprRequest/actions/create" {
+  export type ActionRun = (params: CreateShopifyGdprRequestActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: CreateShopifyGdprRequestActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/shopifyGdprRequest/actions/update" {
+  export type ActionRun = (params: UpdateShopifyGdprRequestActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: UpdateShopifyGdprRequestActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/shopifyOrder/actions/create" {
+  export type ActionRun = (params: CreateShopifyOrderActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: CreateShopifyOrderActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/shopifyOrder/actions/update" {
+  export type ActionRun = (params: UpdateShopifyOrderActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: UpdateShopifyOrderActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/shopifyOrder/actions/delete" {
+  export type ActionRun = (params: DeleteShopifyOrderActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: DeleteShopifyOrderActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/shopifyShop/actions/update" {
+  export type ActionRun = (params: UpdateShopifyShopActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: UpdateShopifyShopActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/shopifyShop/actions/install" {
+  export type ActionRun = (params: InstallShopifyShopActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: InstallShopifyShopActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/shopifyShop/actions/reinstall" {
+  export type ActionRun = (params: ReinstallShopifyShopActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: ReinstallShopifyShopActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/shopifyShop/actions/uninstall" {
+  export type ActionRun = (params: UninstallShopifyShopActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: UninstallShopifyShopActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/shopifySync/actions/abort" {
+  export type ActionRun = (params: AbortShopifySyncActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: AbortShopifySyncActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/shopifySync/actions/complete" {
+  export type ActionRun = (params: CompleteShopifySyncActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: CompleteShopifySyncActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/shopifySync/actions/error" {
+  export type ActionRun = (params: ErrorShopifySyncActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: ErrorShopifySyncActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/shopifySync/actions/run" {
+  export type ActionRun = (params: RunShopifySyncActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: RunShopifySyncActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/googleSheetConfig/actions/create" {
+  export type ActionRun = (params: CreateGoogleSheetConfigActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: CreateGoogleSheetConfigActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/googleSheetConfig/actions/update" {
+  export type ActionRun = (params: UpdateGoogleSheetConfigActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: UpdateGoogleSheetConfigActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/googleSheetConfig/actions/delete" {
+  export type ActionRun = (params: DeleteGoogleSheetConfigActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: DeleteGoogleSheetConfigActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/shopifyFulfillment/actions/create" {
+  export type ActionRun = (params: CreateShopifyFulfillmentActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: CreateShopifyFulfillmentActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/shopifyFulfillment/actions/update" {
+  export type ActionRun = (params: UpdateShopifyFulfillmentActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: UpdateShopifyFulfillmentActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/shopifyFulfillment/actions/delete" {
+  export type ActionRun = (params: DeleteShopifyFulfillmentActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: DeleteShopifyFulfillmentActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/shopifyFulfillmentOrder/actions/create" {
+  export type ActionRun = (params: CreateShopifyFulfillmentOrderActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: CreateShopifyFulfillmentOrderActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/shopifyFulfillmentOrder/actions/update" {
+  export type ActionRun = (params: UpdateShopifyFulfillmentOrderActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: UpdateShopifyFulfillmentOrderActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/shopifyFulfillmentOrder/actions/delete" {
+  export type ActionRun = (params: DeleteShopifyFulfillmentOrderActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: DeleteShopifyFulfillmentOrderActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/shopifyFulfillmentService/actions/create" {
+  export type ActionRun = (params: CreateShopifyFulfillmentServiceActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: CreateShopifyFulfillmentServiceActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/shopifyFulfillmentService/actions/update" {
+  export type ActionRun = (params: UpdateShopifyFulfillmentServiceActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: UpdateShopifyFulfillmentServiceActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/shopifyFulfillmentService/actions/delete" {
+  export type ActionRun = (params: DeleteShopifyFulfillmentServiceActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: DeleteShopifyFulfillmentServiceActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/shopifyProduct/actions/create" {
+  export type ActionRun = (params: CreateShopifyProductActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: CreateShopifyProductActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/shopifyProduct/actions/update" {
+  export type ActionRun = (params: UpdateShopifyProductActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: UpdateShopifyProductActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/shopifyProduct/actions/delete" {
+  export type ActionRun = (params: DeleteShopifyProductActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: DeleteShopifyProductActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/shopifyProductVariant/actions/create" {
+  export type ActionRun = (params: CreateShopifyProductVariantActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: CreateShopifyProductVariantActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/shopifyProductVariant/actions/update" {
+  export type ActionRun = (params: UpdateShopifyProductVariantActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: UpdateShopifyProductVariantActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/shopifyProductVariant/actions/delete" {
+  export type ActionRun = (params: DeleteShopifyProductVariantActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: DeleteShopifyProductVariantActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/senditConfig/actions/create" {
+  export type ActionRun = (params: CreateSenditConfigActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: CreateSenditConfigActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/senditConfig/actions/update" {
+  export type ActionRun = (params: UpdateSenditConfigActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: UpdateSenditConfigActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/senditConfig/actions/delete" {
+  export type ActionRun = (params: DeleteSenditConfigActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: DeleteSenditConfigActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/speedafConfig/actions/create" {
+  export type ActionRun = (params: CreateSpeedafConfigActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: CreateSpeedafConfigActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/speedafConfig/actions/update" {
+  export type ActionRun = (params: UpdateSpeedafConfigActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: UpdateSpeedafConfigActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/speedafConfig/actions/delete" {
+  export type ActionRun = (params: DeleteSpeedafConfigActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: DeleteSpeedafConfigActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/speedafConfig/actions/findFirst" {
+  export type ActionRun = (params: FindFirstSpeedafConfigActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: FindFirstSpeedafConfigActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/actions/createSenditOrder" {
+  export type ActionRun = (params: CreateSenditOrderGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: CreateSenditOrderGlobalActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/actions/directOrderTest" {
+  export type ActionRun = (params: DirectOrderTestGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: DirectOrderTestGlobalActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/actions/extractOrderSKUs" {
+  export type ActionRun = (params: ExtractOrderSKUsGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: ExtractOrderSKUsGlobalActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/actions/fulfillOrder" {
+  export type ActionRun = (params: FulfillOrderGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: FulfillOrderGlobalActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/actions/getSenditDistrictId" {
+  export type ActionRun = (params: GetSenditDistrictIdGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: GetSenditDistrictIdGlobalActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/actions/processSpeedafAPI" {
+  export type ActionRun = (params: ProcessSpeedafAPIGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: ProcessSpeedafAPIGlobalActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/actions/senditFulfillOrder" {
+  export type ActionRun = (params: SenditFulfillOrderGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: SenditFulfillOrderGlobalActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/actions/standardizeMoroccanAddress" {
+  export type ActionRun = (params: StandardizeMoroccanAddressGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: StandardizeMoroccanAddressGlobalActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/actions/standardizeMoroccanCity" {
+  export type ActionRun = (params: StandardizeMoroccanCityGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: StandardizeMoroccanCityGlobalActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/actions/syncOrders" {
+  export type ActionRun = (params: SyncOrdersGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: SyncOrdersGlobalActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/actions/testGoogleAuth" {
+  export type ActionRun = (params: TestGoogleAuthGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: TestGoogleAuthGlobalActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/actions/testSenditConnection" {
+  export type ActionRun = (params: TestSenditConnectionGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: TestSenditConnectionGlobalActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/actions/testWriteToSheet" {
+  export type ActionRun = (params: TestWriteToSheetGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: TestWriteToSheetGlobalActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/actions/updateReferenceTracking" {
+  export type ActionRun = (params: UpdateReferenceTrackingGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: UpdateReferenceTrackingGlobalActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/actions/writeBatchOrdersToSheets" {
+  export type ActionRun = (params: WriteBatchOrdersToSheetsGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: WriteBatchOrdersToSheetsGlobalActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/actions/writeToShopify" {
+  export type ActionRun = (params: WriteToShopifyGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: WriteToShopifyGlobalActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/actions/removeOrderFromSheets" {
+  export type ActionRun = (params: RemoveOrderFromSheetsGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: RemoveOrderFromSheetsGlobalActionContext) => Promise<any>;
+}
+

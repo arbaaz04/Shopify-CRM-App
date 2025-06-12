@@ -1,0 +1,9 @@
+{
+  "application": "bambe-crm-app",
+  "environment": "development",
+  "environments": {
+    "development": {
+      "filesVersion": "2303"
+    }
+  }
+}
