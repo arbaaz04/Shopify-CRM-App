@@ -1,0 +1,73 @@
+# Gadget Framework
+.gadget/
+.react-router/
+
+# Dependencies
+node_modules/
+yarn.lock
+package-lock.json
+
+# Environment Variables & Secrets
+.env
+.env.*
+*.env
+
+# Shopify Configuration
+extensions/**/dist
+extensions/**/node_modules
+shopify.app.*.toml
+
+# Build Output
+dist/
+build/
+.vite/
+
+# IDE & Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS Generated Files
+**/.DS_Store
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Runtime Data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage Directory
+coverage/
+*.lcov
+
+# Temporary Files
+.tmp/
+.temp/
+*.tmp
+*.temp
+
+# Backup Files
+*.backup
+*.bak
+*.old
+
+# API Keys & Sensitive Data (extra protection)
+**/config/secrets.*
+**/config/keys.*
+**/*secret*
+**/*key*
+**/*credential*

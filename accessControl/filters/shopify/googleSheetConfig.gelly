@@ -1,0 +1,4 @@
+filter ($session: Session) on GoogleSheetConfig [
+  where shopId == $session.shopId
+]
+# structured filters: [{"type":"tenancy_read_filter","field":"shop"}]
