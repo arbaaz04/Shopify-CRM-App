@@ -1,6 +1,6 @@
 # Bambe CRM App
 
-A comprehensive Shopify CRM application that automates order management, Google Sheets synchronization, and Moroccan courier fulfillment using Sendit and Speedaf services.
+A comprehensive Shopify CRM application built on Gadget.dev that automates order management, Google Sheets synchronization, and Moroccan courier fulfillment using Sendit and Speedaf courier services.
 
 ## 🚀 Key Features
 
