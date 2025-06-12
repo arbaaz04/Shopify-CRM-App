@@ -265,6 +265,38 @@ export class Client implements AnyClient {
                              | null
                              | undefined;
                    };
+  /** Executes the removeOrderFromSheets global action. */
+  removeOrderFromSheets = buildGlobalAction(this, {
+                       type: 'globalAction',
+                       functionName: 'removeOrderFromSheets',
+                       operationName: 'removeOrderFromSheets',
+                       operationReturnType: 'RemoveOrderFromSheets',
+                       namespace: null,
+                       variables: {
+                         orderName: { required: false, type: 'String' },
+                         shopId: { required: false, type: 'String' }
+                       }
+                     } as const) as unknown as {
+                     (variables?: {
+                                        orderName?: (Scalars['String'] | null) | null;
+                                        shopId?: (Scalars['String'] | null) | null;
+                                      } | null): Promise<any>;
+                     type: 'globalAction';
+                     operationName: 'removeOrderFromSheets';
+                     operationReturnType: 'RemoveOrderFromSheets';
+                     namespace: null;
+                     typesImports: [ 'Scalars' ];
+                     variables: {
+                         orderName: { required: false, type: 'String' },
+                         shopId: { required: false, type: 'String' }
+                       };
+                     variablesType: {
+                             orderName?: (Scalars['String'] | null) | null;
+                             shopId?: (Scalars['String'] | null) | null;
+                           }
+                             | null
+                             | undefined;
+                   };
   /** Executes the senditFulfillOrder global action. */
   senditFulfillOrder = buildGlobalAction(this, {
                        type: 'globalAction',
@@ -554,24 +586,6 @@ export class Client implements AnyClient {
                            }
                              | null
                              | undefined;
-                   };
-  /** Executes the removeOrderFromSheets global action. */
-  removeOrderFromSheets = buildGlobalAction(this, {
-                       type: 'globalAction',
-                       functionName: 'removeOrderFromSheets',
-                       operationName: 'removeOrderFromSheets',
-                       operationReturnType: 'RemoveOrderFromSheets',
-                       namespace: null,
-                       variables: {}
-                     } as const) as unknown as {
-                     (): Promise<any>;
-                     type: 'globalAction';
-                     operationName: 'removeOrderFromSheets';
-                     operationReturnType: 'RemoveOrderFromSheets';
-                     namespace: null;
-                     typesImports: [];
-                     variables: {};
-                     variablesType: Record<string, never>;
                    };
   shopifyCustomer!: ShopifyCustomerManager;
   shopifyGdprRequest!: ShopifyGdprRequestManager;

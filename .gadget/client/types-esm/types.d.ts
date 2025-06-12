@@ -110,8 +110,8 @@ export type InternalShopifyProductVariantRecord = Scalars["JSONObject"];
 export type InternalSenditConfigRecord = Scalars["JSONObject"];
 /** Represents one speedafConfig result record in internal api calls. Returns a JSON blob of all the record's fields. */
 export type InternalSpeedafConfigRecord = Scalars["JSONObject"];
-export type BackgroundActionResult = AvailableCreateSenditOrderResultSelection | AvailableDirectOrderTestResultSelection | AvailableExtractOrderSKUsResultSelection | AvailableFulfillOrderResultSelection | AvailableGetSenditDistrictIdResultSelection | AvailableProcessSpeedafAPIResultSelection | AvailableSenditFulfillOrderResultSelection | AvailableStandardizeMoroccanAddressResultSelection | AvailableStandardizeMoroccanCityResultSelection | AvailableSyncOrdersResultSelection | AvailableTestGoogleAuthResultSelection | AvailableTestSenditConnectionResultSelection | AvailableTestWriteToSheetResultSelection | AvailableUpdateReferenceTrackingResultSelection | AvailableWriteBatchOrdersToSheetsResultSelection | AvailableWriteToShopifyResultSelection | AvailableRemoveOrderFromSheetsResultSelection | AvailableUpdateShopifyOrderResultSelection | AvailableAbortShopifySyncResultSelection | AvailableCompleteShopifySyncResultSelection | AvailableErrorShopifySyncResultSelection | AvailableRunShopifySyncResultSelection | AvailableCreateGoogleSheetConfigResultSelection | AvailableUpdateGoogleSheetConfigResultSelection | AvailableDeleteGoogleSheetConfigResultSelection | AvailableCreateSenditConfigResultSelection | AvailableUpdateSenditConfigResultSelection | AvailableDeleteSenditConfigResultSelection | AvailableCreateSpeedafConfigResultSelection | AvailableUpdateSpeedafConfigResultSelection | AvailableDeleteSpeedafConfigResultSelection | AvailableFindFirstSpeedafConfigResultSelection;
-export type AvailableBackgroundActionResultSelection = CreateSenditOrderResult | DirectOrderTestResult | ExtractOrderSKUsResult | FulfillOrderResult | GetSenditDistrictIdResult | ProcessSpeedafAPIResult | SenditFulfillOrderResult | StandardizeMoroccanAddressResult | StandardizeMoroccanCityResult | SyncOrdersResult | TestGoogleAuthResult | TestSenditConnectionResult | TestWriteToSheetResult | UpdateReferenceTrackingResult | WriteBatchOrdersToSheetsResult | WriteToShopifyResult | RemoveOrderFromSheetsResult | UpdateShopifyOrderResult | AbortShopifySyncResult | CompleteShopifySyncResult | ErrorShopifySyncResult | RunShopifySyncResult | CreateGoogleSheetConfigResult | UpdateGoogleSheetConfigResult | DeleteGoogleSheetConfigResult | CreateSenditConfigResult | UpdateSenditConfigResult | DeleteSenditConfigResult | CreateSpeedafConfigResult | UpdateSpeedafConfigResult | DeleteSpeedafConfigResult | FindFirstSpeedafConfigResult;
+export type BackgroundActionResult = AvailableCreateSenditOrderResultSelection | AvailableDirectOrderTestResultSelection | AvailableExtractOrderSKUsResultSelection | AvailableFulfillOrderResultSelection | AvailableGetSenditDistrictIdResultSelection | AvailableProcessSpeedafAPIResultSelection | AvailableRemoveOrderFromSheetsResultSelection | AvailableSenditFulfillOrderResultSelection | AvailableStandardizeMoroccanAddressResultSelection | AvailableStandardizeMoroccanCityResultSelection | AvailableSyncOrdersResultSelection | AvailableTestGoogleAuthResultSelection | AvailableTestSenditConnectionResultSelection | AvailableTestWriteToSheetResultSelection | AvailableUpdateReferenceTrackingResultSelection | AvailableWriteBatchOrdersToSheetsResultSelection | AvailableWriteToShopifyResultSelection | AvailableUpdateShopifyOrderResultSelection | AvailableAbortShopifySyncResultSelection | AvailableCompleteShopifySyncResultSelection | AvailableErrorShopifySyncResultSelection | AvailableRunShopifySyncResultSelection | AvailableCreateGoogleSheetConfigResultSelection | AvailableUpdateGoogleSheetConfigResultSelection | AvailableDeleteGoogleSheetConfigResultSelection | AvailableCreateSenditConfigResultSelection | AvailableUpdateSenditConfigResultSelection | AvailableDeleteSenditConfigResultSelection | AvailableCreateSpeedafConfigResultSelection | AvailableUpdateSpeedafConfigResultSelection | AvailableDeleteSpeedafConfigResultSelection | AvailableFindFirstSpeedafConfigResultSelection;
+export type AvailableBackgroundActionResultSelection = CreateSenditOrderResult | DirectOrderTestResult | ExtractOrderSKUsResult | FulfillOrderResult | GetSenditDistrictIdResult | ProcessSpeedafAPIResult | RemoveOrderFromSheetsResult | SenditFulfillOrderResult | StandardizeMoroccanAddressResult | StandardizeMoroccanCityResult | SyncOrdersResult | TestGoogleAuthResult | TestSenditConnectionResult | TestWriteToSheetResult | UpdateReferenceTrackingResult | WriteBatchOrdersToSheetsResult | WriteToShopifyResult | UpdateShopifyOrderResult | AbortShopifySyncResult | CompleteShopifySyncResult | ErrorShopifySyncResult | RunShopifySyncResult | CreateGoogleSheetConfigResult | UpdateGoogleSheetConfigResult | DeleteGoogleSheetConfigResult | CreateSenditConfigResult | UpdateSenditConfigResult | DeleteSenditConfigResult | CreateSpeedafConfigResult | UpdateSpeedafConfigResult | DeleteSpeedafConfigResult | FindFirstSpeedafConfigResult;
 export type ShopifySyncSort = {
     /** Sort the results by the id field. Defaults to ascending (smallest value first). */
     id?: SortOrder | null;
@@ -4957,6 +4957,7 @@ export type Mutation = {
     fulfillOrder: (FulfillOrderResult | null);
     getSenditDistrictId: (GetSenditDistrictIdResult | null);
     processSpeedafAPI: (ProcessSpeedafAPIResult | null);
+    removeOrderFromSheets: (RemoveOrderFromSheetsResult | null);
     senditFulfillOrder: (SenditFulfillOrderResult | null);
     standardizeMoroccanAddress: (StandardizeMoroccanAddressResult | null);
     standardizeMoroccanCity: (StandardizeMoroccanCityResult | null);
@@ -4967,7 +4968,6 @@ export type Mutation = {
     updateReferenceTracking: (UpdateReferenceTrackingResult | null);
     writeBatchOrdersToSheets: (WriteBatchOrdersToSheetsResult | null);
     writeToShopify: (WriteToShopifyResult | null);
-    removeOrderFromSheets: (RemoveOrderFromSheetsResult | null);
     shopifyConnection: (ShopifyConnectionMutations | null);
     background: BackgroundMutations;
     internal: InternalMutations;
@@ -5018,6 +5018,7 @@ export type AvailableMutationSelection = {
     fulfillOrder?: AvailableFulfillOrderResultSelection;
     getSenditDistrictId?: AvailableGetSenditDistrictIdResultSelection;
     processSpeedafAPI?: AvailableProcessSpeedafAPIResultSelection;
+    removeOrderFromSheets?: AvailableRemoveOrderFromSheetsResultSelection;
     senditFulfillOrder?: AvailableSenditFulfillOrderResultSelection;
     standardizeMoroccanAddress?: AvailableStandardizeMoroccanAddressResultSelection;
     standardizeMoroccanCity?: AvailableStandardizeMoroccanCityResultSelection;
@@ -5028,7 +5029,6 @@ export type AvailableMutationSelection = {
     updateReferenceTracking?: AvailableUpdateReferenceTrackingResultSelection;
     writeBatchOrdersToSheets?: AvailableWriteBatchOrdersToSheetsResultSelection;
     writeToShopify?: AvailableWriteToShopifyResultSelection;
-    removeOrderFromSheets?: AvailableRemoveOrderFromSheetsResultSelection;
     shopifyConnection?: AvailableShopifyConnectionMutationsSelection;
     background?: AvailableBackgroundMutationsSelection;
     internal?: AvailableInternalMutationsSelection;
@@ -5658,6 +5658,18 @@ export type AvailableProcessSpeedafAPIResultSelection = {
     errors?: AvailableExecutionErrorSelection;
     result?: boolean | null | undefined;
 };
+export type RemoveOrderFromSheetsResult = {
+    __typename: 'RemoveOrderFromSheetsResult';
+    success: Scalars['Boolean'];
+    errors: ExecutionError[];
+    result: (Scalars['JSON'] | null);
+};
+export type AvailableRemoveOrderFromSheetsResultSelection = {
+    __typename?: boolean | null | undefined;
+    success?: boolean | null | undefined;
+    errors?: AvailableExecutionErrorSelection;
+    result?: boolean | null | undefined;
+};
 export type SenditFulfillOrderResult = {
     __typename: 'SenditFulfillOrderResult';
     success: Scalars['Boolean'];
@@ -5778,18 +5790,6 @@ export type AvailableWriteToShopifyResultSelection = {
     errors?: AvailableExecutionErrorSelection;
     result?: boolean | null | undefined;
 };
-export type RemoveOrderFromSheetsResult = {
-    __typename: 'RemoveOrderFromSheetsResult';
-    success: Scalars['Boolean'];
-    errors: ExecutionError[];
-    result: (Scalars['JSON'] | null);
-};
-export type AvailableRemoveOrderFromSheetsResultSelection = {
-    __typename?: boolean | null | undefined;
-    success?: boolean | null | undefined;
-    errors?: AvailableExecutionErrorSelection;
-    result?: boolean | null | undefined;
-};
 export type ShopifyConnectionMutations = {
     __typename: 'ShopifyConnectionMutations';
     fetchOrInstallShop: (ShopifyConnectionFetchOrInstallShopResult | null);
@@ -5856,6 +5856,7 @@ export type BackgroundMutations = {
     fulfillOrder: EnqueueBackgroundActionResult;
     getSenditDistrictId: EnqueueBackgroundActionResult;
     processSpeedafAPI: EnqueueBackgroundActionResult;
+    removeOrderFromSheets: EnqueueBackgroundActionResult;
     senditFulfillOrder: EnqueueBackgroundActionResult;
     standardizeMoroccanAddress: EnqueueBackgroundActionResult;
     standardizeMoroccanCity: EnqueueBackgroundActionResult;
@@ -5866,7 +5867,6 @@ export type BackgroundMutations = {
     updateReferenceTracking: EnqueueBackgroundActionResult;
     writeBatchOrdersToSheets: EnqueueBackgroundActionResult;
     writeToShopify: EnqueueBackgroundActionResult;
-    removeOrderFromSheets: EnqueueBackgroundActionResult;
 };
 export type AvailableBackgroundMutationsSelection = {
     __typename?: boolean | null | undefined;
@@ -5914,6 +5914,7 @@ export type AvailableBackgroundMutationsSelection = {
     fulfillOrder?: AvailableEnqueueBackgroundActionResultSelection;
     getSenditDistrictId?: AvailableEnqueueBackgroundActionResultSelection;
     processSpeedafAPI?: AvailableEnqueueBackgroundActionResultSelection;
+    removeOrderFromSheets?: AvailableEnqueueBackgroundActionResultSelection;
     senditFulfillOrder?: AvailableEnqueueBackgroundActionResultSelection;
     standardizeMoroccanAddress?: AvailableEnqueueBackgroundActionResultSelection;
     standardizeMoroccanCity?: AvailableEnqueueBackgroundActionResultSelection;
@@ -5924,7 +5925,6 @@ export type AvailableBackgroundMutationsSelection = {
     updateReferenceTracking?: AvailableEnqueueBackgroundActionResultSelection;
     writeBatchOrdersToSheets?: AvailableEnqueueBackgroundActionResultSelection;
     writeToShopify?: AvailableEnqueueBackgroundActionResultSelection;
-    removeOrderFromSheets?: AvailableEnqueueBackgroundActionResultSelection;
 };
 /** The value returned from enqueuing an action to run in the background */
 export type EnqueueBackgroundActionResult = {
@@ -6101,6 +6101,7 @@ export type InternalMutations = {
     triggerFulfillOrder: (FulfillOrderResult | null);
     triggerGetSenditDistrictId: (GetSenditDistrictIdResult | null);
     triggerProcessSpeedafAPI: (ProcessSpeedafAPIResult | null);
+    triggerRemoveOrderFromSheets: (RemoveOrderFromSheetsResult | null);
     triggerSenditFulfillOrder: (SenditFulfillOrderResult | null);
     triggerStandardizeMoroccanAddress: (StandardizeMoroccanAddressResult | null);
     triggerStandardizeMoroccanCity: (StandardizeMoroccanCityResult | null);
@@ -6111,7 +6112,6 @@ export type InternalMutations = {
     triggerUpdateReferenceTracking: (UpdateReferenceTrackingResult | null);
     triggerWriteBatchOrdersToSheets: (WriteBatchOrdersToSheetsResult | null);
     triggerWriteToShopify: (WriteToShopifyResult | null);
-    triggerRemoveOrderFromSheets: (RemoveOrderFromSheetsResult | null);
     cancelBackgroundAction: CancelBackgroundActionResult;
     bulkCancelBackgroundActions: BulkCancelBackgroundActionResult;
 };
@@ -6253,6 +6253,7 @@ export type AvailableInternalMutationsSelection = {
     triggerFulfillOrder?: AvailableFulfillOrderResultSelection;
     triggerGetSenditDistrictId?: AvailableGetSenditDistrictIdResultSelection;
     triggerProcessSpeedafAPI?: AvailableProcessSpeedafAPIResultSelection;
+    triggerRemoveOrderFromSheets?: AvailableRemoveOrderFromSheetsResultSelection;
     triggerSenditFulfillOrder?: AvailableSenditFulfillOrderResultSelection;
     triggerStandardizeMoroccanAddress?: AvailableStandardizeMoroccanAddressResultSelection;
     triggerStandardizeMoroccanCity?: AvailableStandardizeMoroccanCityResultSelection;
@@ -6263,7 +6264,6 @@ export type AvailableInternalMutationsSelection = {
     triggerUpdateReferenceTracking?: AvailableUpdateReferenceTrackingResultSelection;
     triggerWriteBatchOrdersToSheets?: AvailableWriteBatchOrdersToSheetsResultSelection;
     triggerWriteToShopify?: AvailableWriteToShopifyResultSelection;
-    triggerRemoveOrderFromSheets?: AvailableRemoveOrderFromSheetsResultSelection;
     cancelBackgroundAction?: AvailableCancelBackgroundActionResultSelection;
     bulkCancelBackgroundActions?: AvailableBulkCancelBackgroundActionResultSelection;
 };

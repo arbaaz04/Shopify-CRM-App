@@ -611,6 +611,7 @@ const ALTERNATIVE_CITY_SPELLINGS: Record<string, string> = {
 
   // C
   "casa": "Casablanca",
+  "casablanca": "Casablanca - Autres quartiers",
   "casablanca anfa": "Casablanca - Anfa",
   "casablanca maarif": "Casablanca - Maarif",
   "casablance": "Casablanca",

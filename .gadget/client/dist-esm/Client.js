@@ -110,6 +110,18 @@ class Client {
         testMode: { required: false, type: "Boolean" }
       }
     });
+    /** Executes the removeOrderFromSheets global action. */
+    this.removeOrderFromSheets = buildGlobalAction(this, {
+      type: "globalAction",
+      functionName: "removeOrderFromSheets",
+      operationName: "removeOrderFromSheets",
+      operationReturnType: "RemoveOrderFromSheets",
+      namespace: null,
+      variables: {
+        orderName: { required: false, type: "String" },
+        shopId: { required: false, type: "String" }
+      }
+    });
     /** Executes the senditFulfillOrder global action. */
     this.senditFulfillOrder = buildGlobalAction(this, {
       type: "globalAction",
@@ -223,15 +235,6 @@ class Client {
         mutation: { required: false, type: "String" },
         variables: { required: false, type: "JSONObject" }
       }
-    });
-    /** Executes the removeOrderFromSheets global action. */
-    this.removeOrderFromSheets = buildGlobalAction(this, {
-      type: "globalAction",
-      functionName: "removeOrderFromSheets",
-      operationName: "removeOrderFromSheets",
-      operationReturnType: "RemoveOrderFromSheets",
-      namespace: null,
-      variables: {}
     });
     /**
      * The list of environments with a customized API root endpoint

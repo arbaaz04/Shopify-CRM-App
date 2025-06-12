@@ -3563,7 +3563,7 @@ export const IndexPage = () => {
             customerName: orderData.customerName,
             phone: orderData.phone,
             address: orderData.address,
-            city: orderData.city, // This will use the recognized/modified city from the app
+            city: formatCityForSheets(modifiedCities[orderData.id] || orderData.city || orderData.rawCity || '', selectedCourier), // Use modified city first, then recognized city, then raw city, standardized and formatted for sheets
             rawCity: orderData.rawCity,
             lineItems: orderData.lineItems.map((item: any) => ({
               name: item.name,
@@ -4845,7 +4845,7 @@ export const IndexPage = () => {
                   customerName: orderData.customerName,
                   phone: orderData.phone,
                   address: orderData.address,
-                  city: orderData.city, // This will use the recognized/modified city from the app
+                  city: formatCityForSheets(modifiedCities[orderData.id] || orderData.city || orderData.rawCity || '', selectedCourier), // Use modified city first, then recognized city, then raw city, standardized and formatted for sheets
                   rawCity: orderData.rawCity,
                   lineItems: orderData.lineItems?.map((item: any) => ({
                     name: item.name,
@@ -5938,7 +5938,7 @@ export const IndexPage = () => {
                   customerName: orderData.customerName,
                   phone: orderData.phone,
                   address: orderData.address,
-                  city: orderData.city, // This will use the recognized/modified city from the app
+                  city: formatCityForSheets(modifiedCities[orderData.id] || orderData.city || orderData.rawCity || '', selectedCourier), // Use modified city first, then recognized city, then raw city, standardized and formatted for sheets
                   rawCity: orderData.rawCity,
                   lineItems: orderData.lineItems?.map((item: any) => ({
                     name: item.name,
@@ -6260,6 +6260,20 @@ export const IndexPage = () => {
       areaCode: parts[2] || '',
       cityCode: parts[3] || ''
     };
+  };
+
+  // Function to format city for Google Sheets based on selected courier
+  const formatCityForSheets = (cityValue: string, courier: string): string => {
+    if (!cityValue) return '';
+
+    // For Speedaf, extract only the city name (second part after first comma)
+    if (courier === 'speedaf') {
+      const parsed = parseSpeedafCityEntry(cityValue);
+      return parsed.city || cityValue; // Fallback to original if parsing fails
+    }
+
+    // For Sendit and others, use the city value as-is
+    return cityValue;
   };
 
   return (

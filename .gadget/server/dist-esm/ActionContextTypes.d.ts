@@ -94,6 +94,8 @@ import { GetSenditDistrictIdGlobalActionContext } from "./global-actions.js";
 
 import { ProcessSpeedafAPIGlobalActionContext } from "./global-actions.js";
 
+import { RemoveOrderFromSheetsGlobalActionContext } from "./global-actions.js";
+
 import { SenditFulfillOrderGlobalActionContext } from "./global-actions.js";
 
 import { StandardizeMoroccanAddressGlobalActionContext } from "./global-actions.js";
@@ -113,8 +115,6 @@ import { UpdateReferenceTrackingGlobalActionContext } from "./global-actions.js"
 import { WriteBatchOrdersToSheetsGlobalActionContext } from "./global-actions.js";
 
 import { WriteToShopifyGlobalActionContext } from "./global-actions.js";
-
-import { RemoveOrderFromSheetsGlobalActionContext } from "./global-actions.js";
 
 
 
@@ -401,6 +401,12 @@ declare module "../../../api/actions/processSpeedafAPI" {
 }
 
 
+declare module "../../../api/actions/removeOrderFromSheets" {
+  export type ActionRun = (params: RemoveOrderFromSheetsGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: RemoveOrderFromSheetsGlobalActionContext) => Promise<any>;
+}
+
+
 declare module "../../../api/actions/senditFulfillOrder" {
   export type ActionRun = (params: SenditFulfillOrderGlobalActionContext) => Promise<any>;
   export type ActionOnSuccess = (params: SenditFulfillOrderGlobalActionContext) => Promise<any>;
@@ -458,11 +464,5 @@ declare module "../../../api/actions/writeBatchOrdersToSheets" {
 declare module "../../../api/actions/writeToShopify" {
   export type ActionRun = (params: WriteToShopifyGlobalActionContext) => Promise<any>;
   export type ActionOnSuccess = (params: WriteToShopifyGlobalActionContext) => Promise<any>;
-}
-
-
-declare module "../../../api/actions/removeOrderFromSheets" {
-  export type ActionRun = (params: RemoveOrderFromSheetsGlobalActionContext) => Promise<any>;
-  export type ActionOnSuccess = (params: RemoveOrderFromSheetsGlobalActionContext) => Promise<any>;
 }
 

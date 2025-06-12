@@ -136,6 +136,29 @@ export interface ProcessSpeedafAPIGlobalActionContext extends AmbientContext {
 	*/
 	context: ProcessSpeedafAPIGlobalActionContext;
 }
+/** Context of the `removeOrderFromSheets` action. */
+export interface RemoveOrderFromSheetsGlobalActionContext extends AmbientContext {
+	/**
+	* @deprecated Use 'returnType' instead.
+	* Useful for returning data from this action by setting `scope.result`.
+	*/
+	scope: ActionExecutionScope;
+	/**
+	* An object specifying the trigger to this action (e.g. API call, custom params).
+	*/
+	params: {
+		orderName?: string
+		shopId?: string
+	};
+	/**
+	* An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+	*/
+	trigger: TriggerWithType<"api"> | TriggerWithType<"background-action">;
+	/**
+	* @private The context of this action.
+	*/
+	context: RemoveOrderFromSheetsGlobalActionContext;
+}
 /** Context of the `senditFulfillOrder` action. */
 export interface SenditFulfillOrderGlobalActionContext extends AmbientContext {
 	/**
@@ -381,24 +404,4 @@ export interface WriteToShopifyGlobalActionContext extends AmbientContext {
 	* @private The context of this action.
 	*/
 	context: WriteToShopifyGlobalActionContext;
-}
-/** Context of the `removeOrderFromSheets` action. */
-export interface RemoveOrderFromSheetsGlobalActionContext extends AmbientContext {
-	/**
-	* @deprecated Use 'returnType' instead.
-	* Useful for returning data from this action by setting `scope.result`.
-	*/
-	scope: ActionExecutionScope;
-	/**
-	* An object specifying the trigger to this action (e.g. API call, custom params).
-	*/
-	params: {};
-	/**
-	* An object specifying the trigger to this action (e.g. api call, scheduler etc.)
-	*/
-	trigger: TriggerWithType<"api"> | TriggerWithType<"background-action">;
-	/**
-	* @private The context of this action.
-	*/
-	context: RemoveOrderFromSheetsGlobalActionContext;
 }

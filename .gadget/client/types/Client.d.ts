@@ -210,6 +210,32 @@ export declare class Client implements AnyClient {
             testMode?: (Scalars["Boolean"] | null) | null;
         } | null | undefined;
     };
+    /** Executes the removeOrderFromSheets global action. */
+    removeOrderFromSheets: {
+        (variables?: {
+            orderName?: (Scalars["String"] | null) | null;
+            shopId?: (Scalars["String"] | null) | null;
+        } | null): Promise<any>;
+        type: "globalAction";
+        operationName: "removeOrderFromSheets";
+        operationReturnType: "RemoveOrderFromSheets";
+        namespace: null;
+        typesImports: ["Scalars"];
+        variables: {
+            orderName: {
+                required: false;
+                type: "String";
+            };
+            shopId: {
+                required: false;
+                type: "String";
+            };
+        };
+        variablesType: {
+            orderName?: (Scalars["String"] | null) | null;
+            shopId?: (Scalars["String"] | null) | null;
+        } | null | undefined;
+    };
     /** Executes the senditFulfillOrder global action. */
     senditFulfillOrder: {
         (): Promise<any>;
@@ -442,17 +468,6 @@ export declare class Client implements AnyClient {
             mutation?: (Scalars["String"] | null) | null;
             variables?: (Scalars["JSONObject"] | null) | null;
         } | null | undefined;
-    };
-    /** Executes the removeOrderFromSheets global action. */
-    removeOrderFromSheets: {
-        (): Promise<any>;
-        type: "globalAction";
-        operationName: "removeOrderFromSheets";
-        operationReturnType: "RemoveOrderFromSheets";
-        namespace: null;
-        typesImports: [];
-        variables: {};
-        variablesType: Record<string, never>;
     };
     shopifyCustomer: ShopifyCustomerManager;
     shopifyGdprRequest: ShopifyGdprRequestManager;
