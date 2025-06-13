@@ -121,21 +121,21 @@ async function getSheetConfig(shopId: string, api: any): Promise<any> {
 }
 
 /**
- * Find the first empty row in the sheet by checking column A
+ * Find the first empty row in the sheet by checking column E
  */
 async function findFirstEmptyRow(sheets: any, spreadsheetId: string, sheetName: string): Promise<number> {
   try {
-    // Check column A to find the first empty row
+    // Check column E to find the first empty row
     const result = await sheets.spreadsheets.values.get({
       spreadsheetId,
-      range: `${sheetName}!A:A`
+      range: `${sheetName}!E:E`
     });
     
     const values = result.data.values || [];
     
-    // Start from row 6 (after headers) and find the first empty row in column A
-    for (let i = 6; i < Math.max(values.length, 1000); i++) { // Check up to row 1000 or actual data length
-      // Check if this row index exists and has data in column A
+    // Start from row 6 (after headers) and find the first empty row in column E
+    for (let i = 6; i < Math.max(values.length, 10000); i++) { // Check up to row 10000 or actual data length
+      // Check if this row index exists and has data in column E
       if (!values[i] || !values[i][0] || values[i][0].toString().trim() === '') {
         return i + 1; // Convert to 1-based row number (i+1 because i is 0-based)
       }
@@ -268,14 +268,6 @@ async function writeBatchToSheet(
           allBatchUpdates.push({
             range: `${sheetName}!K${currentRow}`,
             values: [["0.00"]]
-          });
-        }
-        
-        // Shipping status - Column M
-        if (order.displayFulfillmentStatus) {
-          allBatchUpdates.push({
-            range: `${sheetName}!M${currentRow}`,
-            values: [[order.displayFulfillmentStatus]]
           });
         }
         
