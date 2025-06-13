@@ -121,7 +121,7 @@ function formatCustomerName(customer: any): string {
 function extractPhoneNumber(orderData: any): string {
   // Try multiple possible locations for phone number
   let phone = '';
-  
+
   if (orderData.customer?.phone) {
     phone = orderData.customer.phone;
   } else if (typeof orderData.phone === 'string' && orderData.phone.trim() !== '') {
@@ -132,9 +132,36 @@ function extractPhoneNumber(orderData: any): string {
       phone = orderData.shippingAddress.phone;
     }
   }
-  
+
   // Use the Moroccan phone number formatter
   return formatMoroccanPhoneNumber(phone);
+}
+
+/**
+ * Extract Original City from noteAttributes
+ */
+function extractOriginalCity(orderData: any): string {
+  try {
+    if (!orderData || !orderData.noteAttributes) {
+      return '';
+    }
+
+    // Handle both array and object formats
+    let noteAttributes = orderData.noteAttributes;
+    if (!Array.isArray(noteAttributes)) {
+      return '';
+    }
+
+    // Look for the "Original City" key in noteAttributes
+    const originalCityAttribute = noteAttributes.find((attr: any) =>
+      attr && typeof attr === 'object' && attr.key === 'Original City'
+    );
+
+    return originalCityAttribute?.value || '';
+  } catch (error) {
+    console.error('Error extracting original city:', error);
+    return '';
+  }
 }
 
 /**
@@ -333,6 +360,7 @@ async function fetchOrderData(
           }
         }
         tags
+        note
         customer {
           id
           firstName
@@ -518,8 +546,13 @@ export const run: ActionRun = async ({ params, api, logger, connections }) => {
       throw new Error(`Shop with ID ${shopId} not found`);
     }
     
-    // Verify the order exists (basic check)
-    const orderBasic = await api.shopifyOrder.findById(orderId);
+    // Fetch the order from Gadget database to get noteAttributes
+    const orderBasic = await api.shopifyOrder.findById(orderId, {
+      select: {
+        id: true,
+        noteAttributes: true
+      }
+    });
     if (!orderBasic) {
       throw new Error(`Order with ID ${orderId} not found`);
     }
@@ -547,10 +580,21 @@ export const run: ActionRun = async ({ params, api, logger, connections }) => {
     const customerName = formatCustomerName(orderData.customer);
     const phone = extractPhoneNumber(orderData);
     const email = orderData.customer?.email || '';
-    
+
+    // Extract Original City from noteAttributes (with error handling)
+    let originalCity = '';
+    try {
+      // Use noteAttributes from Gadget database instead of Shopify API
+      const orderDataWithNotes = { ...orderData, noteAttributes: orderBasic.noteAttributes };
+      originalCity = extractOriginalCity(orderDataWithNotes);
+    } catch (error) {
+      console.error('Error extracting original city for order:', orderData.name, error);
+      originalCity = '';
+    }
+
     // Format address
     const address = formatAddress(orderData.shippingAddress);
-    
+
     // Standardize city name
     const rawCity = orderData.shippingAddress?.city || '';
     const city = standardizeMoroccanCitySync(rawCity);
@@ -603,6 +647,18 @@ export const run: ActionRun = async ({ params, api, logger, connections }) => {
         }))
     } : { hasRefunds: false };
     
+    // Debug: Log what we're about to return
+    console.log(`🔍 [DEBUG] extractOrderSKUs returning for order ${orderData.name}:`, {
+      customerName,
+      phone,
+      originalCity,
+      city,
+      rawCity,
+      address,
+      totalPrice: orderData.totalPriceSet?.shopMoney?.amount || "0.00",
+      noteAttributes: orderBasic.noteAttributes // Use noteAttributes from Gadget database
+    });
+
     // Return the comprehensive order data
     return {
       success: true,
@@ -614,6 +670,7 @@ export const run: ActionRun = async ({ params, api, logger, connections }) => {
         customer: orderData.customer,
         phone,
         email,
+        originalCity, // Include the Original City from noteAttributes
         address,
         city,
         rawCity, // Include the original city name for reference
@@ -660,4 +717,4 @@ export const params = {
 export const options: ActionOptions = {
   triggers: { api: true },
   returnType: true
-}; 
+};

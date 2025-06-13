@@ -2916,13 +2916,13 @@ export const IndexPage = () => {
               const isFulfilledNow = FULFILLED_STATUSES.some(
                 status => orderStatus.toUpperCase() === status.toUpperCase()
               );
-              
+
               // Double-check financial status with the full order data
               const financialStatus = orderResponse.order.financialStatus || '';
               const isRefundedNow = REFUNDED_STATUSES.some(
                 status => financialStatus.toUpperCase() === status.toUpperCase()
               );
-              
+
               // Check if order is cancelled using the new isCancelled flag
               const isCancelledNow = !!orderResponse.order.isCancelled;
               
@@ -2953,11 +2953,34 @@ export const IndexPage = () => {
               }
               
               console.log(`🔍 [fetchOrders] Successfully loaded order ${order.name || order.id}`);
-              return {
+
+              // Debug: Log what we're getting from the action
+              console.log(`🔍 [DEBUG] Raw order response for ${order.name || order.id}:`, {
+                customerName: orderResponse.order.customerName,
+                phone: orderResponse.order.phone,
+                originalCity: orderResponse.order.originalCity,
+                city: orderResponse.order.city,
+                totalPrice: orderResponse.order.totalPrice,
+                address: orderResponse.order.address
+              });
+
+              const finalOrderData = {
                 ...orderResponse.order,
                 id: order.id, // Keep the original ID format
                 hasLoadedSKUs: true
               };
+
+              // Debug: Log what we're returning
+              console.log(`🔍 [DEBUG] Final order data for ${order.name || order.id}:`, {
+                customerName: finalOrderData.customerName,
+                phone: finalOrderData.phone,
+                originalCity: finalOrderData.originalCity,
+                city: finalOrderData.city,
+                totalPrice: finalOrderData.totalPrice,
+                address: finalOrderData.address
+              });
+
+              return finalOrderData;
             } else {
               console.log(`🔍 [fetchOrders] Failed to extract SKUs for order ${order.name || order.id}: ${orderResponse?.error || 'Unknown error'}`);
               // If extraction failed, return minimal data
@@ -3562,6 +3585,7 @@ export const IndexPage = () => {
             name: orderData.name,
             customerName: orderData.customerName,
             phone: orderData.phone,
+            originalCity: orderData.originalCity, // Include Original City from noteAttributes
             address: orderData.address,
             city: formatCityForSheets(modifiedCities[orderData.id] || orderData.city || orderData.rawCity || '', selectedCourier), // Use modified city first, then recognized city, then raw city, standardized and formatted for sheets
             rawCity: orderData.rawCity,
@@ -4127,19 +4151,33 @@ export const IndexPage = () => {
 
   // Helper function to render each order item
   const renderItem = (item: any) => {
+    // Debug: Log what we're rendering
+    console.log(`🔍 [DEBUG] renderItem called with:`, {
+      id: item?.id,
+      name: item?.name,
+      customerName: item?.customerName,
+      phone: item?.phone,
+      originalCity: item?.originalCity,
+      city: item?.city,
+      totalPrice: item?.totalPrice,
+      address: item?.address,
+      fullItem: item
+    });
+
     // Safely extract properties with fallbacks
-    const { 
-      id, 
-      name = '', 
-      customerName = '', 
-      city = '', 
+    const {
+      id,
+      name = '',
+      customerName = '',
+      city = '',
       rawCity = '',
-      skus = [], 
-      totalPrice = '', 
-      financialStatus = '', 
-      statusTone = 'info', 
-      address = '', 
-      phone = '', 
+      originalCity = '', // Extract Original City from noteAttributes
+      skus = [],
+      totalPrice = '',
+      financialStatus = '',
+      statusTone = 'info',
+      address = '',
+      phone = '',
       trackingNumber = '',
       confirmationTag = ''
     } = item || {};
@@ -4221,6 +4259,11 @@ export const IndexPage = () => {
             <Text as="span" variant="bodyMd">
               <strong>Phone:</strong> {phone}
             </Text>
+            {originalCity && (
+              <Text as="span" variant="bodyMd">
+                <strong>Original City - additional info:</strong> {originalCity}
+              </Text>
+            )}
           </InlineStack>
           
           <InlineStack align="space-between">
@@ -4844,6 +4887,7 @@ export const IndexPage = () => {
                   name: orderData.name,
                   customerName: orderData.customerName,
                   phone: orderData.phone,
+                  originalCity: orderData.originalCity, // Include Original City from noteAttributes
                   address: orderData.address,
                   city: formatCityForSheets(modifiedCities[orderData.id] || orderData.city || orderData.rawCity || '', selectedCourier), // Use modified city first, then recognized city, then raw city, standardized and formatted for sheets
                   rawCity: orderData.rawCity,
@@ -5937,6 +5981,7 @@ export const IndexPage = () => {
                   name: orderData.name,
                   customerName: orderData.customerName,
                   phone: orderData.phone,
+                  originalCity: orderData.originalCity, // Include Original City from noteAttributes
                   address: orderData.address,
                   city: formatCityForSheets(modifiedCities[orderData.id] || orderData.city || orderData.rawCity || '', selectedCourier), // Use modified city first, then recognized city, then raw city, standardized and formatted for sheets
                   rawCity: orderData.rawCity,
