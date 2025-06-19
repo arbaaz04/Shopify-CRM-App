@@ -1,11 +1,11 @@
-import { GadgetRecord } from "@gadgetinc/api-client-core";
+import type { GadgetRecord } from "@gadgetinc/api-client-core";
 import type { FastifyReply, FastifyRequest } from "fastify";
 import crypto from "node:crypto";
 import { FieldType, LINK_PARAM } from "./effects";
 import { MisconfiguredActionError, PermissionDeniedError } from "./errors";
 import { Globals } from "./globals";
 import type { Session } from "./Session";
-import { AnyParams, FieldMetadata, ModelDescriptor } from "./types";
+import type { AnyParams, FieldMetadata, ModelDescriptor } from "./types";
 
 declare module "fastify" {
   interface FastifyRequest {
@@ -49,14 +49,14 @@ const getSessionFromRequest = <Request extends FastifyRequest>(request: Request)
  * @example
  * ```ts
  * // routes/GET-protected-route.js
- * const { preValidation } = require("@gadgetinc/auth");
+ * import { preValidation } from "gadget-server";
  *
  * module.exports = async ({ request, reply }) => {
  *  await reply.send("this is a protected route");
  * }
  *
  * module.options = {
- *  preValidation,
+ *   preValidation,
  * }
  * ```
  */

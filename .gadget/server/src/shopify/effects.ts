@@ -1,14 +1,8 @@
 import type { FilterElement, GadgetRecord } from "@gadgetinc/api-client-core";
 import { validateBelongsToLink } from "../auth";
-import {
-  getActionContextFromLocalStorage,
-  getCurrentContext,
-  getModelByApiIdentifier,
-  internalModelManagerForModel,
-  maybeGetActionContextFromLocalStorage,
-} from "../effects";
+import { getActionContextFromLocalStorage, getCurrentContext, getModelByApiIdentifier, internalModelManagerForModel } from "../effects";
 import { InvalidActionInputError } from "../errors";
-import { Globals } from "../globals";
+import { Globals, kGlobals } from "../globals";
 import { AppTenancyKey } from "../tenancy";
 import type { AnyParams } from "../types";
 import { assert } from "../utils";
@@ -77,7 +71,7 @@ export async function shopifySync(params: AnyParams, record: GadgetRecord<any>):
         syncRecord.syncSinceBy
       );
     } catch (error) {
-      Globals.logger.error({ error, connectionSyncId: syncRecord.id }, "an error occurred starting shop sync");
+      context.logger.error({ error, connectionSyncId: syncRecord.id }, "an error occurred starting shop sync");
       throw error;
     }
   } else {
@@ -97,12 +91,12 @@ export async function abortSync(params: AnyParams, record: GadgetRecord<any>): P
     record.errorMessage = "Sync aborted";
   }
 
-  Globals.logger.info({ userVisible: true, connectionSyncId: syncId }, "aborting sync");
+  context.logger.info({ userVisible: true, connectionSyncId: syncId }, "aborting sync");
 
   try {
     await effectAPIs.abortSync(syncId.toString());
   } catch (error) {
-    Globals.logger.error({ error, connectionSyncId: syncId }, "an error occurred aborting sync");
+    context.logger.error({ error, connectionSyncId: syncId }, "an error occurred aborting sync");
     throw error;
   }
 }
@@ -236,12 +230,9 @@ export async function globalShopifySync(params: {
   force?: boolean;
   startReason?: string;
 }): Promise<void> {
-  const context = maybeGetActionContextFromLocalStorage();
-  const effectAPIs = assert(
-    context ? context.effectAPIs : getCurrentContext().effectAPIs,
-    "effect apis is missing from the current context"
-  );
-  const api = assert(context ? context.api : getCurrentContext().api, "api client is missing from the current context");
+  const context = getCurrentContext();
+  const effectAPIs = assert(context.effectAPIs, "effect apis is missing from the current context");
+  const api = assert(context.api, "api client is missing from the current context");
 
   const { apiKeys, syncSince, models, force, startReason } = params;
 
@@ -283,23 +274,23 @@ export async function globalShopifySync(params: {
       pageInfo = records.pagination.pageInfo;
     }
   } catch (error) {
-    Globals.logger.info({ userVisible: true, error, apiKeys }, "could not get shops for all API keys");
+    context.logger.info({ userVisible: true, error, apiKeys }, "could not get shops for all API keys");
     throw error;
   }
 
   for (const result of results) {
     const shopId = result.id;
     const domain = result.domain ?? result.myshopifyDomain;
-    Globals.logger.debug({ shopId, domain }, "syncing shop");
+    context.logger.debug({ shopId, domain }, "syncing shop");
 
     // skip the sync if there is no accessToken set or if the state is uninstalled
-    if (Globals.platformModules.lodash().isEmpty(result[accessTokenIdentifier]) || result.state?.created == "uninstalled") {
-      Globals.logger.info({ shopId, domain }, "skipping sync for shop without access token or is uninstalled");
+    if (context[kGlobals].platformModules.lodash().isEmpty(result[accessTokenIdentifier]) || result.state?.created == "uninstalled") {
+      context.logger.info({ shopId, domain }, "skipping sync for shop without access token or is uninstalled");
       continue;
     }
 
     try {
-      const shopifySyncModelManager = Globals.platformModules.lodash().get(api, runShopifySyncAction.dotNotationPath);
+      const shopifySyncModelManager = context[kGlobals].platformModules.lodash().get(api, runShopifySyncAction.dotNotationPath);
       await shopifySyncModelManager[runShopifySyncAction.apiIdentifier]({
         [shopifySyncModelApiIdentifier]: {
           shop: {

@@ -1,4 +1,13 @@
-/** Context of the `createSenditOrder` action. */ /**
+/** Context of the `calculateRefund` action. */ /**
+  * @deprecated Use 'returnType' instead.
+  * Useful for returning data from this action by setting `scope.result`.
+  */ /**
+  * An object specifying the trigger to this action (e.g. API call, custom params).
+  */ /**
+  * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+  */ /**
+  * @private The context of this action.
+  */ /** Context of the `createSenditOrder` action. */ /**
   * @deprecated Use 'returnType' instead.
   * Useful for returning data from this action by setting `scope.result`.
   */ /**
@@ -43,6 +52,24 @@
   * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
   */ /**
   * @private The context of this action.
+  */ /** Context of the `processBulkReturns` action. */ /**
+  * @deprecated Use 'returnType' instead.
+  * Useful for returning data from this action by setting `scope.result`.
+  */ /**
+  * An object specifying the trigger to this action (e.g. API call, custom params).
+  */ /**
+  * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+  */ /**
+  * @private The context of this action.
+  */ /** Context of the `processOrderReturn` action. */ /**
+  * @deprecated Use 'returnType' instead.
+  * Useful for returning data from this action by setting `scope.result`.
+  */ /**
+  * An object specifying the trigger to this action (e.g. API call, custom params).
+  */ /**
+  * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+  */ /**
+  * @private The context of this action.
   */ /** Context of the `processSpeedafAPI` action. */ /**
   * @deprecated Use 'returnType' instead.
   * Useful for returning data from this action by setting `scope.result`.
@@ -53,6 +80,24 @@
   */ /**
   * @private The context of this action.
   */ /** Context of the `removeOrderFromSheets` action. */ /**
+  * @deprecated Use 'returnType' instead.
+  * Useful for returning data from this action by setting `scope.result`.
+  */ /**
+  * An object specifying the trigger to this action (e.g. API call, custom params).
+  */ /**
+  * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+  */ /**
+  * @private The context of this action.
+  */ /** Context of the `searchBulkOrdersForReturn` action. */ /**
+  * @deprecated Use 'returnType' instead.
+  * Useful for returning data from this action by setting `scope.result`.
+  */ /**
+  * An object specifying the trigger to this action (e.g. API call, custom params).
+  */ /**
+  * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+  */ /**
+  * @private The context of this action.
+  */ /** Context of the `searchOrderForReturn` action. */ /**
   * @deprecated Use 'returnType' instead.
   * Useful for returning data from this action by setting `scope.result`.
   */ /**
@@ -98,6 +143,15 @@
   */ /**
   * @private The context of this action.
   */ /** Context of the `testGoogleAuth` action. */ /**
+  * @deprecated Use 'returnType' instead.
+  * Useful for returning data from this action by setting `scope.result`.
+  */ /**
+  * An object specifying the trigger to this action (e.g. API call, custom params).
+  */ /**
+  * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+  */ /**
+  * @private The context of this action.
+  */ /** Context of the `testLocationQuery` action. */ /**
   * @deprecated Use 'returnType' instead.
   * Useful for returning data from this action by setting `scope.result`.
   */ /**

@@ -1,6 +1,6 @@
 import { validateBelongsToLink } from "../auth.js";
 import { FieldType, getActionContextFromLocalStorage } from "../effects.js";
-import { modelsMap } from "../metadata.js";
+import { kGlobals } from "../globals.js";
 /**
  * Applicable for multi-tenant user authenticated apps.
  * Enforces that the given record is only accessible by the current logged in user.
@@ -27,11 +27,12 @@ import { modelsMap } from "../metadata.js";
     const userBelongsToField = options?.userBelongsToField;
     // if this effect is not run in the context of a model then it does not apply
     if (!model) {
+        context.logger.warn("preventCrossUserDataAccess: not running in a model action -- will have no effect");
         return;
     }
     const userId = context.session?.get("user");
     const input = params[model.apiIdentifier];
-    const userModel = context.authConfig?.userModelKey ? Object.values(modelsMap).find((model)=>model.key === context.authConfig?.userModelKey) : undefined;
+    const userModel = context.authConfig?.userModelKey ? Object.values(context[kGlobals].modelsMap).find((model)=>model.key === context.authConfig?.userModelKey) : undefined;
     const tenantModelKey = userModel?.key ?? "";
     const hasBelongsToField = Object.values(model.fields).some((f)=>f.fieldType === FieldType.BelongsTo && f.configuration.relatedModelKey === tenantModelKey);
     if (userId && userModel && hasBelongsToField) {

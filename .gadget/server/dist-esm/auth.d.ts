@@ -1,7 +1,7 @@
 
-import { GadgetRecord } from "@gadgetinc/api-client-core";
+import type { GadgetRecord } from "@gadgetinc/api-client-core";
 import type { FastifyReply, FastifyRequest } from "fastify";
-import { AnyParams, FieldMetadata, ModelDescriptor } from "./types.js";
+import type { AnyParams, FieldMetadata, ModelDescriptor } from "./types.js";
 declare module "fastify" {
 	interface FastifyRequest {
 		gadgetAuth?: {
@@ -28,14 +28,14 @@ export declare const hashCode: (code: string) => string;
 * @example
 * ```ts
 * // routes/GET-protected-route.js
-* const { preValidation } = require("@gadgetinc/auth");
+* import { preValidation } from "gadget-server";
 *
 * module.exports = async ({ request, reply }) => {
 *  await reply.send("this is a protected route");
 * }
 *
 * module.options = {
-*  preValidation,
+*   preValidation,
 * }
 * ```
 */

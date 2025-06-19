@@ -14,7 +14,7 @@
  * ```ts
  * const route: RouteHandler<{ Body: { name: string } }> = async function ({ request, reply }) {
  *   const { name } = request.body;
- *      
+ *
  *   await reply.send({ message: `Hello, ${name}!` });
  * }
  * route.options = {

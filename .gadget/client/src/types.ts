@@ -161,10 +161,10 @@ export type InternalSenditConfigRecord = Scalars["JSONObject"];
 export type InternalSpeedafConfigRecord = Scalars["JSONObject"];
 
 
-export type BackgroundActionResult = AvailableCreateSenditOrderResultSelection | AvailableDirectOrderTestResultSelection | AvailableExtractOrderSKUsResultSelection | AvailableFulfillOrderResultSelection | AvailableGetSenditDistrictIdResultSelection | AvailableProcessSpeedafAPIResultSelection | AvailableRemoveOrderFromSheetsResultSelection | AvailableSenditFulfillOrderResultSelection | AvailableStandardizeMoroccanAddressResultSelection | AvailableStandardizeMoroccanCityResultSelection | AvailableSyncOrdersResultSelection | AvailableTestGoogleAuthResultSelection | AvailableTestSenditConnectionResultSelection | AvailableTestWriteToSheetResultSelection | AvailableUpdateReferenceTrackingResultSelection | AvailableWriteBatchOrdersToSheetsResultSelection | AvailableWriteToShopifyResultSelection | AvailableUpdateShopifyOrderResultSelection | AvailableAbortShopifySyncResultSelection | AvailableCompleteShopifySyncResultSelection | AvailableErrorShopifySyncResultSelection | AvailableRunShopifySyncResultSelection | AvailableCreateGoogleSheetConfigResultSelection | AvailableUpdateGoogleSheetConfigResultSelection | AvailableDeleteGoogleSheetConfigResultSelection | AvailableCreateSenditConfigResultSelection | AvailableUpdateSenditConfigResultSelection | AvailableDeleteSenditConfigResultSelection | AvailableCreateSpeedafConfigResultSelection | AvailableUpdateSpeedafConfigResultSelection | AvailableDeleteSpeedafConfigResultSelection | AvailableFindFirstSpeedafConfigResultSelection;
+export type BackgroundActionResult = AvailableCalculateRefundResultSelection | AvailableCreateSenditOrderResultSelection | AvailableDirectOrderTestResultSelection | AvailableExtractOrderSKUsResultSelection | AvailableFulfillOrderResultSelection | AvailableGetSenditDistrictIdResultSelection | AvailableProcessBulkReturnsResultSelection | AvailableProcessOrderReturnResultSelection | AvailableProcessSpeedafAPIResultSelection | AvailableRemoveOrderFromSheetsResultSelection | AvailableSearchBulkOrdersForReturnResultSelection | AvailableSearchOrderForReturnResultSelection | AvailableSenditFulfillOrderResultSelection | AvailableStandardizeMoroccanAddressResultSelection | AvailableStandardizeMoroccanCityResultSelection | AvailableSyncOrdersResultSelection | AvailableTestGoogleAuthResultSelection | AvailableTestLocationQueryResultSelection | AvailableTestSenditConnectionResultSelection | AvailableTestWriteToSheetResultSelection | AvailableUpdateReferenceTrackingResultSelection | AvailableWriteBatchOrdersToSheetsResultSelection | AvailableWriteToShopifyResultSelection | AvailableUpdateShopifyOrderResultSelection | AvailableAbortShopifySyncResultSelection | AvailableCompleteShopifySyncResultSelection | AvailableErrorShopifySyncResultSelection | AvailableRunShopifySyncResultSelection | AvailableCreateGoogleSheetConfigResultSelection | AvailableUpdateGoogleSheetConfigResultSelection | AvailableDeleteGoogleSheetConfigResultSelection | AvailableCreateSenditConfigResultSelection | AvailableUpdateSenditConfigResultSelection | AvailableDeleteSenditConfigResultSelection | AvailableCreateSpeedafConfigResultSelection | AvailableUpdateSpeedafConfigResultSelection | AvailableDeleteSpeedafConfigResultSelection | AvailableFindFirstSpeedafConfigResultSelection;
 
 
-export type AvailableBackgroundActionResultSelection = CreateSenditOrderResult | DirectOrderTestResult | ExtractOrderSKUsResult | FulfillOrderResult | GetSenditDistrictIdResult | ProcessSpeedafAPIResult | RemoveOrderFromSheetsResult | SenditFulfillOrderResult | StandardizeMoroccanAddressResult | StandardizeMoroccanCityResult | SyncOrdersResult | TestGoogleAuthResult | TestSenditConnectionResult | TestWriteToSheetResult | UpdateReferenceTrackingResult | WriteBatchOrdersToSheetsResult | WriteToShopifyResult | UpdateShopifyOrderResult | AbortShopifySyncResult | CompleteShopifySyncResult | ErrorShopifySyncResult | RunShopifySyncResult | CreateGoogleSheetConfigResult | UpdateGoogleSheetConfigResult | DeleteGoogleSheetConfigResult | CreateSenditConfigResult | UpdateSenditConfigResult | DeleteSenditConfigResult | CreateSpeedafConfigResult | UpdateSpeedafConfigResult | DeleteSpeedafConfigResult | FindFirstSpeedafConfigResult;
+export type AvailableBackgroundActionResultSelection = CalculateRefundResult | CreateSenditOrderResult | DirectOrderTestResult | ExtractOrderSKUsResult | FulfillOrderResult | GetSenditDistrictIdResult | ProcessBulkReturnsResult | ProcessOrderReturnResult | ProcessSpeedafAPIResult | RemoveOrderFromSheetsResult | SearchBulkOrdersForReturnResult | SearchOrderForReturnResult | SenditFulfillOrderResult | StandardizeMoroccanAddressResult | StandardizeMoroccanCityResult | SyncOrdersResult | TestGoogleAuthResult | TestLocationQueryResult | TestSenditConnectionResult | TestWriteToSheetResult | UpdateReferenceTrackingResult | WriteBatchOrdersToSheetsResult | WriteToShopifyResult | UpdateShopifyOrderResult | AbortShopifySyncResult | CompleteShopifySyncResult | ErrorShopifySyncResult | RunShopifySyncResult | CreateGoogleSheetConfigResult | UpdateGoogleSheetConfigResult | DeleteGoogleSheetConfigResult | CreateSenditConfigResult | UpdateSenditConfigResult | DeleteSenditConfigResult | CreateSpeedafConfigResult | UpdateSpeedafConfigResult | DeleteSpeedafConfigResult | FindFirstSpeedafConfigResult;
 
 
 
@@ -3380,6 +3380,47 @@ export type BulkUpsertSpeedafConfigsInput = {
   on?: ((Scalars['String'] | null))[];
 
   speedafConfig?: UpsertSpeedafConfigInput | null;
+};
+
+
+
+export type CalculateRefundLineItemsElementTypeInput = {
+
+  lineItemId?: (Scalars['String'] | null) | null;
+
+  quantity?: (Scalars['Float'] | null) | null;
+
+  reason?: (Scalars['String'] | null) | null;
+};
+
+
+
+export type ProcessBulkReturnsOrderSelectionsElementTypeInput = {
+
+  orderId?: (Scalars['String'] | null) | null;
+
+  /** An array of ProcessBulkReturnsOrderSelectionsElementTypeSelectedItemsElementTypeInputs */
+  selectedItems?: (ProcessBulkReturnsOrderSelectionsElementTypeSelectedItemsElementTypeInput)[];
+};
+
+
+
+export type ProcessBulkReturnsOrderSelectionsElementTypeSelectedItemsElementTypeInput = {
+
+  lineItemId?: (Scalars['String'] | null) | null;
+
+  quantity?: (Scalars['Float'] | null) | null;
+};
+
+
+
+export type ProcessOrderReturnLineItemsElementTypeInput = {
+
+  lineItemId?: (Scalars['String'] | null) | null;
+
+  quantity?: (Scalars['Float'] | null) | null;
+
+  reason?: (Scalars['String'] | null) | null;
 };
 
 
@@ -9242,6 +9283,8 @@ export type Mutation = {
 
   bulkUpsertSpeedafConfigs: BulkUpsertSpeedafConfigsResult;
 
+  calculateRefund: (CalculateRefundResult | null);
+
   createSenditOrder: (CreateSenditOrderResult | null);
 
   directOrderTest: (DirectOrderTestResult | null);
@@ -9252,9 +9295,17 @@ export type Mutation = {
 
   getSenditDistrictId: (GetSenditDistrictIdResult | null);
 
+  processBulkReturns: (ProcessBulkReturnsResult | null);
+
+  processOrderReturn: (ProcessOrderReturnResult | null);
+
   processSpeedafAPI: (ProcessSpeedafAPIResult | null);
 
   removeOrderFromSheets: (RemoveOrderFromSheetsResult | null);
+
+  searchBulkOrdersForReturn: (SearchBulkOrdersForReturnResult | null);
+
+  searchOrderForReturn: (SearchOrderForReturnResult | null);
 
   senditFulfillOrder: (SenditFulfillOrderResult | null);
 
@@ -9265,6 +9316,8 @@ export type Mutation = {
   syncOrders: (SyncOrdersResult | null);
 
   testGoogleAuth: (TestGoogleAuthResult | null);
+
+  testLocationQuery: (TestLocationQueryResult | null);
 
   testSenditConnection: (TestSenditConnectionResult | null);
 
@@ -9365,6 +9418,8 @@ export type AvailableMutationSelection = {
 
   bulkUpsertSpeedafConfigs?: AvailableBulkUpsertSpeedafConfigsResultSelection;
 
+  calculateRefund?: AvailableCalculateRefundResultSelection;
+
   createSenditOrder?: AvailableCreateSenditOrderResultSelection;
 
   directOrderTest?: AvailableDirectOrderTestResultSelection;
@@ -9375,9 +9430,17 @@ export type AvailableMutationSelection = {
 
   getSenditDistrictId?: AvailableGetSenditDistrictIdResultSelection;
 
+  processBulkReturns?: AvailableProcessBulkReturnsResultSelection;
+
+  processOrderReturn?: AvailableProcessOrderReturnResultSelection;
+
   processSpeedafAPI?: AvailableProcessSpeedafAPIResultSelection;
 
   removeOrderFromSheets?: AvailableRemoveOrderFromSheetsResultSelection;
+
+  searchBulkOrdersForReturn?: AvailableSearchBulkOrdersForReturnResultSelection;
+
+  searchOrderForReturn?: AvailableSearchOrderForReturnResultSelection;
 
   senditFulfillOrder?: AvailableSenditFulfillOrderResultSelection;
 
@@ -9388,6 +9451,8 @@ export type AvailableMutationSelection = {
   syncOrders?: AvailableSyncOrdersResultSelection;
 
   testGoogleAuth?: AvailableTestGoogleAuthResultSelection;
+
+  testLocationQuery?: AvailableTestLocationQueryResultSelection;
 
   testSenditConnection?: AvailableTestSenditConnectionResultSelection;
 
@@ -10391,6 +10456,32 @@ export type AvailableBulkUpsertSpeedafConfigsResultSelection = {
 
 
 
+export type CalculateRefundResult = {
+
+  __typename: 'CalculateRefundResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  result: (Scalars['JSON'] | null);
+};
+
+
+
+export type AvailableCalculateRefundResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  result?: boolean | null | undefined;
+};
+
+
+
 export type CreateSenditOrderResult = {
 
   __typename: 'CreateSenditOrderResult';
@@ -10521,6 +10612,58 @@ export type AvailableGetSenditDistrictIdResultSelection = {
 
 
 
+export type ProcessBulkReturnsResult = {
+
+  __typename: 'ProcessBulkReturnsResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  result: (Scalars['JSON'] | null);
+};
+
+
+
+export type AvailableProcessBulkReturnsResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  result?: boolean | null | undefined;
+};
+
+
+
+export type ProcessOrderReturnResult = {
+
+  __typename: 'ProcessOrderReturnResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  result: (Scalars['JSON'] | null);
+};
+
+
+
+export type AvailableProcessOrderReturnResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  result?: boolean | null | undefined;
+};
+
+
+
 export type ProcessSpeedafAPIResult = {
 
   __typename: 'ProcessSpeedafAPIResult';
@@ -10561,6 +10704,58 @@ export type RemoveOrderFromSheetsResult = {
 
 
 export type AvailableRemoveOrderFromSheetsResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  result?: boolean | null | undefined;
+};
+
+
+
+export type SearchBulkOrdersForReturnResult = {
+
+  __typename: 'SearchBulkOrdersForReturnResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  result: (Scalars['JSON'] | null);
+};
+
+
+
+export type AvailableSearchBulkOrdersForReturnResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  result?: boolean | null | undefined;
+};
+
+
+
+export type SearchOrderForReturnResult = {
+
+  __typename: 'SearchOrderForReturnResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  result: (Scalars['JSON'] | null);
+};
+
+
+
+export type AvailableSearchOrderForReturnResultSelection = {
 
   __typename?: boolean | null | undefined;
 
@@ -10691,6 +10886,32 @@ export type TestGoogleAuthResult = {
 
 
 export type AvailableTestGoogleAuthResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  result?: boolean | null | undefined;
+};
+
+
+
+export type TestLocationQueryResult = {
+
+  __typename: 'TestLocationQueryResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  result: (Scalars['JSON'] | null);
+};
+
+
+
+export type AvailableTestLocationQueryResultSelection = {
 
   __typename?: boolean | null | undefined;
 
@@ -10957,6 +11178,8 @@ export type BackgroundMutations = {
 
   bulkUpsertSpeedafConfigs: BulkEnqueueBackgroundActionResult;
 
+  calculateRefund: EnqueueBackgroundActionResult;
+
   createSenditOrder: EnqueueBackgroundActionResult;
 
   directOrderTest: EnqueueBackgroundActionResult;
@@ -10967,9 +11190,17 @@ export type BackgroundMutations = {
 
   getSenditDistrictId: EnqueueBackgroundActionResult;
 
+  processBulkReturns: EnqueueBackgroundActionResult;
+
+  processOrderReturn: EnqueueBackgroundActionResult;
+
   processSpeedafAPI: EnqueueBackgroundActionResult;
 
   removeOrderFromSheets: EnqueueBackgroundActionResult;
+
+  searchBulkOrdersForReturn: EnqueueBackgroundActionResult;
+
+  searchOrderForReturn: EnqueueBackgroundActionResult;
 
   senditFulfillOrder: EnqueueBackgroundActionResult;
 
@@ -10980,6 +11211,8 @@ export type BackgroundMutations = {
   syncOrders: EnqueueBackgroundActionResult;
 
   testGoogleAuth: EnqueueBackgroundActionResult;
+
+  testLocationQuery: EnqueueBackgroundActionResult;
 
   testSenditConnection: EnqueueBackgroundActionResult;
 
@@ -11074,6 +11307,8 @@ export type AvailableBackgroundMutationsSelection = {
 
   bulkUpsertSpeedafConfigs?: AvailableBulkEnqueueBackgroundActionResultSelection;
 
+  calculateRefund?: AvailableEnqueueBackgroundActionResultSelection;
+
   createSenditOrder?: AvailableEnqueueBackgroundActionResultSelection;
 
   directOrderTest?: AvailableEnqueueBackgroundActionResultSelection;
@@ -11084,9 +11319,17 @@ export type AvailableBackgroundMutationsSelection = {
 
   getSenditDistrictId?: AvailableEnqueueBackgroundActionResultSelection;
 
+  processBulkReturns?: AvailableEnqueueBackgroundActionResultSelection;
+
+  processOrderReturn?: AvailableEnqueueBackgroundActionResultSelection;
+
   processSpeedafAPI?: AvailableEnqueueBackgroundActionResultSelection;
 
   removeOrderFromSheets?: AvailableEnqueueBackgroundActionResultSelection;
+
+  searchBulkOrdersForReturn?: AvailableEnqueueBackgroundActionResultSelection;
+
+  searchOrderForReturn?: AvailableEnqueueBackgroundActionResultSelection;
 
   senditFulfillOrder?: AvailableEnqueueBackgroundActionResultSelection;
 
@@ -11097,6 +11340,8 @@ export type AvailableBackgroundMutationsSelection = {
   syncOrders?: AvailableEnqueueBackgroundActionResultSelection;
 
   testGoogleAuth?: AvailableEnqueueBackgroundActionResultSelection;
+
+  testLocationQuery?: AvailableEnqueueBackgroundActionResultSelection;
 
   testSenditConnection?: AvailableEnqueueBackgroundActionResultSelection;
 
@@ -11446,6 +11691,8 @@ export type InternalMutations = {
 
   triggerFindFirstSpeedafConfig: (FindFirstSpeedafConfigResult | null);
 
+  triggerCalculateRefund: (CalculateRefundResult | null);
+
   triggerCreateSenditOrder: (CreateSenditOrderResult | null);
 
   triggerDirectOrderTest: (DirectOrderTestResult | null);
@@ -11456,9 +11703,17 @@ export type InternalMutations = {
 
   triggerGetSenditDistrictId: (GetSenditDistrictIdResult | null);
 
+  triggerProcessBulkReturns: (ProcessBulkReturnsResult | null);
+
+  triggerProcessOrderReturn: (ProcessOrderReturnResult | null);
+
   triggerProcessSpeedafAPI: (ProcessSpeedafAPIResult | null);
 
   triggerRemoveOrderFromSheets: (RemoveOrderFromSheetsResult | null);
+
+  triggerSearchBulkOrdersForReturn: (SearchBulkOrdersForReturnResult | null);
+
+  triggerSearchOrderForReturn: (SearchOrderForReturnResult | null);
 
   triggerSenditFulfillOrder: (SenditFulfillOrderResult | null);
 
@@ -11469,6 +11724,8 @@ export type InternalMutations = {
   triggerSyncOrders: (SyncOrdersResult | null);
 
   triggerTestGoogleAuth: (TestGoogleAuthResult | null);
+
+  triggerTestLocationQuery: (TestLocationQueryResult | null);
 
   triggerTestSenditConnection: (TestSenditConnectionResult | null);
 
@@ -11750,6 +12007,8 @@ export type AvailableInternalMutationsSelection = {
 
   triggerFindFirstSpeedafConfig?: AvailableFindFirstSpeedafConfigResultSelection;
 
+  triggerCalculateRefund?: AvailableCalculateRefundResultSelection;
+
   triggerCreateSenditOrder?: AvailableCreateSenditOrderResultSelection;
 
   triggerDirectOrderTest?: AvailableDirectOrderTestResultSelection;
@@ -11760,9 +12019,17 @@ export type AvailableInternalMutationsSelection = {
 
   triggerGetSenditDistrictId?: AvailableGetSenditDistrictIdResultSelection;
 
+  triggerProcessBulkReturns?: AvailableProcessBulkReturnsResultSelection;
+
+  triggerProcessOrderReturn?: AvailableProcessOrderReturnResultSelection;
+
   triggerProcessSpeedafAPI?: AvailableProcessSpeedafAPIResultSelection;
 
   triggerRemoveOrderFromSheets?: AvailableRemoveOrderFromSheetsResultSelection;
+
+  triggerSearchBulkOrdersForReturn?: AvailableSearchBulkOrdersForReturnResultSelection;
+
+  triggerSearchOrderForReturn?: AvailableSearchOrderForReturnResultSelection;
 
   triggerSenditFulfillOrder?: AvailableSenditFulfillOrderResultSelection;
 
@@ -11773,6 +12040,8 @@ export type AvailableInternalMutationsSelection = {
   triggerSyncOrders?: AvailableSyncOrdersResultSelection;
 
   triggerTestGoogleAuth?: AvailableTestGoogleAuthResultSelection;
+
+  triggerTestLocationQuery?: AvailableTestLocationQueryResultSelection;
 
   triggerTestSenditConnection?: AvailableTestSenditConnectionResultSelection;
 

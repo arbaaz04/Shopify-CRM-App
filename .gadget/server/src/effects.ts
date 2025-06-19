@@ -1,7 +1,7 @@
 import type { AnyClient, InternalModelManager, RecordData } from "@gadgetinc/api-client-core";
 import { ChangeTracking, GadgetRecord } from "@gadgetinc/api-client-core";
 import { InternalError, InvalidStateTransitionError, NoSessionForAuthenticationError, UserNotSetOnSessionError } from "./errors";
-import { Globals, actionContextLocalStorage } from "./globals";
+import { Globals, actionContextLocalStorage, kGlobals } from "./globals";
 import { frameworkVersion, modelListIndex, modelsMap } from "./metadata";
 import type {
   AnyActionContext,
@@ -84,11 +84,11 @@ export const internalModelManagerForTypename = (api: AnyClient, typename: string
  * @param record - object saved to the database
  */
 export async function save(record: GadgetRecord<any>): Promise<void> {
-  const context = maybeGetActionContextFromLocalStorage();
-  const api = assert(context ? context.api : getCurrentContext().api, "api client is missing from the current context");
+  const context = getCurrentContext();
+  const api = assert(context.api, "api client is missing from the current context");
   const model = getModelByTypename(record.__typename);
 
-  await (await Globals.modelValidator(model.key)).validate({ api, logger: Globals.logger }, record);
+  await (await context[kGlobals].modelValidator(model.key)).validate({ api, logger: Globals.logger }, record);
 
   const internalModelManager = internalModelManagerForTypename(api, record.__typename);
 
@@ -114,17 +114,17 @@ export async function save(record: GadgetRecord<any>): Promise<void> {
  * @param record - object deleted from the database
  */
 export async function deleteRecord(record: GadgetRecord<any>): Promise<void> {
-  const context = maybeGetActionContextFromLocalStorage();
-
-  const api = assert(context ? context.api : getCurrentContext().api, "api client is missing from the current context");
-  const scope = context ? context.scope : {};
+  const context = getCurrentContext();
+  const api = assert(context.api, "api client is missing from the current context");
 
   const id = assert(record.id, `record.id not set on record in scope, has the record been persisted?`);
 
   const internalModelManager = internalModelManagerForTypename(api, record.__typename);
   await internalModelManager.delete(id);
 
-  scope.recordDeleted = true;
+  if ("scope" in context) {
+    context.scope.recordDeleted = true;
+  }
 }
 
 export function transitionState(
@@ -190,12 +190,12 @@ export async function legacySuccessfulAuthentication(params: AnyParams): Promise
   const user = (await manager.findMany({ filter: { email: { equals: params.email } } }))[0];
   let result = false;
   if (user && params.password && user.password?.hash) {
-    if (await Globals.platformModules.bcrypt().compare(params.password, user.password.hash)) {
+    if (await context[kGlobals].platformModules.bcrypt().compare(params.password, user.password.hash)) {
       scope.authenticatedUser = user;
       result = true;
     }
   }
-  Globals.logger.info({ email: params.email, userId: user?.id, result }, "login attempt");
+  context.logger.info({ email: params.email, userId: user?.id, result }, "login attempt");
 
   if (!result) {
     throw new Error("Invalid email or password");
@@ -224,8 +224,24 @@ export function maybeGetActionContextFromLocalStorage(): AnyActionContext | AnyG
   return actionContextLocalStorage.getStore();
 }
 
-export function getCurrentContext(): AnyAmbientContext {
-  return assert(Globals.requestContext.get("requestContext"), "no gadget context found on request");
+/**
+ * Get the current ambient context in any context
+ *
+ * @returns The current ambient context, or `undefined` if there is no ambient context.
+ * @private
+ */
+export function maybeGetCurrentContext(): AnyActionContext | AnyGlobalActionContext | AnyEffectContext | AnyAmbientContext | undefined {
+  return maybeGetActionContextFromLocalStorage() || Globals.requestContext.get("requestContext");
+}
+
+/**
+ * Get the current ambient context in any context
+ *
+ * @returns The current ambient context, or throws if there is no ambient context.
+ * @private
+ */
+export function getCurrentContext(): AnyActionContext | AnyGlobalActionContext | AnyEffectContext | AnyAmbientContext {
+  return assert(maybeGetCurrentContext(), "no gadget context found in AsyncLocalStorage or on request context");
 }
 
 export const LINK_PARAM = "_link";
@@ -257,10 +273,11 @@ export function changedAttributes(model: ModelMetadata, record: GadgetRecord<Rec
 }
 
 export const getModelByApiIdentifier = (apiIdentifier: string): ModelMetadata => {
-  const typename = modelListIndex[`api:${apiIdentifier}`];
+  const modelListIndexValue = maybeGetCurrentContext()?.[kGlobals]?.modelListIndex ?? modelListIndex;
+  const typename = modelListIndexValue[`api:${apiIdentifier}`];
   if (!typename) {
     throw new InternalError(`Model ${apiIdentifier} not found in available model metadata`, {
-      availableApiIdentifiers: Object.keys(modelListIndex),
+      availableApiIdentifiers: Object.keys(modelListIndexValue),
     });
   }
 
@@ -272,10 +289,11 @@ export const getModelByTypename = (typename: string): ModelMetadata => {
     throw new InternalError(`No typename found on record, __typename must be set for accessing model metadata`);
   }
 
-  const model = modelsMap[typename];
+  const modelsMapValue = maybeGetCurrentContext()?.[kGlobals]?.modelsMap ?? modelsMap;
+  const model = modelsMapValue[typename];
   if (!model) {
     throw new InternalError(`Model with typename ${typename} not found in available model metadata`, {
-      availableTypenames: Object.keys(modelsMap),
+      availableTypenames: Object.keys(modelsMapValue),
     });
   }
 

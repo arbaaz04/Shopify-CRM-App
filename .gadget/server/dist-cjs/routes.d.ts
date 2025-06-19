@@ -1,5 +1,5 @@
 
-import { Client } from "@gadget-client/bambe-crm-app";
+import { BambeCrmAppClient } from "@gadget-client/bambe-crm-app";
 import type { FastifyInstance, FastifyReply, FastifyRequest, RequestGenericInterface, RouteGenericInterface, ContextConfigDefault, RawServerDefault, RawRequestDefaultExpression, RawReplyDefaultExpression, RouteShorthandOptions, RouteHandlerMethod } from "fastify";
 import { Logger } from "./AmbientContext";
 import { AppConfiguration } from "./AppConfiguration";
@@ -31,7 +31,7 @@ declare module "fastify" {
 		*
 		* __Note__: This client is authorized using a superuser internal api token and has permission to invoke any action in the system using normal API mutations or the Internal API.
 		**/
-		api: Client;
+		api: BambeCrmAppClient;
 		/** App URL for the current environment e.g. https://example.gadget.app */
 		currentAppUrl: string;
 		/** Fastify request object */
@@ -54,7 +54,7 @@ export type Server = FastifyInstance;
 * ```ts
 * const route: RouteHandler<{ Body: { name: string } }> = async function ({ request, reply }) {
 *   const { name } = request.body;
-*      
+*
 *   await reply.send({ message: `Hello, ${name}!` });
 * }
 * route.options = {

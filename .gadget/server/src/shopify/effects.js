@@ -93,7 +93,7 @@ async function shopifySync(params, record) {
         try {
             await effectAPIs.sync(syncRecord.id.toString(), shopId, syncRecord.syncSince, syncRecord.models, syncRecord.force, params.startReason, syncRecord.syncSinceBy);
         } catch (error) {
-            _globals.Globals.logger.error({
+            context.logger.error({
                 error,
                 connectionSyncId: syncRecord.id
             }, "an error occurred starting shop sync");
@@ -111,14 +111,14 @@ async function abortSync(params, record) {
     if (!params.errorMessage) {
         record.errorMessage = "Sync aborted";
     }
-    _globals.Globals.logger.info({
+    context.logger.info({
         userVisible: true,
         connectionSyncId: syncId
     }, "aborting sync");
     try {
         await effectAPIs.abortSync(syncId.toString());
     } catch (error) {
-        _globals.Globals.logger.error({
+        context.logger.error({
             error,
             connectionSyncId: syncId
         }, "an error occurred aborting sync");
@@ -231,9 +231,9 @@ function validShopsFilter(shopModelFiles, params) {
     return filter;
 }
 async function globalShopifySync(params) {
-    const context = (0, _effects.maybeGetActionContextFromLocalStorage)();
-    const effectAPIs = (0, _utils.assert)(context ? context.effectAPIs : (0, _effects.getCurrentContext)().effectAPIs, "effect apis is missing from the current context");
-    const api = (0, _utils.assert)(context ? context.api : (0, _effects.getCurrentContext)().api, "api client is missing from the current context");
+    const context = (0, _effects.getCurrentContext)();
+    const effectAPIs = (0, _utils.assert)(context.effectAPIs, "effect apis is missing from the current context");
+    const api = (0, _utils.assert)(context.api, "api client is missing from the current context");
     const { apiKeys, syncSince, models, force, startReason } = params;
     if (!apiKeys || apiKeys.length === 0) {
         throw new _errors.InvalidActionInputError("missing at least 1 api key");
@@ -270,7 +270,7 @@ async function globalShopifySync(params) {
             pageInfo = records.pagination.pageInfo;
         }
     } catch (error) {
-        _globals.Globals.logger.info({
+        context.logger.info({
             userVisible: true,
             error,
             apiKeys
@@ -280,20 +280,20 @@ async function globalShopifySync(params) {
     for (const result of results){
         const shopId = result.id;
         const domain = result.domain ?? result.myshopifyDomain;
-        _globals.Globals.logger.debug({
+        context.logger.debug({
             shopId,
             domain
         }, "syncing shop");
         // skip the sync if there is no accessToken set or if the state is uninstalled
-        if (_globals.Globals.platformModules.lodash().isEmpty(result[accessTokenIdentifier]) || result.state?.created == "uninstalled") {
-            _globals.Globals.logger.info({
+        if (context[_globals.kGlobals].platformModules.lodash().isEmpty(result[accessTokenIdentifier]) || result.state?.created == "uninstalled") {
+            context.logger.info({
                 shopId,
                 domain
             }, "skipping sync for shop without access token or is uninstalled");
             continue;
         }
         try {
-            const shopifySyncModelManager = _globals.Globals.platformModules.lodash().get(api, runShopifySyncAction.dotNotationPath);
+            const shopifySyncModelManager = context[_globals.kGlobals].platformModules.lodash().get(api, runShopifySyncAction.dotNotationPath);
             await shopifySyncModelManager[runShopifySyncAction.apiIdentifier]({
                 [shopifySyncModelApiIdentifier]: {
                     shop: {

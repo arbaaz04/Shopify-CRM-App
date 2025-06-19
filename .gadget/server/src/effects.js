@@ -63,6 +63,9 @@ _export(exports, {
     maybeGetActionContextFromLocalStorage: function() {
         return maybeGetActionContextFromLocalStorage;
     },
+    maybeGetCurrentContext: function() {
+        return maybeGetCurrentContext;
+    },
     save: function() {
         return save;
     },
@@ -127,10 +130,10 @@ const internalModelManagerForTypename = (api, typename)=>{
     return internalModelManagerForModel(api, model.apiIdentifier, model.namespace);
 };
 async function save(record) {
-    const context = maybeGetActionContextFromLocalStorage();
-    const api = (0, _utils.assert)(context ? context.api : getCurrentContext().api, "api client is missing from the current context");
+    const context = getCurrentContext();
+    const api = (0, _utils.assert)(context.api, "api client is missing from the current context");
     const model = getModelByTypename(record.__typename);
-    await (await _globals.Globals.modelValidator(model.key)).validate({
+    await (await context[_globals.kGlobals].modelValidator(model.key)).validate({
         api,
         logger: _globals.Globals.logger
     }, record);
@@ -151,13 +154,14 @@ async function save(record) {
     record.flushChanges(_apiclientcore().ChangeTracking.SinceLastPersisted);
 }
 async function deleteRecord(record) {
-    const context = maybeGetActionContextFromLocalStorage();
-    const api = (0, _utils.assert)(context ? context.api : getCurrentContext().api, "api client is missing from the current context");
-    const scope = context ? context.scope : {};
+    const context = getCurrentContext();
+    const api = (0, _utils.assert)(context.api, "api client is missing from the current context");
     const id = (0, _utils.assert)(record.id, `record.id not set on record in scope, has the record been persisted?`);
     const internalModelManager = internalModelManagerForTypename(api, record.__typename);
     await internalModelManager.delete(id);
-    scope.recordDeleted = true;
+    if ("scope" in context) {
+        context.scope.recordDeleted = true;
+    }
 }
 function transitionState(record, transition) {
     const model = getModelByTypename(record.__typename);
@@ -209,12 +213,12 @@ async function legacySuccessfulAuthentication(params) {
     }))[0];
     let result = false;
     if (user && params.password && user.password?.hash) {
-        if (await _globals.Globals.platformModules.bcrypt().compare(params.password, user.password.hash)) {
+        if (await context[_globals.kGlobals].platformModules.bcrypt().compare(params.password, user.password.hash)) {
             scope.authenticatedUser = user;
             result = true;
         }
     }
-    _globals.Globals.logger.info({
+    context.logger.info({
         email: params.email,
         userId: user?.id,
         result
@@ -232,8 +236,11 @@ function getActionContextFromLocalStorage() {
 function maybeGetActionContextFromLocalStorage() {
     return _globals.actionContextLocalStorage.getStore();
 }
+function maybeGetCurrentContext() {
+    return maybeGetActionContextFromLocalStorage() || _globals.Globals.requestContext.get("requestContext");
+}
 function getCurrentContext() {
-    return (0, _utils.assert)(_globals.Globals.requestContext.get("requestContext"), "no gadget context found on request");
+    return (0, _utils.assert)(maybeGetCurrentContext(), "no gadget context found in AsyncLocalStorage or on request context");
 }
 const LINK_PARAM = "_link";
 function writableAttributes(model, record) {
@@ -257,10 +264,11 @@ function changedAttributes(model, record) {
     return writableAttributes(model, attributes);
 }
 const getModelByApiIdentifier = (apiIdentifier)=>{
-    const typename = _metadata.modelListIndex[`api:${apiIdentifier}`];
+    const modelListIndexValue = maybeGetCurrentContext()?.[_globals.kGlobals]?.modelListIndex ?? _metadata.modelListIndex;
+    const typename = modelListIndexValue[`api:${apiIdentifier}`];
     if (!typename) {
         throw new _errors.InternalError(`Model ${apiIdentifier} not found in available model metadata`, {
-            availableApiIdentifiers: Object.keys(_metadata.modelListIndex)
+            availableApiIdentifiers: Object.keys(modelListIndexValue)
         });
     }
     return getModelByTypename(typename);
@@ -269,10 +277,11 @@ const getModelByTypename = (typename)=>{
     if (!typename) {
         throw new _errors.InternalError(`No typename found on record, __typename must be set for accessing model metadata`);
     }
-    const model = _metadata.modelsMap[typename];
+    const modelsMapValue = maybeGetCurrentContext()?.[_globals.kGlobals]?.modelsMap ?? _metadata.modelsMap;
+    const model = modelsMapValue[typename];
     if (!model) {
         throw new _errors.InternalError(`Model with typename ${typename} not found in available model metadata`, {
-            availableTypenames: Object.keys(_metadata.modelsMap)
+            availableTypenames: Object.keys(modelsMapValue)
         });
     }
     return model;

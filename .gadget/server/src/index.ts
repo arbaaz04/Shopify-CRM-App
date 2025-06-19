@@ -8,12 +8,12 @@
 *  |_.__/ \__,_|_| |_| |_|_.__/ \___|      \___|_|  |_| |_| |_|      \__,_| .__/| .__/ 
 *                                                                         |_|   |_|    
 *
-* Built for environment `Development` at version 1870
+* Built for environment `Development` at version 2182
 * Framework version: ^1.3.0
 * Edit this app here: https://bambe-crm-app.gadget.dev/edit
 */
 /// <reference path="./ActionContextTypes.d.ts" />
-import type { Client } from "@gadget-client/bambe-crm-app";
+import type { BambeCrmAppClient } from "@gadget-client/bambe-crm-app";
 import { Logger } from "./AmbientContext";
 export { InvalidRecordError } from '@gadgetinc/api-client-core'
 
@@ -81,7 +81,7 @@ let logger: Logger;
 /**
  * An instance of the Gadget API client that has admin permissions
  */
-let api: Client;
+let api: BambeCrmAppClient;
 
 /**
 * This is used internally to set the connections.
@@ -121,7 +121,7 @@ export const setLogger = (rootLogger: Logger): void => {
  * This is used internally to set the client Instance
  * @internal
  */
-export const setApiClient = (client: Client): void => {
+export const setApiClient = (client: BambeCrmAppClient): void => {
   api = client;
 }
 
@@ -136,5 +136,10 @@ export {
   Globals,
   actionContextLocalStorage
 };
+
+/**
+ * Register the globals on the globalThis object for use in the api client constructor when we need access to the global API client instance
+ **/
+(globalThis as any).GadgetGlobals = Globals;
 
 

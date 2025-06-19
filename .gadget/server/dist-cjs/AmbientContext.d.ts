@@ -1,5 +1,5 @@
 
-import { Client } from "@gadget-client/bambe-crm-app";
+import { BambeCrmAppClient } from "@gadget-client/bambe-crm-app";
 import { FastifyBaseLogger } from "fastify";
 import { AppConfiguration } from "./AppConfiguration";
 import { AppConnections } from "./AppConnections";
@@ -24,7 +24,7 @@ export interface AmbientContext {
 	*
 	* __Note__: This client is authorized using a superuser internal api token and has permission to invoke any action in the system using normal API mutations or the Internal API.
 	**/
-	api: Client;
+	api: BambeCrmAppClient;
 	/**
 	* The details of the request that is invoking this unit of work, if it was invoked by a request.
 	*

@@ -19,8 +19,10 @@ import {
 } from "react-router";
 import { api } from "../api";
 import { IndexPage } from "../routes/index";
-import { GoogleSheetConfigPage } from "../routes/googleSheetConfig";
+import GoogleSheetConfigPage from "../routes/googleSheetConfig";
+import ProcessReturnsPage from "../routes/processReturns";
 import "./App.css";
+import { AdaptorLink } from "./AdaptorLink";
 
 function Error404() {
   const navigate = useNavigate();
@@ -43,6 +45,7 @@ function App() {
       <Route path="/" element={<Layout />}>
         <Route index element={<IndexPage />} />
         <Route path="google-sheet-config" element={<GoogleSheetConfigPage />} />
+        <Route path="process-returns" element={<ProcessReturnsPage />} />
         <Route path="*" element={<Error404 />} />
       </Route>
     )
@@ -60,7 +63,7 @@ function Layout() {
     <GadgetProvider
       type={AppType.Embedded}
       shopifyApiKey={window.gadgetConfig.apiKeys.shopify}
-      api={api}
+      api={api as any}
     >
       <AuthenticatedApp />
     </GadgetProvider>
@@ -96,8 +99,9 @@ function EmbeddedApp() {
     <>
       <Outlet />
       <NavMenu>
-        <Link to="/">Dashboard</Link>
-        <Link to="/google-sheet-config">Configuration</Link>
+        <AdaptorLink url="/">Dashboard</AdaptorLink>
+        <AdaptorLink url="/process-returns">Process Returns</AdaptorLink>
+        <AdaptorLink url="/google-sheet-config">Configuration</AdaptorLink>
       </NavMenu>
     </>
   );

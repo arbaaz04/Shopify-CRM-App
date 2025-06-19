@@ -1,5 +1,6 @@
-import { Client } from ".";
+import { BambeCrmAppClient } from ".";
+window.BambeCrmAppClient = BambeCrmAppClient;
 const previousValue = window.Gadget;
-window.Gadget = Client;
+window.Gadget = BambeCrmAppClient;
 window.Gadget.previousValue = previousValue;
 //# sourceMappingURL=iife-export.js.map

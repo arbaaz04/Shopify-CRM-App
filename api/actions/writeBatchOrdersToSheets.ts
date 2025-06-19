@@ -23,6 +23,7 @@ interface WriteOrderInput {
   tags: string[];
   trackingNumber: string;
   referenceTrackingNumber?: string; // Optional reference tracking for exchange orders
+  isExchangeOrder?: boolean; // Flag to identify exchange orders for checkbox in column AA
   isCancelled: boolean;
   isDeleted: boolean;
   isFulfillmentCancelled: boolean;
@@ -194,103 +195,98 @@ async function writeBatchToSheet(
     let currentRow = startRow;
     
     for (const order of orders) {
-      // Process each line item for this order
+      let isFirstLineItem = true;
       for (let i = 0; i < order.lineItems.length; i++) {
         const item = order.lineItems[i];
-        const isFirstLineItem = i === 0;
-        
-        // Only add updates for columns that have data
-        
-        // Tracking number - Column C
-        if (order.trackingNumber) {
-          allBatchUpdates.push({
-            range: `${sheetName}!C${currentRow}`,
-            values: [[order.trackingNumber]]
-          });
+        // For each quantity, create a separate row
+        for (let q = 0; q < item.quantity; q++) {
+          // Tracking number - Column C
+          if (order.trackingNumber) {
+            allBatchUpdates.push({
+              range: `${sheetName}!C${currentRow}`,
+              values: [[order.trackingNumber]]
+            });
+          }
+          // SKU - Column E
+          if (item.sku) {
+            allBatchUpdates.push({
+              range: `${sheetName}!E${currentRow}`,
+              values: [[item.sku]]
+            });
+          }
+          // Customer name - Column F
+          if (order.customerName) {
+            allBatchUpdates.push({
+              range: `${sheetName}!F${currentRow}`,
+              values: [[order.customerName]]
+            });
+          }
+          // Address - Column G
+          if (order.address) {
+            allBatchUpdates.push({
+              range: `${sheetName}!G${currentRow}`,
+              values: [[order.address]]
+            });
+          }
+          // Phone - Column H
+          if (order.phone) {
+            allBatchUpdates.push({
+              range: `${sheetName}!H${currentRow}`,
+              values: [[order.phone]]
+            });
+          }
+          // City - Column I
+          if (order.city) {
+            allBatchUpdates.push({
+              range: `${sheetName}!I${currentRow}`,
+              values: [[order.city]]
+            });
+          }
+          // NET amount - Column J
+          if (item.price) {
+            allBatchUpdates.push({
+              range: `${sheetName}!J${currentRow}`,
+              values: [[item.price]]
+            });
+          }
+          // Brut amount - Column K (total price for first item, 0.00 for others)
+          if (isFirstLineItem && q === 0 && order.totalPrice) {
+            allBatchUpdates.push({
+              range: `${sheetName}!K${currentRow}`,
+              values: [[order.totalPrice]]
+            });
+          } else {
+            allBatchUpdates.push({
+              range: `${sheetName}!K${currentRow}`,
+              values: [["0.00"]]
+            });
+          }
+          // Order name - Column Z
+          if (order.name) {
+            allBatchUpdates.push({
+              range: `${sheetName}!Z${currentRow}`,
+              values: [[order.name]]
+            });
+          }
+          // Reference tracking number - Column Y (for exchange orders)
+          if (order.referenceTrackingNumber) {
+            allBatchUpdates.push({
+              range: `${sheetName}!Y${currentRow}`,
+              values: [[order.referenceTrackingNumber]]
+            });
+          }
+          // Checkbox - Column AA (set to true for exchange orders)
+          if (order.isExchangeOrder) {
+            allBatchUpdates.push({
+              range: `${sheetName}!AA${currentRow}`,
+              values: [[true]]
+            });
+          }
+          currentRow++;
         }
-        
-        // SKU - Column E
-        if (item.sku) {
-          allBatchUpdates.push({
-            range: `${sheetName}!E${currentRow}`,
-            values: [[item.sku]]
-          });
-        }
-        
-        // Customer name - Column F
-        if (order.customerName) {
-          allBatchUpdates.push({
-            range: `${sheetName}!F${currentRow}`,
-            values: [[order.customerName]]
-          });
-        }
-        
-        // Address - Column G
-        if (order.address) {
-          allBatchUpdates.push({
-            range: `${sheetName}!G${currentRow}`,
-            values: [[order.address]]
-          });
-        }
-        
-        // Phone - Column H
-        if (order.phone) {
-          allBatchUpdates.push({
-            range: `${sheetName}!H${currentRow}`,
-            values: [[order.phone]]
-          });
-        }
-        
-        // City - Column I
-        if (order.city) {
-          allBatchUpdates.push({
-            range: `${sheetName}!I${currentRow}`,
-            values: [[order.city]]
-          });
-        }
-        
-        // NET amount - Column J
-        if (item.price) {
-          allBatchUpdates.push({
-            range: `${sheetName}!J${currentRow}`,
-            values: [[item.price]]
-          });
-        }
-        
-        // Brut amount - Column K (total price for first item, 0.00 for others)
-        if (isFirstLineItem && order.totalPrice) {
-          allBatchUpdates.push({
-            range: `${sheetName}!K${currentRow}`,
-            values: [[order.totalPrice]]
-          });
-        } else if (!isFirstLineItem) {
-          // For second+ line items, explicitly write "0.00"
-          allBatchUpdates.push({
-            range: `${sheetName}!K${currentRow}`,
-            values: [["0.00"]]
-          });
-        }
-        
-        // Order name - Column Z
-        if (order.name) {
-          allBatchUpdates.push({
-            range: `${sheetName}!Z${currentRow}`,
-            values: [[order.name]]
-          });
-        }
-
-        // Reference tracking number - Column Y (for exchange orders)
-        if (order.referenceTrackingNumber) {
-          allBatchUpdates.push({
-            range: `${sheetName}!Y${currentRow}`,
-            values: [[order.referenceTrackingNumber]]
-          });
-        }
-
-        currentRow++;
+        isFirstLineItem = false;
       }
     }
-    
     // Execute all updates in a single massive batch request
     if (allBatchUpdates.length > 0) {
       await sheets.spreadsheets.values.batchUpdate({

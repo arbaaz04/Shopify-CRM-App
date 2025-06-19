@@ -54,7 +54,20 @@ export declare function getActionContextFromLocalStorage(): AnyActionContext | A
 * @private Similar to `getActionContextFromLocalStorage` but returns `undefined` if there is no action context. (i.e. possibly called from a route)
 */
 export declare function maybeGetActionContextFromLocalStorage(): AnyActionContext | AnyGlobalActionContext | AnyEffectContext | undefined;
-export declare function getCurrentContext(): AnyAmbientContext;
+/**
+* Get the current ambient context in any context
+*
+* @returns The current ambient context, or `undefined` if there is no ambient context.
+* @private
+*/
+export declare function maybeGetCurrentContext(): AnyActionContext | AnyGlobalActionContext | AnyEffectContext | AnyAmbientContext | undefined;
+/**
+* Get the current ambient context in any context
+*
+* @returns The current ambient context, or throws if there is no ambient context.
+* @private
+*/
+export declare function getCurrentContext(): AnyActionContext | AnyGlobalActionContext | AnyEffectContext | AnyAmbientContext;
 export declare const LINK_PARAM = "_link";
 export declare function writableAttributes(model: ModelMetadata, record: GadgetRecord<RecordData>): Record<string, any>;
 export declare function changedAttributes(model: ModelMetadata, record: GadgetRecord<RecordData>): Record<string, any>;

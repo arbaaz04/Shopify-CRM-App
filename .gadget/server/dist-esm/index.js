@@ -8,7 +8,7 @@
 *  |_.__/ \__,_|_| |_| |_|_.__/ \___|      \___|_|  |_| |_| |_|      \__,_| .__/| .__/ 
 *                                                                         |_|   |_|    
 *
-* Built for environment `Development` at version 1870
+* Built for environment `Development` at version 2182
 * Framework version: ^1.3.0
 * Edit this app here: https://bambe-crm-app.gadget.dev/edit
 */ /// <reference path="./ActionContextTypes.d.ts" />
@@ -96,3 +96,6 @@ export { api, logger, connections };
 /**
  * @internal
  */ export { Globals, actionContextLocalStorage };
+/**
+ * Register the globals on the globalThis object for use in the api client constructor when we need access to the global API client instance
+ **/ globalThis.GadgetGlobals = Globals;

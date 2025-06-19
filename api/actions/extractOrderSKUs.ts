@@ -647,18 +647,6 @@ export const run: ActionRun = async ({ params, api, logger, connections }) => {
         }))
     } : { hasRefunds: false };
     
-    // Debug: Log what we're about to return
-    console.log(`🔍 [DEBUG] extractOrderSKUs returning for order ${orderData.name}:`, {
-      customerName,
-      phone,
-      originalCity,
-      city,
-      rawCity,
-      address,
-      totalPrice: orderData.totalPriceSet?.shopMoney?.amount || "0.00",
-      noteAttributes: orderBasic.noteAttributes // Use noteAttributes from Gadget database
-    });
-
     // Return the comprehensive order data
     return {
       success: true,

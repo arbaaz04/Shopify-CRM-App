@@ -5,8 +5,8 @@ import { assert, GadgetConnection, AuthenticationMode, GadgetTransaction, Intern
 import type { ClientOptions as ApiClientOptions, AnyClient, EnqueueBackgroundActionOptions, AnyActionFunction } from '@gadgetinc/api-client-core';
 import type { DocumentNode } from 'graphql';
 
+import { CalculateRefundLineItemsElementTypeInput, Scalars, ProcessBulkReturnsOrderSelectionsElementTypeInput, ProcessOrderReturnLineItemsElementTypeInput, SyncOrdersOrdersElementTypeInput } from "./types.js";
 import { buildGlobalAction } from "./builder.js";
-import { Scalars, SyncOrdersOrdersElementTypeInput } from "./types.js";
 import { DefaultShopifyCustomerSelection, ShopifyCustomerManager } from "./models/ShopifyCustomer.js";
 import { DefaultShopifyGdprRequestSelection, ShopifyGdprRequestManager } from "./models/ShopifyGdprRequest.js";
 import { DefaultShopifyOrderSelection, ShopifyOrderManager } from "./models/ShopifyOrder.js";
@@ -88,11 +88,61 @@ const getImplicitEnv = () => {
 
 
 /**
- * Root object used for interacting with the bambe-crm-app API. `Client` has `query` and `mutation` functions for executing raw GraphQL queries and mutations, as well as `ModelManager` objects for manipulating models with a JavaScript API. `Client` also has a `fetch` function for making raw requests to your backend.
+ * Root object used for interacting with the bambe-crm-app API. `BambeCrmAppClient` has `query` and `mutation` functions for executing raw GraphQL queries and mutations, as well as `ModelManager` objects for manipulating models with a JavaScript API. `BambeCrmAppClient` also has a `fetch` function for making raw requests to your backend.
  * */
-export class Client implements AnyClient {
+export class BambeCrmAppClient implements AnyClient {
   connection!: GadgetConnection;
 
+  /** Executes the calculateRefund global action. */
+  calculateRefund = buildGlobalAction(this, {
+                       type: 'globalAction',
+                       functionName: 'calculateRefund',
+                       operationName: 'calculateRefund',
+                       operationReturnType: 'CalculateRefund',
+                       namespace: null,
+                       variables: {
+                         orderId: { required: false, type: 'String' },
+                         shopId: { required: false, type: 'String' },
+                         lineItems: {
+                           required: false,
+                           type: '[CalculateRefundLineItemsElementTypeInput!]'
+                         },
+                         refundShipping: { required: false, type: 'Boolean' },
+                         reason: { required: false, type: 'String' }
+                       }
+                     } as const) as unknown as {
+                     (variables?: {
+                                        orderId?: (Scalars['String'] | null) | null;
+                                        shopId?: (Scalars['String'] | null) | null;
+                                        lineItems?: (CalculateRefundLineItemsElementTypeInput)[];
+                                        refundShipping?: (Scalars['Boolean'] | null) | null;
+                                        reason?: (Scalars['String'] | null) | null;
+                                      } | null): Promise<any>;
+                     type: 'globalAction';
+                     operationName: 'calculateRefund';
+                     operationReturnType: 'CalculateRefund';
+                     namespace: null;
+                     typesImports: [ 'CalculateRefundLineItemsElementTypeInput', 'Scalars' ];
+                     variables: {
+                         orderId: { required: false, type: 'String' },
+                         shopId: { required: false, type: 'String' },
+                         lineItems: {
+                           required: false,
+                           type: '[CalculateRefundLineItemsElementTypeInput!]'
+                         },
+                         refundShipping: { required: false, type: 'Boolean' },
+                         reason: { required: false, type: 'String' }
+                       };
+                     variablesType: {
+                             orderId?: (Scalars['String'] | null) | null;
+                             shopId?: (Scalars['String'] | null) | null;
+                             lineItems?: (CalculateRefundLineItemsElementTypeInput)[];
+                             refundShipping?: (Scalars['Boolean'] | null) | null;
+                             reason?: (Scalars['String'] | null) | null;
+                           }
+                             | null
+                             | undefined;
+                   };
   /** Executes the createSenditOrder global action. */
   createSenditOrder = buildGlobalAction(this, {
                        type: 'globalAction',
@@ -229,6 +279,102 @@ export class Client implements AnyClient {
                      variables: {};
                      variablesType: Record<string, never>;
                    };
+  /** Executes the processBulkReturns global action. */
+  processBulkReturns = buildGlobalAction(this, {
+                       type: 'globalAction',
+                       functionName: 'processBulkReturns',
+                       operationName: 'processBulkReturns',
+                       operationReturnType: 'ProcessBulkReturns',
+                       namespace: null,
+                       variables: {
+                         orderSelections: {
+                           required: false,
+                           type: '[ProcessBulkReturnsOrderSelectionsElementTypeInput!]'
+                         },
+                         shopId: { required: false, type: 'String' }
+                       }
+                     } as const) as unknown as {
+                     (variables?: {
+                                        orderSelections?: (ProcessBulkReturnsOrderSelectionsElementTypeInput)[];
+                                        shopId?: (Scalars['String'] | null) | null;
+                                      } | null): Promise<any>;
+                     type: 'globalAction';
+                     operationName: 'processBulkReturns';
+                     operationReturnType: 'ProcessBulkReturns';
+                     namespace: null;
+                     typesImports: [ 'ProcessBulkReturnsOrderSelectionsElementTypeInput', 'Scalars' ];
+                     variables: {
+                         orderSelections: {
+                           required: false,
+                           type: '[ProcessBulkReturnsOrderSelectionsElementTypeInput!]'
+                         },
+                         shopId: { required: false, type: 'String' }
+                       };
+                     variablesType: {
+                             orderSelections?: (ProcessBulkReturnsOrderSelectionsElementTypeInput)[];
+                             shopId?: (Scalars['String'] | null) | null;
+                           }
+                             | null
+                             | undefined;
+                   };
+  /** Executes the processOrderReturn global action. */
+  processOrderReturn = buildGlobalAction(this, {
+                       type: 'globalAction',
+                       functionName: 'processOrderReturn',
+                       operationName: 'processOrderReturn',
+                       operationReturnType: 'ProcessOrderReturn',
+                       namespace: null,
+                       variables: {
+                         orderId: { required: false, type: 'String' },
+                         shopId: { required: false, type: 'String' },
+                         lineItems: {
+                           required: false,
+                           type: '[ProcessOrderReturnLineItemsElementTypeInput!]'
+                         },
+                         refundShipping: { required: false, type: 'Boolean' },
+                         reason: { required: false, type: 'String' },
+                         notify: { required: false, type: 'Boolean' },
+                         skipRefund: { required: false, type: 'Boolean' }
+                       }
+                     } as const) as unknown as {
+                     (variables?: {
+                                        orderId?: (Scalars['String'] | null) | null;
+                                        shopId?: (Scalars['String'] | null) | null;
+                                        lineItems?: (ProcessOrderReturnLineItemsElementTypeInput)[];
+                                        refundShipping?: (Scalars['Boolean'] | null) | null;
+                                        reason?: (Scalars['String'] | null) | null;
+                                        notify?: (Scalars['Boolean'] | null) | null;
+                                        skipRefund?: (Scalars['Boolean'] | null) | null;
+                                      } | null): Promise<any>;
+                     type: 'globalAction';
+                     operationName: 'processOrderReturn';
+                     operationReturnType: 'ProcessOrderReturn';
+                     namespace: null;
+                     typesImports: [ 'ProcessOrderReturnLineItemsElementTypeInput', 'Scalars' ];
+                     variables: {
+                         orderId: { required: false, type: 'String' },
+                         shopId: { required: false, type: 'String' },
+                         lineItems: {
+                           required: false,
+                           type: '[ProcessOrderReturnLineItemsElementTypeInput!]'
+                         },
+                         refundShipping: { required: false, type: 'Boolean' },
+                         reason: { required: false, type: 'String' },
+                         notify: { required: false, type: 'Boolean' },
+                         skipRefund: { required: false, type: 'Boolean' }
+                       };
+                     variablesType: {
+                             orderId?: (Scalars['String'] | null) | null;
+                             shopId?: (Scalars['String'] | null) | null;
+                             lineItems?: (ProcessOrderReturnLineItemsElementTypeInput)[];
+                             refundShipping?: (Scalars['Boolean'] | null) | null;
+                             reason?: (Scalars['String'] | null) | null;
+                             notify?: (Scalars['Boolean'] | null) | null;
+                             skipRefund?: (Scalars['Boolean'] | null) | null;
+                           }
+                             | null
+                             | undefined;
+                   };
   /** Executes the processSpeedafAPI global action. */
   processSpeedafAPI = buildGlobalAction(this, {
                        type: 'globalAction',
@@ -284,6 +430,70 @@ export class Client implements AnyClient {
                      type: 'globalAction';
                      operationName: 'removeOrderFromSheets';
                      operationReturnType: 'RemoveOrderFromSheets';
+                     namespace: null;
+                     typesImports: [ 'Scalars' ];
+                     variables: {
+                         orderName: { required: false, type: 'String' },
+                         shopId: { required: false, type: 'String' }
+                       };
+                     variablesType: {
+                             orderName?: (Scalars['String'] | null) | null;
+                             shopId?: (Scalars['String'] | null) | null;
+                           }
+                             | null
+                             | undefined;
+                   };
+  /** Executes the searchBulkOrdersForReturn global action. */
+  searchBulkOrdersForReturn = buildGlobalAction(this, {
+                       type: 'globalAction',
+                       functionName: 'searchBulkOrdersForReturn',
+                       operationName: 'searchBulkOrdersForReturn',
+                       operationReturnType: 'SearchBulkOrdersForReturn',
+                       namespace: null,
+                       variables: {
+                         orderNumbers: { required: false, type: '[String!]' },
+                         shopId: { required: false, type: 'String' }
+                       }
+                     } as const) as unknown as {
+                     (variables?: {
+                                        orderNumbers?: ((Scalars['String'] | null))[];
+                                        shopId?: (Scalars['String'] | null) | null;
+                                      } | null): Promise<any>;
+                     type: 'globalAction';
+                     operationName: 'searchBulkOrdersForReturn';
+                     operationReturnType: 'SearchBulkOrdersForReturn';
+                     namespace: null;
+                     typesImports: [ 'Scalars' ];
+                     variables: {
+                         orderNumbers: { required: false, type: '[String!]' },
+                         shopId: { required: false, type: 'String' }
+                       };
+                     variablesType: {
+                             orderNumbers?: ((Scalars['String'] | null))[];
+                             shopId?: (Scalars['String'] | null) | null;
+                           }
+                             | null
+                             | undefined;
+                   };
+  /** Executes the searchOrderForReturn global action. */
+  searchOrderForReturn = buildGlobalAction(this, {
+                       type: 'globalAction',
+                       functionName: 'searchOrderForReturn',
+                       operationName: 'searchOrderForReturn',
+                       operationReturnType: 'SearchOrderForReturn',
+                       namespace: null,
+                       variables: {
+                         orderName: { required: false, type: 'String' },
+                         shopId: { required: false, type: 'String' }
+                       }
+                     } as const) as unknown as {
+                     (variables?: {
+                                        orderName?: (Scalars['String'] | null) | null;
+                                        shopId?: (Scalars['String'] | null) | null;
+                                      } | null): Promise<any>;
+                     type: 'globalAction';
+                     operationName: 'searchOrderForReturn';
+                     operationReturnType: 'SearchOrderForReturn';
                      namespace: null;
                      typesImports: [ 'Scalars' ];
                      variables: {
@@ -411,6 +621,38 @@ export class Client implements AnyClient {
                      variablesType: {
                              shopId?: (Scalars['String'] | null) | null;
                              spreadsheetId?: (Scalars['String'] | null) | null;
+                           }
+                             | null
+                             | undefined;
+                   };
+  /** Executes the testLocationQuery global action. */
+  testLocationQuery = buildGlobalAction(this, {
+                       type: 'globalAction',
+                       functionName: 'testLocationQuery',
+                       operationName: 'testLocationQuery',
+                       operationReturnType: 'TestLocationQuery',
+                       namespace: null,
+                       variables: {
+                         orderId: { required: false, type: 'String' },
+                         shopId: { required: false, type: 'String' }
+                       }
+                     } as const) as unknown as {
+                     (variables?: {
+                                        orderId?: (Scalars['String'] | null) | null;
+                                        shopId?: (Scalars['String'] | null) | null;
+                                      } | null): Promise<any>;
+                     type: 'globalAction';
+                     operationName: 'testLocationQuery';
+                     operationReturnType: 'TestLocationQuery';
+                     namespace: null;
+                     typesImports: [ 'Scalars' ];
+                     variables: {
+                         orderId: { required: false, type: 'String' },
+                         shopId: { required: false, type: 'String' }
+                       };
+                     variablesType: {
+                             orderId?: (Scalars['String'] | null) | null;
+                             shopId?: (Scalars['String'] | null) | null;
                            }
                              | null
                              | undefined;
@@ -760,12 +1002,12 @@ export class Client implements AnyClient {
   /**
    * Returns a new Client instance that will call the Gadget API as the application's admin user.
    * This can only be used for API clients using internal authentication.
-   * @returns {Client} A new Client instance with admin authentication
+   * @returns {BambeCrmAppClient} A new BambeCrmAppClient instance with admin authentication
    */
-  get actAsAdmin(): Client {
-    assert(this.options?.authenticationMode?.internal, "actAsAdmin can only be used for API clients using internal authentication")
+  get actAsAdmin(): BambeCrmAppClient {
+    assert(this.options?.authenticationMode?.internal, `actAsAdmin can only be used for API clients using internal authentication, this client is using ${JSON.stringify(this.options?.authenticationMode)}`)
 
-    return new Client({
+    return new BambeCrmAppClient({
     ...this.options,
     authenticationMode: {
       internal: {
@@ -777,14 +1019,14 @@ export class Client implements AnyClient {
   }
 
   /**
-   * Returns a new Client instance that will call the Gadget API as with the permission of the current session.
+   * Returns a new BambeCrmAppClient instance that will call the Gadget API as with the permission of the current session.
    * This can only be used for API clients using internal authentication.
-   * @returns {Client} A new Client instance with session authentication
+   * @returns {BambeCrmAppClient} A new BambeCrmAppClient instance with session authentication
    */
-  get actAsSession(): Client {
+  get actAsSession(): BambeCrmAppClient {
     assert(this.options?.authenticationMode?.internal, "actAsSession can only be used for API clients using internal authentication")
 
-    return new Client({
+    return new BambeCrmAppClient({
       ...this.options,
       authenticationMode: {
         internal: {
@@ -1004,7 +1246,7 @@ export class Client implements AnyClient {
   }
 
   toString(): string {
-    return `GadgetAPIClient<${this.environment}>`;
+    return `BambeCrmAppClient<${this.environment}>`;
   }
 
   toJSON(): string {
@@ -1012,4 +1254,8 @@ export class Client implements AnyClient {
   }
 }
 
-(Client.prototype as any)[Symbol.for("gadget/modelRelationships")] = {"shopifyCustomer":{"orders":{"type":"HasMany","model":"shopifyOrder"},"lastOrder":{"type":"BelongsTo","model":"shopifyOrder"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyGdprRequest":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyOrder":{"customer":{"type":"BelongsTo","model":"shopifyCustomer"},"fulfillments":{"type":"HasMany","model":"shopifyFulfillment"},"shopifyShop":{"type":"BelongsTo","model":"shopifyShop"},"fulfillmentOrders":{"type":"HasMany","model":"shopifyFulfillmentOrder"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyShop":{"syncs":{"type":"HasMany","model":"shopifySync"},"gdprRequests":{"type":"HasMany","model":"shopifyGdprRequest"},"fulfillmentOrders":{"type":"HasMany","model":"shopifyFulfillmentOrder"},"fulfillmentServices":{"type":"HasMany","model":"shopifyFulfillmentService"},"fulfillments":{"type":"HasMany","model":"shopifyFulfillment"},"customers":{"type":"HasMany","model":"shopifyCustomer"},"orders":{"type":"HasMany","model":"shopifyOrder"},"productVariants":{"type":"HasMany","model":"shopifyProductVariant"},"products":{"type":"HasMany","model":"shopifyProduct"}},"shopifySync":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"googleSheetConfig":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"session":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyFulfillment":{"order":{"type":"BelongsTo","model":"shopifyOrder"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyFulfillmentOrder":{"order":{"type":"BelongsTo","model":"shopifyOrder"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyFulfillmentService":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyProduct":{"variants":{"type":"HasMany","model":"shopifyProductVariant"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyProductVariant":{"product":{"type":"BelongsTo","model":"shopifyProduct"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"senditConfig":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"speedafConfig":{"shop":{"type":"BelongsTo","model":"shopifyShop"}}};
+(BambeCrmAppClient.prototype as any)[Symbol.for("gadget/modelRelationships")] = {"shopifyCustomer":{"orders":{"type":"HasMany","model":"shopifyOrder"},"lastOrder":{"type":"BelongsTo","model":"shopifyOrder"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyGdprRequest":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyOrder":{"customer":{"type":"BelongsTo","model":"shopifyCustomer"},"fulfillments":{"type":"HasMany","model":"shopifyFulfillment"},"shopifyShop":{"type":"BelongsTo","model":"shopifyShop"},"fulfillmentOrders":{"type":"HasMany","model":"shopifyFulfillmentOrder"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyShop":{"syncs":{"type":"HasMany","model":"shopifySync"},"gdprRequests":{"type":"HasMany","model":"shopifyGdprRequest"},"fulfillmentOrders":{"type":"HasMany","model":"shopifyFulfillmentOrder"},"fulfillmentServices":{"type":"HasMany","model":"shopifyFulfillmentService"},"fulfillments":{"type":"HasMany","model":"shopifyFulfillment"},"customers":{"type":"HasMany","model":"shopifyCustomer"},"orders":{"type":"HasMany","model":"shopifyOrder"},"productVariants":{"type":"HasMany","model":"shopifyProductVariant"},"products":{"type":"HasMany","model":"shopifyProduct"}},"shopifySync":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"googleSheetConfig":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"session":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyFulfillment":{"order":{"type":"BelongsTo","model":"shopifyOrder"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyFulfillmentOrder":{"order":{"type":"BelongsTo","model":"shopifyOrder"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyFulfillmentService":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyProduct":{"variants":{"type":"HasMany","model":"shopifyProductVariant"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyProductVariant":{"product":{"type":"BelongsTo","model":"shopifyProduct"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"senditConfig":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"speedafConfig":{"shop":{"type":"BelongsTo","model":"shopifyShop"}}};
+
+/** Legacy export under the `Client` name for backwards compatibility. */
+export const Client: typeof BambeCrmAppClient = BambeCrmAppClient;
+export type Client = InstanceType<typeof BambeCrmAppClient>;

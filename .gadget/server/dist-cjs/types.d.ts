@@ -3,6 +3,7 @@ import type { AnyClient, GadgetRecord } from "@gadgetinc/api-client-core";
 import type { FastifyReply, FastifyRequest } from "fastify";
 import type { Logger } from "./AmbientContext";
 import type { Session } from "./Session";
+import type { GadgetFrameworkGlobals, kGlobals } from "./globals";
 import type { JSONTransportConfig, SESTransportConfig, SMTPTransportConfig, SendmailTransportConfig, StreamTransportConfig } from "./nodemailer-transports";
 import type { AppTenancy, AppTenancyKey } from "./tenancy";
 /**
@@ -316,6 +317,8 @@ export interface AnyAmbientContext {
 	effectAPIs: any;
 	/** @internal */
 	authConfig?: AuthenticationConfiguration;
+	/** @internal */
+	[kGlobals]: GadgetFrameworkGlobals;
 }
 export type GadgetConfig = {
 	apiKeys: {

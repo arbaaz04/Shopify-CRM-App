@@ -2,7 +2,7 @@ import type { OperationContext } from "@urql/core";
 import { GadgetConnection, GadgetTransaction, InternalModelManager, ActionFunctionMetadata, GlobalActionFunction, BackgroundActionHandle } from "@gadgetinc/api-client-core";
 import type { ClientOptions as ApiClientOptions, AnyClient, EnqueueBackgroundActionOptions, AnyActionFunction } from '@gadgetinc/api-client-core';
 import type { DocumentNode } from 'graphql';
-import { Scalars, SyncOrdersOrdersElementTypeInput } from "./types.js";
+import { CalculateRefundLineItemsElementTypeInput, Scalars, ProcessBulkReturnsOrderSelectionsElementTypeInput, ProcessOrderReturnLineItemsElementTypeInput, SyncOrdersOrdersElementTypeInput } from "./types.js";
 import { ShopifyCustomerManager } from "./models/ShopifyCustomer.js";
 import { ShopifyGdprRequestManager } from "./models/ShopifyGdprRequest.js";
 import { ShopifyOrderManager } from "./models/ShopifyOrder.js";
@@ -67,11 +67,55 @@ export type InternalModelManagers = {
     speedafConfig: InternalModelManager;
 };
 /**
- * Root object used for interacting with the bambe-crm-app API. `Client` has `query` and `mutation` functions for executing raw GraphQL queries and mutations, as well as `ModelManager` objects for manipulating models with a JavaScript API. `Client` also has a `fetch` function for making raw requests to your backend.
+ * Root object used for interacting with the bambe-crm-app API. `BambeCrmAppClient` has `query` and `mutation` functions for executing raw GraphQL queries and mutations, as well as `ModelManager` objects for manipulating models with a JavaScript API. `BambeCrmAppClient` also has a `fetch` function for making raw requests to your backend.
  * */
-export declare class Client implements AnyClient {
+export declare class BambeCrmAppClient implements AnyClient {
     readonly options?: ClientOptions | undefined;
     connection: GadgetConnection;
+    /** Executes the calculateRefund global action. */
+    calculateRefund: {
+        (variables?: {
+            orderId?: (Scalars["String"] | null) | null;
+            shopId?: (Scalars["String"] | null) | null;
+            lineItems?: (CalculateRefundLineItemsElementTypeInput)[];
+            refundShipping?: (Scalars["Boolean"] | null) | null;
+            reason?: (Scalars["String"] | null) | null;
+        } | null): Promise<any>;
+        type: "globalAction";
+        operationName: "calculateRefund";
+        operationReturnType: "CalculateRefund";
+        namespace: null;
+        typesImports: ["CalculateRefundLineItemsElementTypeInput", "Scalars"];
+        variables: {
+            orderId: {
+                required: false;
+                type: "String";
+            };
+            shopId: {
+                required: false;
+                type: "String";
+            };
+            lineItems: {
+                required: false;
+                type: "[CalculateRefundLineItemsElementTypeInput!]";
+            };
+            refundShipping: {
+                required: false;
+                type: "Boolean";
+            };
+            reason: {
+                required: false;
+                type: "String";
+            };
+        };
+        variablesType: {
+            orderId?: (Scalars["String"] | null) | null;
+            shopId?: (Scalars["String"] | null) | null;
+            lineItems?: (CalculateRefundLineItemsElementTypeInput)[];
+            refundShipping?: (Scalars["Boolean"] | null) | null;
+            reason?: (Scalars["String"] | null) | null;
+        } | null | undefined;
+    };
     /** Executes the createSenditOrder global action. */
     createSenditOrder: {
         (): Promise<any>;
@@ -178,6 +222,88 @@ export declare class Client implements AnyClient {
         variables: {};
         variablesType: Record<string, never>;
     };
+    /** Executes the processBulkReturns global action. */
+    processBulkReturns: {
+        (variables?: {
+            orderSelections?: (ProcessBulkReturnsOrderSelectionsElementTypeInput)[];
+            shopId?: (Scalars["String"] | null) | null;
+        } | null): Promise<any>;
+        type: "globalAction";
+        operationName: "processBulkReturns";
+        operationReturnType: "ProcessBulkReturns";
+        namespace: null;
+        typesImports: ["ProcessBulkReturnsOrderSelectionsElementTypeInput", "Scalars"];
+        variables: {
+            orderSelections: {
+                required: false;
+                type: "[ProcessBulkReturnsOrderSelectionsElementTypeInput!]";
+            };
+            shopId: {
+                required: false;
+                type: "String";
+            };
+        };
+        variablesType: {
+            orderSelections?: (ProcessBulkReturnsOrderSelectionsElementTypeInput)[];
+            shopId?: (Scalars["String"] | null) | null;
+        } | null | undefined;
+    };
+    /** Executes the processOrderReturn global action. */
+    processOrderReturn: {
+        (variables?: {
+            orderId?: (Scalars["String"] | null) | null;
+            shopId?: (Scalars["String"] | null) | null;
+            lineItems?: (ProcessOrderReturnLineItemsElementTypeInput)[];
+            refundShipping?: (Scalars["Boolean"] | null) | null;
+            reason?: (Scalars["String"] | null) | null;
+            notify?: (Scalars["Boolean"] | null) | null;
+            skipRefund?: (Scalars["Boolean"] | null) | null;
+        } | null): Promise<any>;
+        type: "globalAction";
+        operationName: "processOrderReturn";
+        operationReturnType: "ProcessOrderReturn";
+        namespace: null;
+        typesImports: ["ProcessOrderReturnLineItemsElementTypeInput", "Scalars"];
+        variables: {
+            orderId: {
+                required: false;
+                type: "String";
+            };
+            shopId: {
+                required: false;
+                type: "String";
+            };
+            lineItems: {
+                required: false;
+                type: "[ProcessOrderReturnLineItemsElementTypeInput!]";
+            };
+            refundShipping: {
+                required: false;
+                type: "Boolean";
+            };
+            reason: {
+                required: false;
+                type: "String";
+            };
+            notify: {
+                required: false;
+                type: "Boolean";
+            };
+            skipRefund: {
+                required: false;
+                type: "Boolean";
+            };
+        };
+        variablesType: {
+            orderId?: (Scalars["String"] | null) | null;
+            shopId?: (Scalars["String"] | null) | null;
+            lineItems?: (ProcessOrderReturnLineItemsElementTypeInput)[];
+            refundShipping?: (Scalars["Boolean"] | null) | null;
+            reason?: (Scalars["String"] | null) | null;
+            notify?: (Scalars["Boolean"] | null) | null;
+            skipRefund?: (Scalars["Boolean"] | null) | null;
+        } | null | undefined;
+    };
     /** Executes the processSpeedafAPI global action. */
     processSpeedafAPI: {
         (variables?: {
@@ -219,6 +345,58 @@ export declare class Client implements AnyClient {
         type: "globalAction";
         operationName: "removeOrderFromSheets";
         operationReturnType: "RemoveOrderFromSheets";
+        namespace: null;
+        typesImports: ["Scalars"];
+        variables: {
+            orderName: {
+                required: false;
+                type: "String";
+            };
+            shopId: {
+                required: false;
+                type: "String";
+            };
+        };
+        variablesType: {
+            orderName?: (Scalars["String"] | null) | null;
+            shopId?: (Scalars["String"] | null) | null;
+        } | null | undefined;
+    };
+    /** Executes the searchBulkOrdersForReturn global action. */
+    searchBulkOrdersForReturn: {
+        (variables?: {
+            orderNumbers?: ((Scalars["String"] | null))[];
+            shopId?: (Scalars["String"] | null) | null;
+        } | null): Promise<any>;
+        type: "globalAction";
+        operationName: "searchBulkOrdersForReturn";
+        operationReturnType: "SearchBulkOrdersForReturn";
+        namespace: null;
+        typesImports: ["Scalars"];
+        variables: {
+            orderNumbers: {
+                required: false;
+                type: "[String!]";
+            };
+            shopId: {
+                required: false;
+                type: "String";
+            };
+        };
+        variablesType: {
+            orderNumbers?: ((Scalars["String"] | null))[];
+            shopId?: (Scalars["String"] | null) | null;
+        } | null | undefined;
+    };
+    /** Executes the searchOrderForReturn global action. */
+    searchOrderForReturn: {
+        (variables?: {
+            orderName?: (Scalars["String"] | null) | null;
+            shopId?: (Scalars["String"] | null) | null;
+        } | null): Promise<any>;
+        type: "globalAction";
+        operationName: "searchOrderForReturn";
+        operationReturnType: "SearchOrderForReturn";
         namespace: null;
         typesImports: ["Scalars"];
         variables: {
@@ -319,6 +497,32 @@ export declare class Client implements AnyClient {
         variablesType: {
             shopId?: (Scalars["String"] | null) | null;
             spreadsheetId?: (Scalars["String"] | null) | null;
+        } | null | undefined;
+    };
+    /** Executes the testLocationQuery global action. */
+    testLocationQuery: {
+        (variables?: {
+            orderId?: (Scalars["String"] | null) | null;
+            shopId?: (Scalars["String"] | null) | null;
+        } | null): Promise<any>;
+        type: "globalAction";
+        operationName: "testLocationQuery";
+        operationReturnType: "TestLocationQuery";
+        namespace: null;
+        typesImports: ["Scalars"];
+        variables: {
+            orderId: {
+                required: false;
+                type: "String";
+            };
+            shopId: {
+                required: false;
+                type: "String";
+            };
+        };
+        variablesType: {
+            orderId?: (Scalars["String"] | null) | null;
+            shopId?: (Scalars["String"] | null) | null;
         } | null | undefined;
     };
     /** Executes the testSenditConnection global action. */
@@ -503,15 +707,15 @@ export declare class Client implements AnyClient {
     /**
      * Returns a new Client instance that will call the Gadget API as the application's admin user.
      * This can only be used for API clients using internal authentication.
-     * @returns {Client} A new Client instance with admin authentication
+     * @returns {BambeCrmAppClient} A new BambeCrmAppClient instance with admin authentication
      */
-    get actAsAdmin(): Client;
+    get actAsAdmin(): BambeCrmAppClient;
     /**
-     * Returns a new Client instance that will call the Gadget API as with the permission of the current session.
+     * Returns a new BambeCrmAppClient instance that will call the Gadget API as with the permission of the current session.
      * This can only be used for API clients using internal authentication.
-     * @returns {Client} A new Client instance with session authentication
+     * @returns {BambeCrmAppClient} A new BambeCrmAppClient instance with session authentication
      */
-    get actAsSession(): Client;
+    get actAsSession(): BambeCrmAppClient;
     /** Run an arbitrary GraphQL query. */
     query<T = any>(graphQL: string | DocumentNode, variables?: Record<string, any>, options?: Partial<OperationContext>): Promise<T>;
     /** Run an arbitrary GraphQL mutation. */
@@ -679,3 +883,6 @@ export declare class Client implements AnyClient {
     toString(): string;
     toJSON(): string;
 }
+/** Legacy export under the `Client` name for backwards compatibility. */
+export declare const Client: typeof BambeCrmAppClient;
+export type Client = InstanceType<typeof BambeCrmAppClient>;

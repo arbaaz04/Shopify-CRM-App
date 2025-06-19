@@ -29,6 +29,7 @@ export const settings: GadgetSettings = {
           "read_assigned_fulfillment_orders",
           "read_merchant_managed_fulfillment_orders",
           "write_merchant_managed_fulfillment_orders",
+          "read_locations",
         ],
       },
     },

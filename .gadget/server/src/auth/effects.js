@@ -10,7 +10,7 @@ Object.defineProperty(exports, "preventCrossUserDataAccess", {
 });
 const _auth = require("../auth");
 const _effects = require("../effects");
-const _metadata = require("../metadata");
+const _globals = require("../globals");
 async function preventCrossUserDataAccess(params, record, options) {
     const context = (0, _effects.getActionContextFromLocalStorage)();
     if (context.type != "effect") {
@@ -26,11 +26,12 @@ async function preventCrossUserDataAccess(params, record, options) {
     const userBelongsToField = options?.userBelongsToField;
     // if this effect is not run in the context of a model then it does not apply
     if (!model) {
+        context.logger.warn("preventCrossUserDataAccess: not running in a model action -- will have no effect");
         return;
     }
     const userId = context.session?.get("user");
     const input = params[model.apiIdentifier];
-    const userModel = context.authConfig?.userModelKey ? Object.values(_metadata.modelsMap).find((model)=>model.key === context.authConfig?.userModelKey) : undefined;
+    const userModel = context.authConfig?.userModelKey ? Object.values(context[_globals.kGlobals].modelsMap).find((model)=>model.key === context.authConfig?.userModelKey) : undefined;
     const tenantModelKey = userModel?.key ?? "";
     const hasBelongsToField = Object.values(model.fields).some((f)=>f.fieldType === _effects.FieldType.BelongsTo && f.configuration.relatedModelKey === tenantModelKey);
     if (userId && userModel && hasBelongsToField) {

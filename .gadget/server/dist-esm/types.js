@@ -30,7 +30,7 @@
    */ /** App URL for the current environment e.g. https://example.gadget.app */ /** An object for sending emails */ /**
    * The current tenancy for this unit of work
    * @internal
-   */ /** @internal */ /** @internal */ /** @internal */ /** The context for a request passed to an HTTP route */ /** @deprecated */ /** @deprecated */ /** @deprecated */ /** A signal for if/when the request for processing this unit of work gets prematurely aborted. Useful for passing along to long running requests that should be interrupted when the client goes away. */ /** Details about what triggered this action or global action to run */ /**
+   */ /** @internal */ /** @internal */ /** @internal */ /** @internal */ /** The context for a request passed to an HTTP route */ /** @deprecated */ /** @deprecated */ /** @deprecated */ /** A signal for if/when the request for processing this unit of work gets prematurely aborted. Useful for passing along to long running requests that should be interrupted when the client goes away. */ /** Details about what triggered this action or global action to run */ /**
    * An object passed between all preconditions and effects of an action execution at the \`scope\` property.
    * Useful for transferring data between effects.
    */ /**

@@ -2953,34 +2953,11 @@ export const IndexPage = () => {
               }
               
               console.log(`🔍 [fetchOrders] Successfully loaded order ${order.name || order.id}`);
-
-              // Debug: Log what we're getting from the action
-              console.log(`🔍 [DEBUG] Raw order response for ${order.name || order.id}:`, {
-                customerName: orderResponse.order.customerName,
-                phone: orderResponse.order.phone,
-                originalCity: orderResponse.order.originalCity,
-                city: orderResponse.order.city,
-                totalPrice: orderResponse.order.totalPrice,
-                address: orderResponse.order.address
-              });
-
-              const finalOrderData = {
+              return {
                 ...orderResponse.order,
                 id: order.id, // Keep the original ID format
                 hasLoadedSKUs: true
               };
-
-              // Debug: Log what we're returning
-              console.log(`🔍 [DEBUG] Final order data for ${order.name || order.id}:`, {
-                customerName: finalOrderData.customerName,
-                phone: finalOrderData.phone,
-                originalCity: finalOrderData.originalCity,
-                city: finalOrderData.city,
-                totalPrice: finalOrderData.totalPrice,
-                address: finalOrderData.address
-              });
-
-              return finalOrderData;
             } else {
               console.log(`🔍 [fetchOrders] Failed to extract SKUs for order ${order.name || order.id}: ${orderResponse?.error || 'Unknown error'}`);
               // If extraction failed, return minimal data
@@ -3579,6 +3556,44 @@ export const IndexPage = () => {
             orderData = orderExtractResult.order;
           }
 
+          // Check if this is an exchange order by looking for "echange" tag
+          const tagArray = Array.isArray(orderData.tags) ? orderData.tags :
+                          (typeof orderData.tags === 'string' ? orderData.tags.split(/,\s*/) : []);
+          const isExchangeOrder = tagArray.some(tag =>
+            typeof tag === 'string' && tag.toLowerCase().includes('echange')
+          );
+
+          // For exchange orders, try to get reference tracking number
+          let referenceTrackingNumber = '';
+          if (isExchangeOrder) {
+            console.log(`Order ${orderData.name} is an exchange order, checking for reference tracking...`);
+
+            // First check if we have the reference in our exchangeReferences state
+            if (exchangeReferences[orderId] && exchangeReferences[orderId].trackingNumber) {
+              referenceTrackingNumber = exchangeReferences[orderId].trackingNumber;
+              console.log(`Found reference tracking number from exchangeReferences: ${referenceTrackingNumber}`);
+            }
+            // If not found in exchangeReferences, try to get it from the order's referenceOrderId
+            else if (orderData.referenceOrderId) {
+              try {
+                const refOrderExtractResult = await (api as any).extractOrderSKUs({
+                  orderId: String(orderData.referenceOrderId).replace(/\D/g, ''),
+                  shopId: shop?.id || ''
+                });
+
+                if (refOrderExtractResult?.success && refOrderExtractResult?.order) {
+                  referenceTrackingNumber = refOrderExtractResult.order.trackingNumber || '';
+                  console.log(`Found reference tracking number from referenceOrderId: ${referenceTrackingNumber}`);
+                }
+              } catch (refError) {
+                console.error(`Error getting reference order tracking:`, refError);
+              }
+            }
+            else {
+              console.log(`No reference tracking found for exchange order ${orderData.name}`);
+            }
+          }
+
           // Transform order data
           const transformedOrderData = {
             id: orderData.id,
@@ -3600,6 +3615,8 @@ export const IndexPage = () => {
             createdAt: orderData.createdAt,
             tags: orderData.tags,
             trackingNumber: orderData.trackingNumber || '',
+            referenceTrackingNumber: referenceTrackingNumber, // Reference order tracking for column Y
+            isExchangeOrder: isExchangeOrder, // Flag to identify exchange orders for checkbox in column AA
             isCancelled: orderData.isCancelled,
             isDeleted: orderData.isDeleted,
             isFulfillmentCancelled: orderData.isFulfillmentCancelled
@@ -4151,19 +4168,6 @@ export const IndexPage = () => {
 
   // Helper function to render each order item
   const renderItem = (item: any) => {
-    // Debug: Log what we're rendering
-    console.log(`🔍 [DEBUG] renderItem called with:`, {
-      id: item?.id,
-      name: item?.name,
-      customerName: item?.customerName,
-      phone: item?.phone,
-      originalCity: item?.originalCity,
-      city: item?.city,
-      totalPrice: item?.totalPrice,
-      address: item?.address,
-      fullItem: item
-    });
-
     // Safely extract properties with fallbacks
     const {
       id,
@@ -4903,6 +4907,7 @@ export const IndexPage = () => {
                   tags: orderData.tags || [],
                   trackingNumber: orderData.trackingNumber || '', // Fresh tracking number from fulfillment
                   referenceTrackingNumber: referenceTrackingNumber, // Reference order tracking for column Y
+                  isExchangeOrder: true, // Flag to identify exchange orders for checkbox in column AA
                   isCancelled: orderData.isCancelled || false,
                   isDeleted: orderData.isDeleted || false,
                   isFulfillmentCancelled: orderData.isFulfillmentCancelled || false
@@ -6422,12 +6427,12 @@ export const IndexPage = () => {
                       <strong>Original Address:</strong> {orders.find(o => o.id === editingOrderId)?.address || exchangeOrders.find(o => o.id === editingOrderId)?.address || "Address not found"}
                     </Text>
                     <Text variant="bodyMd" as="p">
-                      <strong>Original City:</strong> {" "}
+                      <strong>AI Detected City:</strong> {" "}
                       {(() => {
                         const order = orders.find(o => o.id === editingOrderId) || exchangeOrders.find(o => o.id === editingOrderId);
                         const rawCity = order?.rawCity;
                         const city = order?.city;
-                        
+
                         if (rawCity) {
                           return <span style={{ color: '#108043' }}>{rawCity}</span>;
                         } else if (city) {
@@ -6437,6 +6442,20 @@ export const IndexPage = () => {
                         }
                       })()}
                     </Text>
+                    {(() => {
+                      const order = orders.find(o => o.id === editingOrderId) || exchangeOrders.find(o => o.id === editingOrderId);
+                      const originalCity = order?.originalCity;
+
+                      if (originalCity) {
+                        return (
+                          <Text variant="bodyMd" as="p">
+                            <strong>Additional Info - Original City:</strong> {" "}
+                            <span style={{ color: '#108043' }}>{originalCity}</span>
+                          </Text>
+                        );
+                      }
+                      return null;
+                    })()}
                   </Box>
                 )}
                 

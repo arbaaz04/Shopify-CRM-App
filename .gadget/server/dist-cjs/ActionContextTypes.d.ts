@@ -82,6 +82,8 @@ import { DeleteSpeedafConfigActionContext } from "./models/SpeedafConfig";
 
 import { FindFirstSpeedafConfigActionContext } from "./models/SpeedafConfig";
 
+import { CalculateRefundGlobalActionContext } from "./global-actions";
+
 import { CreateSenditOrderGlobalActionContext } from "./global-actions";
 
 import { DirectOrderTestGlobalActionContext } from "./global-actions";
@@ -92,9 +94,17 @@ import { FulfillOrderGlobalActionContext } from "./global-actions";
 
 import { GetSenditDistrictIdGlobalActionContext } from "./global-actions";
 
+import { ProcessBulkReturnsGlobalActionContext } from "./global-actions";
+
+import { ProcessOrderReturnGlobalActionContext } from "./global-actions";
+
 import { ProcessSpeedafAPIGlobalActionContext } from "./global-actions";
 
 import { RemoveOrderFromSheetsGlobalActionContext } from "./global-actions";
+
+import { SearchBulkOrdersForReturnGlobalActionContext } from "./global-actions";
+
+import { SearchOrderForReturnGlobalActionContext } from "./global-actions";
 
 import { SenditFulfillOrderGlobalActionContext } from "./global-actions";
 
@@ -105,6 +115,8 @@ import { StandardizeMoroccanCityGlobalActionContext } from "./global-actions";
 import { SyncOrdersGlobalActionContext } from "./global-actions";
 
 import { TestGoogleAuthGlobalActionContext } from "./global-actions";
+
+import { TestLocationQueryGlobalActionContext } from "./global-actions";
 
 import { TestSenditConnectionGlobalActionContext } from "./global-actions";
 
@@ -365,6 +377,12 @@ declare module "../../../api/models/speedafConfig/actions/findFirst" {
 }
 
 
+declare module "../../../api/actions/calculateRefund" {
+  export type ActionRun = (params: CalculateRefundGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: CalculateRefundGlobalActionContext) => Promise<any>;
+}
+
+
 declare module "../../../api/actions/createSenditOrder" {
   export type ActionRun = (params: CreateSenditOrderGlobalActionContext) => Promise<any>;
   export type ActionOnSuccess = (params: CreateSenditOrderGlobalActionContext) => Promise<any>;
@@ -395,6 +413,18 @@ declare module "../../../api/actions/getSenditDistrictId" {
 }
 
 
+declare module "../../../api/actions/processBulkReturns" {
+  export type ActionRun = (params: ProcessBulkReturnsGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: ProcessBulkReturnsGlobalActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/actions/processOrderReturn" {
+  export type ActionRun = (params: ProcessOrderReturnGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: ProcessOrderReturnGlobalActionContext) => Promise<any>;
+}
+
+
 declare module "../../../api/actions/processSpeedafAPI" {
   export type ActionRun = (params: ProcessSpeedafAPIGlobalActionContext) => Promise<any>;
   export type ActionOnSuccess = (params: ProcessSpeedafAPIGlobalActionContext) => Promise<any>;
@@ -404,6 +434,18 @@ declare module "../../../api/actions/processSpeedafAPI" {
 declare module "../../../api/actions/removeOrderFromSheets" {
   export type ActionRun = (params: RemoveOrderFromSheetsGlobalActionContext) => Promise<any>;
   export type ActionOnSuccess = (params: RemoveOrderFromSheetsGlobalActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/actions/searchBulkOrdersForReturn" {
+  export type ActionRun = (params: SearchBulkOrdersForReturnGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: SearchBulkOrdersForReturnGlobalActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/actions/searchOrderForReturn" {
+  export type ActionRun = (params: SearchOrderForReturnGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: SearchOrderForReturnGlobalActionContext) => Promise<any>;
 }
 
 
@@ -434,6 +476,12 @@ declare module "../../../api/actions/syncOrders" {
 declare module "../../../api/actions/testGoogleAuth" {
   export type ActionRun = (params: TestGoogleAuthGlobalActionContext) => Promise<any>;
   export type ActionOnSuccess = (params: TestGoogleAuthGlobalActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/actions/testLocationQuery" {
+  export type ActionRun = (params: TestLocationQueryGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: TestLocationQueryGlobalActionContext) => Promise<any>;
 }
 
 

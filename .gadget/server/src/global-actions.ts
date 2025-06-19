@@ -3,6 +3,34 @@ import type { ActionTrigger, TriggerWithType, ActionExecutionScope } from "./typ
 import type { Scalars } from "@gadget-client/bambe-crm-app";
 import { ShopifyWebhookTriggerForTopic } from "./WebhookPayloadTypes";
 
+/** Context of the `calculateRefund` action. */
+export interface CalculateRefundGlobalActionContext extends AmbientContext {
+  /**
+  * @deprecated Use 'returnType' instead.
+  * Useful for returning data from this action by setting `scope.result`.
+  */
+  scope: ActionExecutionScope;
+  /**
+  * An object specifying the trigger to this action (e.g. API call, custom params).
+  */
+  params: {
+orderId?: string;    
+shopId?: string;    
+lineItems?: { lineItemId?: string;quantity?: number;reason?: string; }[];    
+refundShipping?: boolean;    
+reason?: string;
+};
+  /**
+  * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+  */
+  trigger: TriggerWithType<"api"> | TriggerWithType<"background-action">;
+  /**
+  * @private The context of this action.
+  */
+  context: CalculateRefundGlobalActionContext;
+};
+
+
 /** Context of the `createSenditOrder` action. */
 export interface CreateSenditOrderGlobalActionContext extends AmbientContext {
   /**
@@ -125,6 +153,61 @@ export interface GetSenditDistrictIdGlobalActionContext extends AmbientContext {
 };
 
 
+/** Context of the `processBulkReturns` action. */
+export interface ProcessBulkReturnsGlobalActionContext extends AmbientContext {
+  /**
+  * @deprecated Use 'returnType' instead.
+  * Useful for returning data from this action by setting `scope.result`.
+  */
+  scope: ActionExecutionScope;
+  /**
+  * An object specifying the trigger to this action (e.g. API call, custom params).
+  */
+  params: {
+orderSelections?: { orderId?: string;selectedItems?: { lineItemId?: string;quantity?: number; }[]; }[];    
+shopId?: string;
+};
+  /**
+  * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+  */
+  trigger: TriggerWithType<"api"> | TriggerWithType<"background-action">;
+  /**
+  * @private The context of this action.
+  */
+  context: ProcessBulkReturnsGlobalActionContext;
+};
+
+
+/** Context of the `processOrderReturn` action. */
+export interface ProcessOrderReturnGlobalActionContext extends AmbientContext {
+  /**
+  * @deprecated Use 'returnType' instead.
+  * Useful for returning data from this action by setting `scope.result`.
+  */
+  scope: ActionExecutionScope;
+  /**
+  * An object specifying the trigger to this action (e.g. API call, custom params).
+  */
+  params: {
+orderId?: string;    
+shopId?: string;    
+lineItems?: { lineItemId?: string;quantity?: number;reason?: string; }[];    
+refundShipping?: boolean;    
+reason?: string;    
+notify?: boolean;    
+skipRefund?: boolean;
+};
+  /**
+  * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+  */
+  trigger: TriggerWithType<"api"> | TriggerWithType<"background-action">;
+  /**
+  * @private The context of this action.
+  */
+  context: ProcessOrderReturnGlobalActionContext;
+};
+
+
 /** Context of the `processSpeedafAPI` action. */
 export interface ProcessSpeedafAPIGlobalActionContext extends AmbientContext {
   /**
@@ -173,6 +256,56 @@ shopId?: string;
   * @private The context of this action.
   */
   context: RemoveOrderFromSheetsGlobalActionContext;
+};
+
+
+/** Context of the `searchBulkOrdersForReturn` action. */
+export interface SearchBulkOrdersForReturnGlobalActionContext extends AmbientContext {
+  /**
+  * @deprecated Use 'returnType' instead.
+  * Useful for returning data from this action by setting `scope.result`.
+  */
+  scope: ActionExecutionScope;
+  /**
+  * An object specifying the trigger to this action (e.g. API call, custom params).
+  */
+  params: {
+orderNumbers?: string[];    
+shopId?: string;
+};
+  /**
+  * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+  */
+  trigger: TriggerWithType<"api"> | TriggerWithType<"background-action">;
+  /**
+  * @private The context of this action.
+  */
+  context: SearchBulkOrdersForReturnGlobalActionContext;
+};
+
+
+/** Context of the `searchOrderForReturn` action. */
+export interface SearchOrderForReturnGlobalActionContext extends AmbientContext {
+  /**
+  * @deprecated Use 'returnType' instead.
+  * Useful for returning data from this action by setting `scope.result`.
+  */
+  scope: ActionExecutionScope;
+  /**
+  * An object specifying the trigger to this action (e.g. API call, custom params).
+  */
+  params: {
+orderName?: string;    
+shopId?: string;
+};
+  /**
+  * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+  */
+  trigger: TriggerWithType<"api"> | TriggerWithType<"background-action">;
+  /**
+  * @private The context of this action.
+  */
+  context: SearchOrderForReturnGlobalActionContext;
 };
 
 
@@ -292,6 +425,31 @@ spreadsheetId?: string;
   * @private The context of this action.
   */
   context: TestGoogleAuthGlobalActionContext;
+};
+
+
+/** Context of the `testLocationQuery` action. */
+export interface TestLocationQueryGlobalActionContext extends AmbientContext {
+  /**
+  * @deprecated Use 'returnType' instead.
+  * Useful for returning data from this action by setting `scope.result`.
+  */
+  scope: ActionExecutionScope;
+  /**
+  * An object specifying the trigger to this action (e.g. API call, custom params).
+  */
+  params: {
+orderId?: string;    
+shopId?: string;
+};
+  /**
+  * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+  */
+  trigger: TriggerWithType<"api"> | TriggerWithType<"background-action">;
+  /**
+  * @private The context of this action.
+  */
+  context: TestLocationQueryGlobalActionContext;
 };
 
 

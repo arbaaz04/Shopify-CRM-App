@@ -1,7 +1,7 @@
 import type { GadgetRecord } from "@gadgetinc/api-client-core";
 import { validateBelongsToLink } from "../auth";
 import { FieldType, getActionContextFromLocalStorage } from "../effects";
-import { modelsMap } from "../metadata";
+import { kGlobals } from "../globals";
 import type { AnyParams } from "../types";
 
 /**
@@ -42,6 +42,7 @@ export async function preventCrossUserDataAccess(
 
   // if this effect is not run in the context of a model then it does not apply
   if (!model) {
+    context.logger.warn("preventCrossUserDataAccess: not running in a model action -- will have no effect");
     return;
   }
 
@@ -49,7 +50,7 @@ export async function preventCrossUserDataAccess(
   const input = params[model.apiIdentifier];
 
   const userModel = context.authConfig?.userModelKey
-    ? Object.values(modelsMap).find((model) => model.key === context.authConfig?.userModelKey)
+    ? Object.values(context[kGlobals].modelsMap).find((model) => model.key === context.authConfig?.userModelKey)
     : undefined;
 
   const tenantModelKey = userModel?.key ?? "";

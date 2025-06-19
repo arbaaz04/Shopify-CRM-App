@@ -18,6 +18,7 @@ var __copyProps = (to, from, except, desc) => {
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 var Client_exports = {};
 __export(Client_exports, {
+  BambeCrmAppClient: () => BambeCrmAppClient,
   Client: () => Client,
   DefaultGoogleSheetConfigSelection: () => import_GoogleSheetConfig2.DefaultGoogleSheetConfigSelection,
   DefaultSenditConfigSelection: () => import_SenditConfig2.DefaultSenditConfigSelection,
@@ -77,9 +78,27 @@ const getImplicitEnv = () => {
     return void 0;
   }
 };
-class Client {
+class BambeCrmAppClient {
   constructor(options) {
     this.options = options;
+    /** Executes the calculateRefund global action. */
+    this.calculateRefund = (0, import_builder.buildGlobalAction)(this, {
+      type: "globalAction",
+      functionName: "calculateRefund",
+      operationName: "calculateRefund",
+      operationReturnType: "CalculateRefund",
+      namespace: null,
+      variables: {
+        orderId: { required: false, type: "String" },
+        shopId: { required: false, type: "String" },
+        lineItems: {
+          required: false,
+          type: "[CalculateRefundLineItemsElementTypeInput!]"
+        },
+        refundShipping: { required: false, type: "Boolean" },
+        reason: { required: false, type: "String" }
+      }
+    });
     /** Executes the createSenditOrder global action. */
     this.createSenditOrder = (0, import_builder.buildGlobalAction)(this, {
       type: "globalAction",
@@ -135,6 +154,41 @@ class Client {
       namespace: null,
       variables: {}
     });
+    /** Executes the processBulkReturns global action. */
+    this.processBulkReturns = (0, import_builder.buildGlobalAction)(this, {
+      type: "globalAction",
+      functionName: "processBulkReturns",
+      operationName: "processBulkReturns",
+      operationReturnType: "ProcessBulkReturns",
+      namespace: null,
+      variables: {
+        orderSelections: {
+          required: false,
+          type: "[ProcessBulkReturnsOrderSelectionsElementTypeInput!]"
+        },
+        shopId: { required: false, type: "String" }
+      }
+    });
+    /** Executes the processOrderReturn global action. */
+    this.processOrderReturn = (0, import_builder.buildGlobalAction)(this, {
+      type: "globalAction",
+      functionName: "processOrderReturn",
+      operationName: "processOrderReturn",
+      operationReturnType: "ProcessOrderReturn",
+      namespace: null,
+      variables: {
+        orderId: { required: false, type: "String" },
+        shopId: { required: false, type: "String" },
+        lineItems: {
+          required: false,
+          type: "[ProcessOrderReturnLineItemsElementTypeInput!]"
+        },
+        refundShipping: { required: false, type: "Boolean" },
+        reason: { required: false, type: "String" },
+        notify: { required: false, type: "Boolean" },
+        skipRefund: { required: false, type: "Boolean" }
+      }
+    });
     /** Executes the processSpeedafAPI global action. */
     this.processSpeedafAPI = (0, import_builder.buildGlobalAction)(this, {
       type: "globalAction",
@@ -154,6 +208,30 @@ class Client {
       functionName: "removeOrderFromSheets",
       operationName: "removeOrderFromSheets",
       operationReturnType: "RemoveOrderFromSheets",
+      namespace: null,
+      variables: {
+        orderName: { required: false, type: "String" },
+        shopId: { required: false, type: "String" }
+      }
+    });
+    /** Executes the searchBulkOrdersForReturn global action. */
+    this.searchBulkOrdersForReturn = (0, import_builder.buildGlobalAction)(this, {
+      type: "globalAction",
+      functionName: "searchBulkOrdersForReturn",
+      operationName: "searchBulkOrdersForReturn",
+      operationReturnType: "SearchBulkOrdersForReturn",
+      namespace: null,
+      variables: {
+        orderNumbers: { required: false, type: "[String!]" },
+        shopId: { required: false, type: "String" }
+      }
+    });
+    /** Executes the searchOrderForReturn global action. */
+    this.searchOrderForReturn = (0, import_builder.buildGlobalAction)(this, {
+      type: "globalAction",
+      functionName: "searchOrderForReturn",
+      operationName: "searchOrderForReturn",
+      operationReturnType: "SearchOrderForReturn",
       namespace: null,
       variables: {
         orderName: { required: false, type: "String" },
@@ -209,6 +287,18 @@ class Client {
       variables: {
         shopId: { required: false, type: "String" },
         spreadsheetId: { required: false, type: "String" }
+      }
+    });
+    /** Executes the testLocationQuery global action. */
+    this.testLocationQuery = (0, import_builder.buildGlobalAction)(this, {
+      type: "globalAction",
+      functionName: "testLocationQuery",
+      operationName: "testLocationQuery",
+      operationReturnType: "TestLocationQuery",
+      namespace: null,
+      variables: {
+        orderId: { required: false, type: "String" },
+        shopId: { required: false, type: "String" }
       }
     });
     /** Executes the testSenditConnection global action. */
@@ -405,12 +495,12 @@ class Client {
   /**
    * Returns a new Client instance that will call the Gadget API as the application's admin user.
    * This can only be used for API clients using internal authentication.
-   * @returns {Client} A new Client instance with admin authentication
+   * @returns {BambeCrmAppClient} A new BambeCrmAppClient instance with admin authentication
    */
   get actAsAdmin() {
-    var _a, _b;
-    (0, import_api_client_core.assert)((_b = (_a = this.options) == null ? void 0 : _a.authenticationMode) == null ? void 0 : _b.internal, "actAsAdmin can only be used for API clients using internal authentication");
-    return new Client({
+    var _a, _b, _c;
+    (0, import_api_client_core.assert)((_b = (_a = this.options) == null ? void 0 : _a.authenticationMode) == null ? void 0 : _b.internal, `actAsAdmin can only be used for API clients using internal authentication, this client is using ${JSON.stringify((_c = this.options) == null ? void 0 : _c.authenticationMode)}`);
+    return new BambeCrmAppClient({
       ...this.options,
       authenticationMode: {
         internal: {
@@ -421,14 +511,14 @@ class Client {
     });
   }
   /**
-   * Returns a new Client instance that will call the Gadget API as with the permission of the current session.
+   * Returns a new BambeCrmAppClient instance that will call the Gadget API as with the permission of the current session.
    * This can only be used for API clients using internal authentication.
-   * @returns {Client} A new Client instance with session authentication
+   * @returns {BambeCrmAppClient} A new BambeCrmAppClient instance with session authentication
    */
   get actAsSession() {
     var _a, _b;
     (0, import_api_client_core.assert)((_b = (_a = this.options) == null ? void 0 : _a.authenticationMode) == null ? void 0 : _b.internal, "actAsSession can only be used for API clients using internal authentication");
-    return new Client({
+    return new BambeCrmAppClient({
       ...this.options,
       authenticationMode: {
         internal: {
@@ -501,15 +591,17 @@ class Client {
     return new import_api_client_core.BackgroundActionHandle(this.connection, action, id);
   }
   toString() {
-    return `GadgetAPIClient<${this.environment}>`;
+    return `BambeCrmAppClient<${this.environment}>`;
   }
   toJSON() {
     return this.toString();
   }
 }
-Client.prototype[Symbol.for("gadget/modelRelationships")] = { "shopifyCustomer": { "orders": { "type": "HasMany", "model": "shopifyOrder" }, "lastOrder": { "type": "BelongsTo", "model": "shopifyOrder" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyGdprRequest": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyOrder": { "customer": { "type": "BelongsTo", "model": "shopifyCustomer" }, "fulfillments": { "type": "HasMany", "model": "shopifyFulfillment" }, "shopifyShop": { "type": "BelongsTo", "model": "shopifyShop" }, "fulfillmentOrders": { "type": "HasMany", "model": "shopifyFulfillmentOrder" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyShop": { "syncs": { "type": "HasMany", "model": "shopifySync" }, "gdprRequests": { "type": "HasMany", "model": "shopifyGdprRequest" }, "fulfillmentOrders": { "type": "HasMany", "model": "shopifyFulfillmentOrder" }, "fulfillmentServices": { "type": "HasMany", "model": "shopifyFulfillmentService" }, "fulfillments": { "type": "HasMany", "model": "shopifyFulfillment" }, "customers": { "type": "HasMany", "model": "shopifyCustomer" }, "orders": { "type": "HasMany", "model": "shopifyOrder" }, "productVariants": { "type": "HasMany", "model": "shopifyProductVariant" }, "products": { "type": "HasMany", "model": "shopifyProduct" } }, "shopifySync": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "googleSheetConfig": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "session": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyFulfillment": { "order": { "type": "BelongsTo", "model": "shopifyOrder" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyFulfillmentOrder": { "order": { "type": "BelongsTo", "model": "shopifyOrder" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyFulfillmentService": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyProduct": { "variants": { "type": "HasMany", "model": "shopifyProductVariant" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyProductVariant": { "product": { "type": "BelongsTo", "model": "shopifyProduct" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "senditConfig": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "speedafConfig": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } } };
+BambeCrmAppClient.prototype[Symbol.for("gadget/modelRelationships")] = { "shopifyCustomer": { "orders": { "type": "HasMany", "model": "shopifyOrder" }, "lastOrder": { "type": "BelongsTo", "model": "shopifyOrder" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyGdprRequest": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyOrder": { "customer": { "type": "BelongsTo", "model": "shopifyCustomer" }, "fulfillments": { "type": "HasMany", "model": "shopifyFulfillment" }, "shopifyShop": { "type": "BelongsTo", "model": "shopifyShop" }, "fulfillmentOrders": { "type": "HasMany", "model": "shopifyFulfillmentOrder" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyShop": { "syncs": { "type": "HasMany", "model": "shopifySync" }, "gdprRequests": { "type": "HasMany", "model": "shopifyGdprRequest" }, "fulfillmentOrders": { "type": "HasMany", "model": "shopifyFulfillmentOrder" }, "fulfillmentServices": { "type": "HasMany", "model": "shopifyFulfillmentService" }, "fulfillments": { "type": "HasMany", "model": "shopifyFulfillment" }, "customers": { "type": "HasMany", "model": "shopifyCustomer" }, "orders": { "type": "HasMany", "model": "shopifyOrder" }, "productVariants": { "type": "HasMany", "model": "shopifyProductVariant" }, "products": { "type": "HasMany", "model": "shopifyProduct" } }, "shopifySync": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "googleSheetConfig": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "session": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyFulfillment": { "order": { "type": "BelongsTo", "model": "shopifyOrder" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyFulfillmentOrder": { "order": { "type": "BelongsTo", "model": "shopifyOrder" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyFulfillmentService": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyProduct": { "variants": { "type": "HasMany", "model": "shopifyProductVariant" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyProductVariant": { "product": { "type": "BelongsTo", "model": "shopifyProduct" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "senditConfig": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "speedafConfig": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } } };
+const Client = BambeCrmAppClient;
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
+  BambeCrmAppClient,
   Client,
   DefaultGoogleSheetConfigSelection,
   DefaultSenditConfigSelection,
