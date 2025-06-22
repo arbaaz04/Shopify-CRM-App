@@ -287,6 +287,19 @@ class BambeCrmAppClient {
         sheetName: { required: false, type: "String" }
       }
     });
+    /** Executes the trackSpeedafOrders global action. */
+    this.trackSpeedafOrders = buildGlobalAction(this, {
+      type: "globalAction",
+      functionName: "trackSpeedafOrders",
+      operationName: "trackSpeedafOrders",
+      operationReturnType: "TrackSpeedafOrders",
+      namespace: null,
+      variables: {
+        latestOrderName: { required: false, type: "String" },
+        orderCount: { required: false, type: "Float" },
+        mode: { required: false, type: "String" }
+      }
+    });
     /** Executes the updateReferenceTracking global action. */
     this.updateReferenceTracking = buildGlobalAction(this, {
       type: "globalAction",
@@ -323,6 +336,21 @@ class BambeCrmAppClient {
         shopId: { required: false, type: "String" },
         mutation: { required: false, type: "String" },
         variables: { required: false, type: "JSONObject" }
+      }
+    });
+    /** Executes the writeSpeedafDataToSheets global action. */
+    this.writeSpeedafDataToSheets = buildGlobalAction(this, {
+      type: "globalAction",
+      functionName: "writeSpeedafDataToSheets",
+      operationName: "writeSpeedafDataToSheets",
+      operationReturnType: "WriteSpeedafDataToSheets",
+      namespace: null,
+      variables: {
+        shopId: { required: false, type: "String" },
+        trackingData: {
+          required: false,
+          type: "[WriteSpeedafDataToSheetsTrackingDataElementTypeInput!]"
+        }
       }
     });
     /**

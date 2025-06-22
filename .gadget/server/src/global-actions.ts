@@ -504,6 +504,32 @@ sheetName?: string;
 };
 
 
+/** Context of the `trackSpeedafOrders` action. */
+export interface TrackSpeedafOrdersGlobalActionContext extends AmbientContext {
+  /**
+  * @deprecated Use 'returnType' instead.
+  * Useful for returning data from this action by setting `scope.result`.
+  */
+  scope: ActionExecutionScope;
+  /**
+  * An object specifying the trigger to this action (e.g. API call, custom params).
+  */
+  params: {
+latestOrderName?: string;    
+orderCount?: number;    
+mode?: string;
+};
+  /**
+  * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+  */
+  trigger: TriggerWithType<"api"> | TriggerWithType<"background-action">;
+  /**
+  * @private The context of this action.
+  */
+  context: TrackSpeedafOrdersGlobalActionContext;
+};
+
+
 /** Context of the `updateReferenceTracking` action. */
 export interface UpdateReferenceTrackingGlobalActionContext extends AmbientContext {
   /**
@@ -578,6 +604,31 @@ variables?: Scalars["JSONObject"];
   * @private The context of this action.
   */
   context: WriteToShopifyGlobalActionContext;
+};
+
+
+/** Context of the `writeSpeedafDataToSheets` action. */
+export interface WriteSpeedafDataToSheetsGlobalActionContext extends AmbientContext {
+  /**
+  * @deprecated Use 'returnType' instead.
+  * Useful for returning data from this action by setting `scope.result`.
+  */
+  scope: ActionExecutionScope;
+  /**
+  * An object specifying the trigger to this action (e.g. API call, custom params).
+  */
+  params: {
+shopId?: string;    
+trackingData?: { trackingNumber?: string;latestStatus?: string; }[];
+};
+  /**
+  * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+  */
+  trigger: TriggerWithType<"api"> | TriggerWithType<"background-action">;
+  /**
+  * @private The context of this action.
+  */
+  context: WriteSpeedafDataToSheetsGlobalActionContext;
 };
 
 

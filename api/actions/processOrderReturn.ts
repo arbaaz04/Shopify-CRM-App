@@ -123,7 +123,7 @@ async function updateGoogleSheetsWithReturn(
       }
     }
 
-    logger.info('Successfully updated Google Sheets with return information', {
+    logger.info('Successfully updated Google Sheets with "On Stock" status', {
       orderName,
       returnedItems: returnedLineItems.length
     });
@@ -207,8 +207,9 @@ async function updateReturnInSheet(
                           rowSKU === returnedItemSKU;
 
         if (rowMatches) {
-          // If this row doesn't already have "Return", mark it
-          if (rowStatus !== "Return") {
+          // Always mark returned items as "On Stock" regardless of current status
+          // This ensures it stays "On Stock" even if something else tries to change it
+          if (rowStatus !== "On Stock") {
             updates.push({
               range: `${sheetName}!L${i + 1}`, // Column L, 1-indexed row
               values: [["On Stock"]]
@@ -216,17 +217,23 @@ async function updateReturnInSheet(
 
             returnedQuantity--;
 
-            logger.info(`Marking return for row ${i + 1}`, {
+            logger.info(`Setting item status to "On Stock" for row ${i + 1}`, {
               orderName,
               sku: rowSKU,
               matchedWith: returnedItemSKU,
-              remainingQuantity: returnedQuantity
+              remainingQuantity: returnedQuantity,
+              previousStatus: rowStatus,
+              newStatus: "On Stock",
+              timestamp: new Date().toISOString(),
+              action: "processOrderReturn"
             });
           } else {
-            logger.info(`Row ${i + 1} already marked as Return`, {
+            logger.info(`Row ${i + 1} already marked as "On Stock"`, {
               orderName,
-              sku: rowSKU
+              sku: rowSKU,
+              currentStatus: rowStatus
             });
+            returnedQuantity--; // Still count this as processed
           }
         }
       }
@@ -242,7 +249,7 @@ async function updateReturnInSheet(
         }
       });
 
-      logger.info(`Updated ${updates.length} rows in ${sheetName} with return status`);
+      logger.info(`Updated ${updates.length} rows in ${sheetName} with "On Stock" status`);
     } else {
       logger.info(`No updates needed in ${sheetName} for order ${orderName}`);
     }
@@ -745,14 +752,16 @@ export const run = async ({ params, api, logger, connections }: ActionContext) =
 
     // Update Google Sheets with return information
     try {
-      logger.info('Starting Google Sheets update', {
+      logger.info('Starting Google Sheets update with "On Stock" status', {
         orderName: calculation.orderName,
         lineItems: calculation.lineItems.map((item: any) => ({
           lineItemId: item.lineItemId,
           name: item.name,
-          quantity: item.quantity
+          quantity: item.quantity,
+          sku: item.sku
         })),
-        shopId
+        shopId,
+        timestamp: new Date().toISOString()
       });
 
       await updateGoogleSheetsWithReturn(
@@ -762,9 +771,11 @@ export const run = async ({ params, api, logger, connections }: ActionContext) =
         api,
         logger
       );
-      logger.info('Successfully updated Google Sheets with return information', {
+
+      logger.info('Successfully completed Google Sheets update with "On Stock" status', {
         orderName: calculation.orderName,
-        returnedItems: calculation.lineItems.length
+        returnedItems: calculation.lineItems.length,
+        timestamp: new Date().toISOString()
       });
     } catch (sheetsError) {
       logger.error('Failed to update Google Sheets with return information', {

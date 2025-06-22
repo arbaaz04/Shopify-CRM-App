@@ -2661,6 +2661,14 @@ export const IndexPage = () => {
   const [selectedSheetOrders, setSelectedSheetOrders] = useState<string[]>([]);
   const [sheetCurrentPage, setSheetCurrentPage] = useState(1);
   const [sheetPageSize] = useState(10);
+
+  // Speedaf tracking states
+  const [speedafTrackingMode, setSpeedafTrackingMode] = useState<'10' | 'custom'>('10');
+  const [speedafCustomOrderName, setSpeedafCustomOrderName] = useState<string>('');
+  const [speedafTracking, setSpeedafTracking] = useState(false);
+  const [speedafTrackingResults, setSpeedafTrackingResults] = useState<any[]>([]);
+  const [speedafTrackingError, setSpeedafTrackingError] = useState<string | null>(null);
+  const [speedafWritingToSheets, setSpeedafWritingToSheets] = useState(false);
   
   // GROUP 2: useFindFirst hooks
   const [{ data: shop, fetching: shopFetching, error: shopError }] = useFindFirst(api.shopifyShop);
@@ -3435,6 +3443,7 @@ export const IndexPage = () => {
         }
       });
     }
+    // Note: selectedTab === 3 (Speedaf Tracking) doesn't need order selection
   }, [selectedTab]);
 
   const handleSelectAllOrders = useCallback(() => {
@@ -4191,7 +4200,9 @@ export const IndexPage = () => {
       ? selectedConfirmedOrders.includes(id)
       : selectedTab === 1
         ? selectedExchangeOrders.includes(id)
-        : selectedSheetOrders.includes(id);
+        : selectedTab === 2
+          ? selectedSheetOrders.includes(id)
+          : false; // Speedaf Tracking tab doesn't have selectable orders
     
     // Determine if tracking number was recently updated for highlighting
     const isTracked = trackingNumber && trackingNumber.trim() !== '';
@@ -4389,6 +4400,13 @@ export const IndexPage = () => {
       accessibilityLabel: 'Sheet Orders',
       panelID: 'sheet-orders-panel',
       badge: sheetOrders.length > 0 ? sheetOrders.length.toString() : undefined,
+    },
+    {
+      id: 'speedaf-tracking',
+      content: 'Speedaf Tracking',
+      accessibilityLabel: 'Speedaf Tracking',
+      panelID: 'speedaf-tracking-panel',
+      badge: speedafTrackingResults.length > 0 ? speedafTrackingResults.length.toString() : undefined,
     },
   ];
 
@@ -5071,6 +5089,175 @@ export const IndexPage = () => {
       setRemoveOrderLoading(false);
     }
   };
+
+  // Function to clear Speedaf tracking results
+  const handleClearSpeedafResults = () => {
+    setSpeedafTrackingResults([]);
+    setSpeedafTrackingError(null);
+  };
+
+  // Function to handle writing Speedaf data to sheets
+  const handleWriteSpeedafDataToSheets = async () => {
+    if (!shop?.id) {
+      setSpeedafTrackingError("Shop information not available");
+      return;
+    }
+
+    if (!speedafTrackingResults || speedafTrackingResults.length === 0) {
+      setToastProps({
+        content: "No Speedaf tracking data available to write to sheets",
+        error: true
+      });
+      setToastActive(true);
+      return;
+    }
+
+    setSpeedafWritingToSheets(true);
+    setSpeedafTrackingError(null);
+
+    try {
+      // Prepare tracking data for the sheets
+      const trackingData = speedafTrackingResults.map(order => {
+        // Extract the latest status from tracking data
+        let latestStatus = '';
+
+        if (order.trackingStatus && order.trackingStatus.tracks && order.trackingStatus.tracks.length > 0) {
+          // Get the most recent track (first one, as they're usually sorted by time)
+          const latestTrack = order.trackingStatus.tracks[0];
+          latestStatus = latestTrack.action || latestTrack.actionDescription || '';
+        }
+
+        return {
+          trackingNumber: order.trackingNumber,
+          latestStatus: latestStatus
+        };
+      });
+
+      console.log(`Writing ${trackingData.length} Speedaf tracking records to Google Sheets...`);
+
+      const result = await (api as any).writeSpeedafDataToSheets({
+        shopId: shop.id,
+        trackingData: trackingData
+      });
+
+      if (result?.success) {
+        setToastProps({
+          content: result.message || `Successfully wrote Speedaf data to Google Sheets`,
+          error: false
+        });
+        setToastActive(true);
+      } else {
+        throw new Error(result?.error || "Failed to write Speedaf data to sheets");
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error("Error writing Speedaf data to sheets:", errorMessage);
+      setSpeedafTrackingError(errorMessage);
+
+      setToastProps({
+        content: `Failed to write Speedaf data to sheets: ${errorMessage}`,
+        error: true
+      });
+      setToastActive(true);
+    } finally {
+      setSpeedafWritingToSheets(false);
+    }
+  };
+
+  // Function to handle Speedaf tracking
+  const handleSpeedafTracking = async () => {
+    if (!shop?.id) {
+      setSpeedafTrackingError("Shop information not available");
+      return;
+    }
+
+    setSpeedafTracking(true);
+    setSpeedafTrackingError(null);
+    setSpeedafTrackingResults([]);
+
+    try {
+      let startingOrderName: string;
+      const orderCount = 10; // Fixed to 10 orders as per API limit
+
+      if (speedafTrackingMode === '10') {
+        // Get the latest order name to calculate the starting point for last 10 orders
+        const latestOrderResult = await api.shopifyOrder.findFirst({
+          select: { name: true },
+          sort: [{ createdAt: "Descending" }]
+        });
+
+        if (!latestOrderResult?.name) {
+          throw new Error("Could not find latest order to start tracking from");
+        }
+
+        // Extract the latest order number and calculate starting point for last 10 orders
+        const latestOrderNumber = parseInt(latestOrderResult.name.replace(/\D/g, ''));
+        const startingOrderNumber = Math.max(1, latestOrderNumber - 9); // Ensure we don't go below order #1
+        startingOrderName = `#${startingOrderNumber}`;
+
+        console.log(`Latest order: ${latestOrderResult.name} (${latestOrderNumber})`);
+        console.log(`Tracking last 10 orders from: ${startingOrderName} to #${latestOrderNumber}`);
+      } else {
+        // Custom order name mode
+        if (!speedafCustomOrderName.trim()) {
+          throw new Error("Please enter an order name to start tracking from");
+        }
+
+        // Clean and format the order name
+        let cleanOrderName = speedafCustomOrderName.trim();
+
+        // Add # prefix if not present
+        if (!cleanOrderName.startsWith('#')) {
+          cleanOrderName = `#${cleanOrderName}`;
+        }
+
+        startingOrderName = cleanOrderName;
+        console.log(`Tracking 10 orders starting from custom order: ${startingOrderName}`);
+      }
+
+      const result = await (api as any).trackSpeedafOrders({
+        latestOrderName: startingOrderName,
+        orderCount: orderCount
+      });
+
+      if (result?.success) {
+        setSpeedafTrackingResults(result.orders || []);
+
+        if (result.orders && result.orders.length > 0) {
+          setToastProps({
+            content: `Successfully tracked ${result.orders.length} Speedaf orders out of ${result.totalOrders} checked orders`,
+            error: false
+          });
+        } else {
+          // Calculate the ending order number for better user feedback
+          const startingNumber = parseInt(startingOrderName.replace(/\D/g, ''));
+          const endingNumber = startingNumber + orderCount - 1;
+
+          setToastProps({
+            content: `No Speedaf orders found in the range ${startingOrderName} - #${endingNumber} (${result.totalOrders} orders checked)`,
+            error: false
+          });
+        }
+        setToastActive(true);
+      } else {
+        throw new Error(result?.error || "Failed to track Speedaf orders");
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error("Error tracking Speedaf orders:", errorMessage);
+      setSpeedafTrackingError(errorMessage);
+
+      setToastProps({
+        content: `Failed to track Speedaf orders: ${errorMessage}`,
+        error: true
+      });
+      setToastActive(true);
+    } finally {
+      setSpeedafTracking(false);
+    }
+  };
+
+
 
   // Function to handle the actual fulfillment after user confirms
   const handleFulfillOrders = async (writeToSheets: boolean = false) => {
@@ -6830,7 +7017,7 @@ export const IndexPage = () => {
                 </Card>
               </Layout.Section>
             </Layout>
-          ) : (
+          ) : selectedTab === 2 ? (
             <Layout>
               <Layout.Section>
                 <Card padding="400">
@@ -6972,6 +7159,186 @@ export const IndexPage = () => {
                     >
                       {removeOrderLoading ? "Removing..." : "Remove Orders"}
                     </Button>
+                  </BlockStack>
+                </Card>
+              </Layout.Section>
+            </Layout>
+          ) : (
+            <Layout>
+              <Layout.Section>
+                <Card padding="400">
+                  <BlockStack gap="400">
+                    <Text variant="headingLg" as="h2">
+                      Speedaf Order Tracking
+                    </Text>
+
+                    <Text variant="bodyMd" as="p">
+                      Track batch Speedaf orders and write them to Sheets
+                    </Text>
+
+                    <BlockStack gap="400">
+                      <div>
+                        <Text variant="headingMd" as="h4">
+                          Select Tracking Mode
+                        </Text>
+                        <div style={{ marginTop: '12px', maxWidth: '300px' }}>
+                          <Select
+                            label="Tracking mode"
+                            options={[
+                              { label: 'Last 10 orders (ending at latest)', value: '10' },
+                              { label: 'Custom starting order', value: 'custom' }
+                            ]}
+                            value={speedafTrackingMode}
+                            onChange={(value) => {
+                              setSpeedafTrackingMode(value as '10' | 'custom');
+                            }}
+                            disabled={speedafTracking}
+                          />
+                        </div>
+                      </div>
+
+                      {speedafTrackingMode === 'custom' && (
+                        <div>
+                          <Text variant="headingMd" as="h4">
+                            Starting Order
+                          </Text>
+                          <div style={{ marginTop: '12px', maxWidth: '300px' }}>
+                            <TextField
+                              label="Order name or number"
+                              value={speedafCustomOrderName}
+                              onChange={setSpeedafCustomOrderName}
+                              placeholder="e.g., 1234 or #1234"
+                              helpText="10 orders starting from this order will be checked (e.g., 1234, 1235, 1236...)"
+                              disabled={speedafTracking}
+                              autoComplete="off"
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      <div>
+                        <InlineStack gap="200" align="space-between">
+                          <InlineStack gap="200">
+                            <Button
+                              onClick={handleSpeedafTracking}
+                              loading={speedafTracking}
+                              disabled={speedafTracking || speedafWritingToSheets}
+                              variant="primary"
+                              tone="success"
+                            >
+                              {speedafTracking ? "Tracking..." : "Track Speedaf Orders"}
+                            </Button>
+
+                            {speedafTrackingResults.length > 0 && (
+                              <Button
+                                onClick={handleClearSpeedafResults}
+                                disabled={speedafTracking || speedafWritingToSheets}
+                                variant="secondary"
+                              >
+                                Clear Results
+                              </Button>
+                            )}
+                          </InlineStack>
+
+                          {speedafTrackingResults.length > 0 && (
+                            <Button
+                              onClick={handleWriteSpeedafDataToSheets}
+                              loading={speedafWritingToSheets}
+                              disabled={speedafTracking || speedafWritingToSheets}
+                              variant="primary"
+                              icon={LogoGoogleIcon}
+                            >
+                              {speedafWritingToSheets ? "Writing..." : "Write Data to Sheets"}
+                            </Button>
+                          )}
+                        </InlineStack>
+                      </div>
+
+
+                    </BlockStack>
+
+                    {speedafTrackingError && (
+                      <Banner tone="critical">
+                        <p>Error: {speedafTrackingError}</p>
+                      </Banner>
+                    )}
+
+                    {speedafTrackingResults.length > 0 && (
+                      <div>
+                        <Text variant="headingMd" as="h4" alignment="start">
+                          Tracking Results ({speedafTrackingResults.length} orders)
+                        </Text>
+
+                        <div style={{ marginTop: '16px' }}>
+                          <ResourceList
+                            resourceName={{ singular: 'order', plural: 'orders' }}
+                            items={speedafTrackingResults}
+                            renderItem={(order: any) => (
+                              <ResourceItem
+                                id={order.id}
+                                accessibilityLabel={`Order ${order.name}`}
+                                onClick={() => {}}
+                              >
+                                <BlockStack gap="200">
+                                  <InlineStack align="space-between">
+                                    <Text variant="bodyMd" as="h5" fontWeight="semibold">
+                                      {order.name}
+                                    </Text>
+                                    <Text variant="bodyMd" as="p" tone="subdued">
+                                      {order.trackingNumber}
+                                    </Text>
+                                  </InlineStack>
+
+                                  {order.error ? (
+                                    <Text variant="bodyMd" as="p" tone="critical">
+                                      {order.error}
+                                    </Text>
+                                  ) : order.trackingStatus ? (
+                                    <BlockStack gap="100">
+                                      {order.trackingStatus.tracks && order.trackingStatus.tracks.length > 0 ? (
+                                        order.trackingStatus.tracks.slice(0, 3).map((track: any, index: number) => (
+                                          <div key={index} style={{
+                                            padding: '8px',
+                                            backgroundColor: '#f6f6f7',
+                                            borderRadius: '4px',
+                                            fontSize: '12px'
+                                          }}>
+                                            <InlineStack align="space-between">
+                                              <Text variant="bodyMd" as="p" fontWeight="medium">
+                                                {track.actionDescription || track.actionName} {track.action && `(${track.action})`}
+                                              </Text>
+                                              <Text variant="bodyMd" as="p" tone="subdued">
+                                                {track.time}
+                                              </Text>
+                                            </InlineStack>
+                                            <Text variant="bodyMd" as="p" tone={track.action === '-2' ? 'critical' : 'subdued'}>
+                                              {track.msgEng || track.message}
+                                            </Text>
+                                            {track.action === '-2' && (
+                                              <Text variant="bodyMd" as="p" tone="critical" fontWeight="medium">
+                                                ⚠️ Delivery Exception - Contact customer service
+                                              </Text>
+                                            )}
+                                          </div>
+                                        ))
+                                      ) : (
+                                        <Text variant="bodyMd" as="p" tone="subdued">
+                                          No tracking events found
+                                        </Text>
+                                      )}
+                                    </BlockStack>
+                                  ) : (
+                                    <Text variant="bodyMd" as="p" tone="subdued">
+                                      No tracking data available
+                                    </Text>
+                                  )}
+                                </BlockStack>
+                              </ResourceItem>
+                            )}
+                          />
+                        </div>
+                      </div>
+                    )}
                   </BlockStack>
                 </Card>
               </Layout.Section>

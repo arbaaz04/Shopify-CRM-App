@@ -122,11 +122,15 @@ import { TestSenditConnectionGlobalActionContext } from "./global-actions";
 
 import { TestWriteToSheetGlobalActionContext } from "./global-actions";
 
+import { TrackSpeedafOrdersGlobalActionContext } from "./global-actions";
+
 import { UpdateReferenceTrackingGlobalActionContext } from "./global-actions";
 
 import { WriteBatchOrdersToSheetsGlobalActionContext } from "./global-actions";
 
 import { WriteToShopifyGlobalActionContext } from "./global-actions";
+
+import { WriteSpeedafDataToSheetsGlobalActionContext } from "./global-actions";
 
 
 
@@ -497,6 +501,12 @@ declare module "../../../api/actions/testWriteToSheet" {
 }
 
 
+declare module "../../../api/actions/trackSpeedafOrders" {
+  export type ActionRun = (params: TrackSpeedafOrdersGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: TrackSpeedafOrdersGlobalActionContext) => Promise<any>;
+}
+
+
 declare module "../../../api/actions/updateReferenceTracking" {
   export type ActionRun = (params: UpdateReferenceTrackingGlobalActionContext) => Promise<any>;
   export type ActionOnSuccess = (params: UpdateReferenceTrackingGlobalActionContext) => Promise<any>;
@@ -512,5 +522,11 @@ declare module "../../../api/actions/writeBatchOrdersToSheets" {
 declare module "../../../api/actions/writeToShopify" {
   export type ActionRun = (params: WriteToShopifyGlobalActionContext) => Promise<any>;
   export type ActionOnSuccess = (params: WriteToShopifyGlobalActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/actions/writeSpeedafDataToSheets" {
+  export type ActionRun = (params: WriteSpeedafDataToSheetsGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: WriteSpeedafDataToSheetsGlobalActionContext) => Promise<any>;
 }
 

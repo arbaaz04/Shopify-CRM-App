@@ -4275,7 +4275,7 @@
             "zmUxDbQrRPpm": {
                 "fieldType": "Boolean",
                 "key": "zmUxDbQrRPpm",
-                "name": "writeToSheets",
+                "name": "writeOrder",
                 "apiIdentifier": "writeOrder",
                 "configuration": {
                     "type": "BooleanConfig",
@@ -4288,7 +4288,7 @@
             "WF9jdF-lE09t": {
                 "fieldType": "Boolean",
                 "key": "WF9jdF-lE09t",
-                "name": "sheetsSynced",
+                "name": "autoWrite",
                 "apiIdentifier": "autoWrite",
                 "configuration": {
                     "type": "BooleanConfig",
@@ -8395,30 +8395,58 @@
                     "options": [
                         {
                             "type": "EnumOption",
-                            "key": "MnIFoqm3_ve1",
-                            "createdDate": 1744264263178,
-                            "name": "DISABLED",
+                            "key": "GFLmWSsTQvIY",
+                            "createdDate": 1750441852142,
+                            "name": "UNSUBMITTED",
                             "color": "#FCFCFC"
                         },
                         {
                             "type": "EnumOption",
-                            "key": "uV3jWHV9yVCZ",
-                            "createdDate": 1744264263178,
-                            "name": "INVITED",
+                            "key": "WXA30_LLHHSh",
+                            "createdDate": 1750441852142,
+                            "name": "SUBMITTED",
                             "color": "#FCFCFC"
                         },
                         {
                             "type": "EnumOption",
-                            "key": "RajuE8sYy1G1",
-                            "createdDate": 1744264263178,
-                            "name": "ENABLED",
+                            "key": "AJG7GVHrKjpX",
+                            "createdDate": 1750441852143,
+                            "name": "ACCEPTED",
                             "color": "#FCFCFC"
                         },
                         {
                             "type": "EnumOption",
-                            "key": "uzKFr6-y3bOh",
-                            "createdDate": 1744264263178,
-                            "name": "DECLINED",
+                            "key": "w4hCTGzw2S-d",
+                            "createdDate": 1750441852143,
+                            "name": "REJECTED",
+                            "color": "#FCFCFC"
+                        },
+                        {
+                            "type": "EnumOption",
+                            "key": "OPKZ2Gldq7G7",
+                            "createdDate": 1750441852143,
+                            "name": "CANCELLATION_REQUESTED",
+                            "color": "#FCFCFC"
+                        },
+                        {
+                            "type": "EnumOption",
+                            "key": "j9GkOzLCjqdA",
+                            "createdDate": 1750441852143,
+                            "name": "CANCELLATION_ACCEPTED",
+                            "color": "#FCFCFC"
+                        },
+                        {
+                            "type": "EnumOption",
+                            "key": "ESdG4Iv6ekqa",
+                            "createdDate": 1750441852143,
+                            "name": "CANCELLATION_REJECTED",
+                            "color": "#FCFCFC"
+                        },
+                        {
+                            "type": "EnumOption",
+                            "key": "CLYcKP_cLt4Z",
+                            "createdDate": 1750441852143,
+                            "name": "CLOSED",
                             "color": "#FCFCFC"
                         }
                     ],
@@ -8440,30 +8468,51 @@
                     "options": [
                         {
                             "type": "EnumOption",
-                            "key": "xvb7PCYJWeSM",
-                            "createdDate": 1744264263178,
-                            "name": "DISABLED",
+                            "key": "I_zaOAY9EHdb",
+                            "createdDate": 1750441852144,
+                            "name": "OPEN",
                             "color": "#FCFCFC"
                         },
                         {
                             "type": "EnumOption",
-                            "key": "M09L9aj8emtd",
-                            "createdDate": 1744264263178,
-                            "name": "INVITED",
+                            "key": "9WOVkJ1ajc2X",
+                            "createdDate": 1750441852144,
+                            "name": "IN_PROGRESS",
                             "color": "#FCFCFC"
                         },
                         {
                             "type": "EnumOption",
-                            "key": "RnsbLbwy0mxA",
-                            "createdDate": 1744264263179,
-                            "name": "ENABLED",
+                            "key": "YCF57dAWHz01",
+                            "createdDate": 1750441852144,
+                            "name": "CANCELLED",
                             "color": "#FCFCFC"
                         },
                         {
                             "type": "EnumOption",
-                            "key": "HmJBly5sLqHQ",
-                            "createdDate": 1744264263179,
-                            "name": "DECLINED",
+                            "key": "oZcrkpJenvrf",
+                            "createdDate": 1750441852144,
+                            "name": "INCOMPLETE",
+                            "color": "#FCFCFC"
+                        },
+                        {
+                            "type": "EnumOption",
+                            "key": "BxM214DiUp2J",
+                            "createdDate": 1750441852145,
+                            "name": "CLOSED",
+                            "color": "#FCFCFC"
+                        },
+                        {
+                            "type": "EnumOption",
+                            "key": "2L39-h2rI3ys",
+                            "createdDate": 1750441852145,
+                            "name": "SCHEDULED",
+                            "color": "#FCFCFC"
+                        },
+                        {
+                            "type": "EnumOption",
+                            "key": "DFfjEOfo8iIY",
+                            "createdDate": 1750441852145,
+                            "name": "ON_HOLD",
                             "color": "#FCFCFC"
                         }
                     ],

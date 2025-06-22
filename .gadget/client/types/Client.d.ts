@@ -2,7 +2,7 @@ import type { OperationContext } from "@urql/core";
 import { GadgetConnection, GadgetTransaction, InternalModelManager, ActionFunctionMetadata, GlobalActionFunction, BackgroundActionHandle } from "@gadgetinc/api-client-core";
 import type { ClientOptions as ApiClientOptions, AnyClient, EnqueueBackgroundActionOptions, AnyActionFunction } from '@gadgetinc/api-client-core';
 import type { DocumentNode } from 'graphql';
-import { CalculateRefundLineItemsElementTypeInput, Scalars, ProcessBulkReturnsOrderSelectionsElementTypeInput, ProcessOrderReturnLineItemsElementTypeInput, SyncOrdersOrdersElementTypeInput } from "./types.js";
+import { CalculateRefundLineItemsElementTypeInput, Scalars, ProcessBulkReturnsOrderSelectionsElementTypeInput, ProcessOrderReturnLineItemsElementTypeInput, SyncOrdersOrdersElementTypeInput, WriteSpeedafDataToSheetsTrackingDataElementTypeInput } from "./types.js";
 import { ShopifyCustomerManager } from "./models/ShopifyCustomer.js";
 import { ShopifyGdprRequestManager } from "./models/ShopifyGdprRequest.js";
 import { ShopifyOrderManager } from "./models/ShopifyOrder.js";
@@ -583,6 +583,38 @@ export declare class BambeCrmAppClient implements AnyClient {
             sheetName?: (Scalars["String"] | null) | null;
         } | null | undefined;
     };
+    /** Executes the trackSpeedafOrders global action. */
+    trackSpeedafOrders: {
+        (variables?: {
+            latestOrderName?: (Scalars["String"] | null) | null;
+            orderCount?: (Scalars["Float"] | null) | null;
+            mode?: (Scalars["String"] | null) | null;
+        } | null): Promise<any>;
+        type: "globalAction";
+        operationName: "trackSpeedafOrders";
+        operationReturnType: "TrackSpeedafOrders";
+        namespace: null;
+        typesImports: ["Scalars"];
+        variables: {
+            latestOrderName: {
+                required: false;
+                type: "String";
+            };
+            orderCount: {
+                required: false;
+                type: "Float";
+            };
+            mode: {
+                required: false;
+                type: "String";
+            };
+        };
+        variablesType: {
+            latestOrderName?: (Scalars["String"] | null) | null;
+            orderCount?: (Scalars["Float"] | null) | null;
+            mode?: (Scalars["String"] | null) | null;
+        } | null | undefined;
+    };
     /** Executes the updateReferenceTracking global action. */
     updateReferenceTracking: {
         (variables?: {
@@ -671,6 +703,32 @@ export declare class BambeCrmAppClient implements AnyClient {
             shopId?: (Scalars["String"] | null) | null;
             mutation?: (Scalars["String"] | null) | null;
             variables?: (Scalars["JSONObject"] | null) | null;
+        } | null | undefined;
+    };
+    /** Executes the writeSpeedafDataToSheets global action. */
+    writeSpeedafDataToSheets: {
+        (variables?: {
+            shopId?: (Scalars["String"] | null) | null;
+            trackingData?: (WriteSpeedafDataToSheetsTrackingDataElementTypeInput)[];
+        } | null): Promise<any>;
+        type: "globalAction";
+        operationName: "writeSpeedafDataToSheets";
+        operationReturnType: "WriteSpeedafDataToSheets";
+        namespace: null;
+        typesImports: ["WriteSpeedafDataToSheetsTrackingDataElementTypeInput", "Scalars"];
+        variables: {
+            shopId: {
+                required: false;
+                type: "String";
+            };
+            trackingData: {
+                required: false;
+                type: "[WriteSpeedafDataToSheetsTrackingDataElementTypeInput!]";
+            };
+        };
+        variablesType: {
+            shopId?: (Scalars["String"] | null) | null;
+            trackingData?: (WriteSpeedafDataToSheetsTrackingDataElementTypeInput)[];
         } | null | undefined;
     };
     shopifyCustomer: ShopifyCustomerManager;

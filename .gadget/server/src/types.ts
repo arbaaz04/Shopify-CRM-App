@@ -635,7 +635,9 @@ export interface AuthenticationConfiguration {
 
 /** The options for the mail object being sent */
 export type MailData = {
+  /** An array of recipients e-mail addresses that will appear on the To: field */
   to: string | string[] | Address | Array<string | Address>;
+  /** The subject of the e-mail */
   subject?: string;
   /** The body of the email in plain text */
   text?: string;
@@ -647,6 +649,18 @@ export type MailData = {
   sender?: string | Address;
   /** An array of attachments */
   attachments?: Attachment[];
+  /** Comma separated list or an array of recipients e-mail addresses that will appear on the Cc: field */
+  cc?: string | Address | (string | Address)[];
+  /** Comma separated list or an array of recipients e-mail addresses that will appear on the Bcc: field */
+  bcc?: string | Address | (string | Address)[];
+  /** Comma separated list or an array of e-mail addresses that will appear on the Reply-To: field */
+  replyTo?: string | Address | (string | Address)[];
+  /** The message-id this message is replying */
+  inReplyTo?: string | Address;
+  /** Message-id list (an array or space separated string) */
+  references?: string | string[];
+  /** An object or array of additional header fields */
+  headers?: { [key: string]: string | string[] };
 };
 
 export type Address = {

@@ -27,7 +27,7 @@ _export(exports, {
 *  |_.__/ \__,_|_| |_| |_|_.__/ \___|      \___|_|  |_| |_| |_|      \__,_| .__/| .__/ 
 *                                                                         |_|   |_|    
 *
-* Built for environment `Development` at version 2182
+* Built for environment `Development` at version 2281
 * Framework version: ^1.3.0
 * Edit this app here: https://bambe-crm-app.gadget.dev/edit
 */ /// <reference path="./ActionContextTypes.d.ts" />
