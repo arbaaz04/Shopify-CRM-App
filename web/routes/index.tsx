@@ -37,6 +37,7 @@ import { useGadget } from "@gadgetinc/react-shopify-app-bridge";
 import { useFindFirst, useFindMany } from "@gadgetinc/react";
 import { useQuery } from "@gadgetinc/react";
 import { SpeedafApiConfig, testSpeedafApiWithDocExample, createMockOrderData, sendSpeedafApiRequest } from "../utils/speedafApiTester";
+import { useCombinedCities } from "../hooks/useCombinedCities";
 
 // Tags we're looking for
 const CONFIRMATION_TAGS = [
@@ -2198,6 +2199,13 @@ const getSpeedafTrackingUrl = (trackingNumber: string): string => {
   return `https://t.17track.net/en#nums=${trackingNumber}`;
 };
 
+// Helper function to check if a city is Tanger
+const isTangerCity = (city: string): boolean => {
+  if (!city) return false;
+  const lowerCity = city.toLowerCase();
+  return lowerCity.includes('tanger') || lowerCity.includes('tangier');
+};
+
 // Helper function to format Shopify order ID for GraphQL
 const formatShopifyOrderId = (orderId: string): string => {
   try {
@@ -2667,14 +2675,55 @@ export const IndexPage = () => {
   const [speedafCustomOrderName, setSpeedafCustomOrderName] = useState<string>('');
   const [speedafTracking, setSpeedafTracking] = useState(false);
   const [speedafTrackingResults, setSpeedafTrackingResults] = useState<any[]>([]);
+
+  // Custom cities state
+  const [customCities, setCustomCities] = useState<string[]>([]);
+  const [customCitiesLoading, setCustomCitiesLoading] = useState(false);
   const [speedafTrackingError, setSpeedafTrackingError] = useState<string | null>(null);
   const [speedafWritingToSheets, setSpeedafWritingToSheets] = useState(false);
+  
+  // Local delivery state - tracks which orders should have TNG- prefix for Tanger deliveries
+  const [localDeliveryOrders, setLocalDeliveryOrders] = useState<Record<string, boolean>>({});
   
   // GROUP 2: useFindFirst hooks
   const [{ data: shop, fetching: shopFetching, error: shopError }] = useFindFirst(api.shopifyShop);
   const [{ data: config, fetching: configFetching, error: configError }] = useFindFirst(api.googleSheetConfig, {
     filter: shop ? { shopId: { equals: shop.id } } : undefined
   });
+
+  // Function to get combined cities (default + custom)
+  const getCombinedCities = useCallback(() => {
+    const defaultCities = selectedCourier === 'speedaf' ? SPEEDAF_CITIES : MOROCCAN_CITIES;
+    return [...defaultCities, ...customCities];
+  }, [selectedCourier, customCities]);
+
+  // Function to load custom cities
+  const loadCustomCities = useCallback(async () => {
+    if (!shop?.id) return;
+
+    try {
+      setCustomCitiesLoading(true);
+      // @ts-ignore - API type not available but works at runtime
+      const result = await api.getCustomCities({ 
+        shopId: shop.id,
+        courierType: selectedCourier === 'speedaf' ? 'speedaf' : 'sendit'
+      });
+
+      if (result.success && result.cities) {
+        const cityNames = result.cities.map((city: any) => city.name);
+        setCustomCities(cityNames);
+        console.log('Loaded custom cities:', cityNames);
+      } else {
+        console.error("Failed to load custom cities:", result.error);
+        setCustomCities([]);
+      }
+    } catch (error: any) {
+      console.error("Error loading custom cities:", error);
+      setCustomCities([]);
+    } finally {
+      setCustomCitiesLoading(false);
+    }
+  }, [shop?.id, selectedCourier]);
 
   // GROUP 3: All useEffect hooks
   // Load saved city modifications and removed orders from localStorage on component mount
@@ -2690,10 +2739,26 @@ export const IndexPage = () => {
       if (savedRemovedOrders) {
         setRemovedOrders(JSON.parse(savedRemovedOrders));
       }
+      
+      // Load local delivery orders
+      const savedLocalDeliveryOrders = localStorage.getItem('localDeliveryOrders');
+      if (savedLocalDeliveryOrders) {
+        setLocalDeliveryOrders(JSON.parse(savedLocalDeliveryOrders));
+      }
     } catch (error) {
       console.error("Error loading data from localStorage:", error);
     }
   }, []);
+  
+  // Initialize filtered cities when combined cities are loaded
+  useEffect(() => {
+    const combinedCities = getCombinedCities();
+    console.log('Combined cities updated:', combinedCities.length, 'cities for courier:', selectedCourier);
+    console.log('First 5 cities:', combinedCities.slice(0, 5));
+    if (combinedCities.length > 0) {
+      setFilteredCities(combinedCities);
+    }
+  }, [getCombinedCities, selectedCourier]);
   
   // Clear highlighted tracking IDs after 30 seconds
   useEffect(() => {
@@ -2713,8 +2778,17 @@ export const IndexPage = () => {
       // Also fetch exchange orders on initial load
       fetchExchangeOrders();
       fetchSheetOrders(); // Uncommented this line
+      // Load custom cities
+      loadCustomCities();
     }
   }, [isAuthenticated, shop]);
+
+  // Load custom cities when courier type changes
+  useEffect(() => {
+    if (shop?.id) {
+      loadCustomCities();
+    }
+  }, [selectedCourier, loadCustomCities, shop?.id]);
   
   // Reset pagination when tab changes
   useEffect(() => {
@@ -2999,13 +3073,39 @@ export const IndexPage = () => {
       }
       
       setOrders(validOrdersData);
+      
+      // Set default local delivery to true for new Tanger orders with Sendit courier
+      if (selectedCourier === 'sendit' && validOrdersData.length > 0) {
+        const newLocalDeliveryOrders = { ...localDeliveryOrders };
+        let hasNewTangerOrders = false;
+        
+        validOrdersData.forEach(order => {
+          const currentCity = modifiedCities[order.id] || order.city || '';
+          
+          // If this is a Tanger order and we don't have a setting for it yet, default to true
+          if (isTangerCity(currentCity) && localDeliveryOrders[order.id] === undefined) {
+            newLocalDeliveryOrders[order.id] = true;
+            hasNewTangerOrders = true;
+          }
+        });
+        
+        if (hasNewTangerOrders) {
+          setLocalDeliveryOrders(newLocalDeliveryOrders);
+          try {
+            localStorage.setItem('localDeliveryOrders', JSON.stringify(newLocalDeliveryOrders));
+          } catch (error) {
+            console.error("Error saving default local delivery orders to localStorage:", error);
+          }
+        }
+      }
+      
       setOrdersFetching(false);
     } catch (error) {
       console.error("Error fetching orders:", error);
       setOrdersError(error instanceof Error ? error : new Error(String(error)));
       setOrdersFetching(false);
     }
-  }, [isAuthenticated, shop, preventRefresh]);
+  }, [isAuthenticated, shop, preventRefresh, removedOrders, selectedCourier, localDeliveryOrders, modifiedCities]);
 
   const fetchSheetOrders = useCallback(async () => {
     if (!isAuthenticated || !shop || preventRefresh || sheetOrdersFetching) {
@@ -3524,8 +3624,8 @@ export const IndexPage = () => {
     // Set prevent refresh flag to avoid auto-refreshes
     setPreventRefresh(true);
     setFulfillLoading(true);
-    const results = [];
-    const failedOrders = [];
+    const results: any[] = [];
+    const failedOrders: any[] = [];
 
     try {
       console.log(`Starting to write ${selectedSheetOrders.length} orders to Google Sheets`);
@@ -3568,7 +3668,7 @@ export const IndexPage = () => {
           // Check if this is an exchange order by looking for "echange" tag
           const tagArray = Array.isArray(orderData.tags) ? orderData.tags :
                           (typeof orderData.tags === 'string' ? orderData.tags.split(/,\s*/) : []);
-          const isExchangeOrder = tagArray.some(tag =>
+          const isExchangeOrder = tagArray.some((tag: any) =>
             typeof tag === 'string' && tag.toLowerCase().includes('echange')
           );
 
@@ -3623,7 +3723,7 @@ export const IndexPage = () => {
             displayFulfillmentStatus: orderData.fulfillmentStatus || orderData.displayFulfillmentStatus,
             createdAt: orderData.createdAt,
             tags: orderData.tags,
-            trackingNumber: orderData.trackingNumber || '',
+            trackingNumber: formatTrackingNumberForSheets(orderData.id, orderData.trackingNumber || ''),
             referenceTrackingNumber: referenceTrackingNumber, // Reference order tracking for column Y
             isExchangeOrder: isExchangeOrder, // Flag to identify exchange orders for checkbox in column AA
             isCancelled: orderData.isCancelled,
@@ -3747,8 +3847,8 @@ export const IndexPage = () => {
     setCityInputValue(value);
     setEditingCity(value);
     
-    // Get the appropriate cities list based on the selected courier
-    const citiesList = selectedCourier === 'speedaf' ? SPEEDAF_CITIES : MOROCCAN_CITIES;
+    // Use combined cities instead of hardcoded arrays
+    const citiesList = getCombinedCities();
     
     // Filter cities based on input
     if (value.trim() === '') {
@@ -3758,13 +3858,13 @@ export const IndexPage = () => {
       setIsLoading(true);
       // Use normalized search to handle accents and special characters
       const normalizedInput = normalizeForSearch(value);
-      const filtered = citiesList.filter(city => 
+      const filtered = citiesList.filter((city: string) => 
         normalizeForSearch(city).includes(normalizedInput)
       );
       setFilteredCities(filtered);
       setIsLoading(false);
     }
-  }, [selectedCourier, normalizeForSearch]);
+  }, [getCombinedCities, normalizeForSearch]);
 
   const handleCitySelect = useCallback((selected: string) => {
     setEditingCity(selected);
@@ -3778,13 +3878,13 @@ export const IndexPage = () => {
     setEditingCity(safeCurrentCity);
     setCityInputValue(safeCurrentCity);
     
-    // Get the appropriate cities list based on the selected courier
-    const citiesList = selectedCourier === 'speedaf' ? SPEEDAF_CITIES : MOROCCAN_CITIES;
+    // Use combined cities instead of hardcoded arrays
+    const citiesList = getCombinedCities();
     
     // Show all cities initially
     setFilteredCities(citiesList);
     setShowCityModal(true);
-  }, [modifiedCities, selectedCourier]);
+  }, [modifiedCities, getCombinedCities]);
 
   const handleSaveCity = useCallback(() => {
     if (editingOrderId) {
@@ -3802,15 +3902,64 @@ export const IndexPage = () => {
         console.error("Error saving modified cities to localStorage:", error);
       }
       
+      // Check if the new city is Tanger and we're using Sendit courier
+      // If so, automatically set local delivery to true
+      if (selectedCourier === 'sendit' && isTangerCity(editingCity)) {
+        const updatedLocalDelivery = {
+          ...localDeliveryOrders,
+          [editingOrderId]: true
+        };
+        
+        setLocalDeliveryOrders(updatedLocalDelivery);
+        
+        // Save local delivery setting to localStorage
+        try {
+          localStorage.setItem('localDeliveryOrders', JSON.stringify(updatedLocalDelivery));
+        } catch (error) {
+          console.error("Error saving local delivery orders to localStorage:", error);
+        }
+      }
+      
       setShowCityModal(false);
       setEditingOrderId(null);
     }
-  }, [editingOrderId, editingCity, modifiedCities]);
+  }, [editingOrderId, editingCity, modifiedCities, selectedCourier, localDeliveryOrders]);
 
   const handleCancelCity = useCallback(() => {
     setShowCityModal(false);
     setEditingOrderId(null);
   }, []);
+
+  const handleLocalDeliveryChange = useCallback((orderId: string, checked: boolean) => {
+    const updatedLocalDelivery = {
+      ...localDeliveryOrders,
+      [orderId]: checked
+    };
+    
+    setLocalDeliveryOrders(updatedLocalDelivery);
+    
+    // Save to localStorage for persistence
+    try {
+      localStorage.setItem('localDeliveryOrders', JSON.stringify(updatedLocalDelivery));
+    } catch (error) {
+      console.error("Error saving local delivery orders to localStorage:", error);
+    }
+  }, [localDeliveryOrders]);
+
+  // Helper function to format tracking number with TNG- prefix for local delivery
+  const formatTrackingNumberForSheets = useCallback((orderId: string, trackingNumber: string) => {
+    if (!trackingNumber) return '';
+    
+    // Check if local delivery is enabled for this order
+    const isLocalDelivery = localDeliveryOrders[orderId];
+    
+    // Add TNG- prefix if local delivery is enabled and tracking number doesn't already have it
+    if (isLocalDelivery && !trackingNumber.startsWith('TNG-')) {
+      return `TNG-${trackingNumber}`;
+    }
+    
+    return trackingNumber;
+  }, [localDeliveryOrders]);
 
   const handleRemoveOrder = useCallback((id: string) => {
     setOrderToRemove(id);
@@ -4217,6 +4366,17 @@ export const IndexPage = () => {
       e.stopPropagation();
     };
     
+    // Handle order name click to select order
+    const handleOrderNameClick = (e: React.MouseEvent<HTMLElement>) => {
+      e.stopPropagation();
+      handleSelectOrder(id);
+    };
+    
+    // Handle ResourceItem click - do nothing to prevent accidental selection
+    const handleResourceItemClick = () => {
+      // Do nothing - only checkbox and order name should trigger selection
+    };
+    
     // Safely access array methods
     const safeJoin = (arr?: any[]) => {
       return Array.isArray(arr) ? arr.join(', ') : '';
@@ -4224,8 +4384,8 @@ export const IndexPage = () => {
     
     return (
       <ResourceItem 
-        id={id} 
-        onClick={() => handleOrderSelect(id)}
+        id={id}
+        onClick={handleResourceItemClick}
       >
         <BlockStack gap="400">
           <InlineStack gap="200" align="space-between">
@@ -4238,7 +4398,14 @@ export const IndexPage = () => {
                   onChange={() => handleSelectOrder(id)}
                 />
               </div>
-              <Text as="h3" variant="headingMd">{name}</Text>
+              <div 
+                onClick={handleOrderNameClick}
+                style={{ cursor: 'pointer' }}
+              >
+                <Text as="h3" variant="headingMd">
+                  {name}
+                </Text>
+              </div>
               
               <Badge tone={statusTone}>
                 {financialStatus}
@@ -4276,7 +4443,7 @@ export const IndexPage = () => {
             </Text>
             {originalCity && (
               <Text as="span" variant="bodyMd">
-                <strong>Original City - additional info:</strong> {originalCity}
+                <strong>City - Additional Info:</strong> {originalCity}
               </Text>
             )}
           </InlineStack>
@@ -4323,6 +4490,20 @@ export const IndexPage = () => {
               </Button>
             </InlineStack>
           </InlineStack>
+          
+          {/* Local Delivery Checkbox - only show for confirmed orders tab, Sendit courier, and when city is Tanger */}
+          {selectedTab === 0 && selectedCourier === 'sendit' && (() => {
+            const currentCity = modifiedCities[id] || city || '';
+            return isTangerCity(currentCity);
+          })() && (
+            <InlineStack gap="100" align="start">
+              <Checkbox
+                label="Local delivery"
+                checked={localDeliveryOrders[id] !== undefined ? localDeliveryOrders[id] : true}
+                onChange={(checked) => handleLocalDeliveryChange(id, checked)}
+              />
+            </InlineStack>
+          )}
           
           <Text as="p" variant="bodyMd">
             <strong>Products:</strong> {safeJoin(skus)}
@@ -4923,7 +5104,7 @@ export const IndexPage = () => {
                   displayFulfillmentStatus: orderData.fulfillmentStatus || "FULFILLED", // Use fresh status or fallback to FULFILLED
                   createdAt: orderData.createdAt,
                   tags: orderData.tags || [],
-                  trackingNumber: orderData.trackingNumber || '', // Fresh tracking number from fulfillment
+                  trackingNumber: formatTrackingNumberForSheets(orderData.id, orderData.trackingNumber || ''), // Fresh tracking number from fulfillment
                   referenceTrackingNumber: referenceTrackingNumber, // Reference order tracking for column Y
                   isExchangeOrder: true, // Flag to identify exchange orders for checkbox in column AA
                   isCancelled: orderData.isCancelled || false,
@@ -4992,13 +5173,13 @@ export const IndexPage = () => {
       setToastActive(true);
     } finally {
       setFulfillLoading(false);
+      setPreventRefresh(false); // Reset immediately to allow manual refresh
       
       // Refresh exchange orders once after all processing is complete, with a 2 second delay
       // This prevents multiple refreshes and ensures UI is updated after processing
       console.log("All exchange orders processed, scheduling refresh in 2 seconds");
       setTimeout(() => {
         console.log("Refreshing exchange orders list");
-        setPreventRefresh(false); // Allow refreshes again
         fetchExchangeOrders();
         
         // Schedule another refresh after 10 seconds to make sure Shopify has updated the order status
@@ -6187,7 +6368,7 @@ export const IndexPage = () => {
                   displayFulfillmentStatus: orderData.fulfillmentStatus || "FULFILLED", // Use fresh status or fallback to FULFILLED
                   createdAt: orderData.createdAt,
                   tags: orderData.tags || [],
-                  trackingNumber: orderData.trackingNumber || '', // Fresh tracking number from fulfillment
+                  trackingNumber: formatTrackingNumberForSheets(orderData.id, orderData.trackingNumber || ''), // Fresh tracking number from fulfillment
                   isCancelled: orderData.isCancelled || false,
                   isDeleted: orderData.isDeleted || false,
                   isFulfillmentCancelled: orderData.isFulfillmentCancelled || false
@@ -6254,12 +6435,12 @@ export const IndexPage = () => {
       setToastActive(true);
     } finally {
       setFulfillLoading(false);
+      setPreventRefresh(false); // Reset immediately to allow manual refresh
       
       // Refresh orders once after all processing is complete, with a 2 second delay
       console.log("All orders processed, scheduling refresh in 2 seconds");
       setTimeout(() => {
         console.log("Refreshing orders list");
-        setPreventRefresh(false); // Allow refreshes again
         fetchOrders();
       }, 2000);
     }
@@ -6636,7 +6817,7 @@ export const IndexPage = () => {
                       if (originalCity) {
                         return (
                           <Text variant="bodyMd" as="p">
-                            <strong>Additional Info - Original City:</strong> {" "}
+                            <strong>Original City:</strong> {" "}
                             <span style={{ color: '#108043' }}>{originalCity}</span>
                           </Text>
                         );
@@ -6653,7 +6834,7 @@ export const IndexPage = () => {
                     onChange={handleCityInputChange}
                     autoComplete="off"
                     placeholder="Type to search cities..."
-                    helpText={`Showing cities for ${selectedCourier === 'speedaf' ? 'Speedaf' : 'Sendit'}. Type to search, scroll to view all cities, or click on a city to select it.`}
+                    helpText={`Showing cities for ${selectedCourier === 'speedaf' ? 'Speedaf' : 'Sendit'} (including custom cities). Type to search, scroll to view all cities, or click on a city to select it.`}
                   />
                   
                   <div style={{ marginTop: '20px' }}>

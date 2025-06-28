@@ -118,6 +118,15 @@ export type ComputedViewOperation = {
   variables?: VariablesOptions;
 };
 
+export type StubbedComputedViewOperation = {
+  type: "stubbedComputedView";
+  operationName: string;
+  functionName: string; // Same as operationName, but required by ModelManagers
+  gqlFieldName: string; // The field name of the operation in GQL schema (includes model for model views)
+  namespace: string | string[] | null;
+  errorMessage: string;
+};
+
 export type StubbedActionReason = "MissingApiTrigger";
 
 export type StubbedActionOperation = {
@@ -144,7 +153,8 @@ export type ModelManagerOperation =
   | ActionOperation
   | BulkActionOperation
   | StubbedActionOperation
-  | ComputedViewOperation;
+  | ComputedViewOperation
+  | StubbedComputedViewOperation;
 
 /**
  * Construct a model manager class out of the metadatas generated on the server
@@ -404,6 +414,11 @@ export const buildModelManager = (
         (modelManagerClass.prototype as any)[operation.operationName] = isInlineComputedView(operation)
           ? buildInlineModelComputedView(operation)
           : buildModelComputedView(operation);
+        break;
+      }
+      case "stubbedComputedView": {
+        (modelManagerClass.prototype as any)[operation.operationName] = buildStubbedComputedView(operation);
+        break;
       }
     }
   }
@@ -442,6 +457,12 @@ export const buildGlobalAction = (
     ) as any;
   }
 };
+
+export function buildStubbedComputedView(operation: StubbedComputedViewOperation): () => Promise<never> {
+  return Object.assign(async () => {
+    throw new Error(operation.errorMessage);
+  }, operation);
+}
 
 export function buildComputedView<ResultT>(
   client: { connection: GadgetConnection },

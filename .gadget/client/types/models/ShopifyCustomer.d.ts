@@ -238,7 +238,7 @@ export type ShopifyCustomerManager = {
         (...args: any[]): never;
         type: 'stubbedAction';
         operationName: 'createShopifyCustomer';
-        errorMessage: 'The action create on model shopifyCustomer does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+        errorMessage: string;
         optionsType: CreateShopifyCustomerOptions;
         actionApiIdentifier: 'create';
         modelApiIdentifier: typeof modelApiIdentifier;
@@ -255,7 +255,7 @@ export type ShopifyCustomerManager = {
         (...args: any[]): never;
         type: 'stubbedAction';
         operationName: 'bulkCreateShopifyCustomers';
-        errorMessage: 'The action create on model shopifyCustomer does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+        errorMessage: string;
         optionsType: CreateShopifyCustomerOptions;
         actionApiIdentifier: 'create';
         modelApiIdentifier: typeof modelApiIdentifier;
@@ -272,7 +272,7 @@ export type ShopifyCustomerManager = {
         (...args: any[]): never;
         type: 'stubbedAction';
         operationName: 'updateShopifyCustomer';
-        errorMessage: 'The action update on model shopifyCustomer does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+        errorMessage: string;
         optionsType: UpdateShopifyCustomerOptions;
         actionApiIdentifier: 'update';
         modelApiIdentifier: typeof modelApiIdentifier;
@@ -289,7 +289,7 @@ export type ShopifyCustomerManager = {
         (...args: any[]): never;
         type: 'stubbedAction';
         operationName: 'bulkUpdateShopifyCustomers';
-        errorMessage: 'The action update on model shopifyCustomer does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+        errorMessage: string;
         optionsType: UpdateShopifyCustomerOptions;
         actionApiIdentifier: 'update';
         modelApiIdentifier: typeof modelApiIdentifier;
@@ -306,7 +306,7 @@ export type ShopifyCustomerManager = {
         (...args: any[]): never;
         type: 'stubbedAction';
         operationName: 'deleteShopifyCustomer';
-        errorMessage: 'The action delete on model shopifyCustomer does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+        errorMessage: string;
         optionsType: DeleteShopifyCustomerOptions;
         actionApiIdentifier: 'delete';
         modelApiIdentifier: typeof modelApiIdentifier;
@@ -323,7 +323,7 @@ export type ShopifyCustomerManager = {
         (...args: any[]): never;
         type: 'stubbedAction';
         operationName: 'bulkDeleteShopifyCustomers';
-        errorMessage: 'The action delete on model shopifyCustomer does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+        errorMessage: string;
         optionsType: DeleteShopifyCustomerOptions;
         actionApiIdentifier: 'delete';
         modelApiIdentifier: typeof modelApiIdentifier;

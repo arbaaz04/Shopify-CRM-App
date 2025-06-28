@@ -228,7 +228,7 @@ export type ShopifyFulfillmentManager = {
         (...args: any[]): never;
         type: 'stubbedAction';
         operationName: 'createShopifyFulfillment';
-        errorMessage: 'The action create on model shopifyFulfillment does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+        errorMessage: string;
         optionsType: CreateShopifyFulfillmentOptions;
         actionApiIdentifier: 'create';
         modelApiIdentifier: typeof modelApiIdentifier;
@@ -245,7 +245,7 @@ export type ShopifyFulfillmentManager = {
         (...args: any[]): never;
         type: 'stubbedAction';
         operationName: 'bulkCreateShopifyFulfillments';
-        errorMessage: 'The action create on model shopifyFulfillment does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+        errorMessage: string;
         optionsType: CreateShopifyFulfillmentOptions;
         actionApiIdentifier: 'create';
         modelApiIdentifier: typeof modelApiIdentifier;
@@ -262,7 +262,7 @@ export type ShopifyFulfillmentManager = {
         (...args: any[]): never;
         type: 'stubbedAction';
         operationName: 'updateShopifyFulfillment';
-        errorMessage: 'The action update on model shopifyFulfillment does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+        errorMessage: string;
         optionsType: UpdateShopifyFulfillmentOptions;
         actionApiIdentifier: 'update';
         modelApiIdentifier: typeof modelApiIdentifier;
@@ -279,7 +279,7 @@ export type ShopifyFulfillmentManager = {
         (...args: any[]): never;
         type: 'stubbedAction';
         operationName: 'bulkUpdateShopifyFulfillments';
-        errorMessage: 'The action update on model shopifyFulfillment does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+        errorMessage: string;
         optionsType: UpdateShopifyFulfillmentOptions;
         actionApiIdentifier: 'update';
         modelApiIdentifier: typeof modelApiIdentifier;
@@ -296,7 +296,7 @@ export type ShopifyFulfillmentManager = {
         (...args: any[]): never;
         type: 'stubbedAction';
         operationName: 'deleteShopifyFulfillment';
-        errorMessage: 'The action delete on model shopifyFulfillment does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+        errorMessage: string;
         optionsType: DeleteShopifyFulfillmentOptions;
         actionApiIdentifier: 'delete';
         modelApiIdentifier: typeof modelApiIdentifier;
@@ -313,7 +313,7 @@ export type ShopifyFulfillmentManager = {
         (...args: any[]): never;
         type: 'stubbedAction';
         operationName: 'bulkDeleteShopifyFulfillments';
-        errorMessage: 'The action delete on model shopifyFulfillment does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+        errorMessage: string;
         optionsType: DeleteShopifyFulfillmentOptions;
         actionApiIdentifier: 'delete';
         modelApiIdentifier: typeof modelApiIdentifier;

@@ -82,6 +82,12 @@ import { DeleteSpeedafConfigActionContext } from "./models/SpeedafConfig.js";
 
 import { FindFirstSpeedafConfigActionContext } from "./models/SpeedafConfig.js";
 
+import { CreateCustomCityActionContext } from "./models/CustomCity.js";
+
+import { UpdateCustomCityActionContext } from "./models/CustomCity.js";
+
+import { DeleteCustomCityActionContext } from "./models/CustomCity.js";
+
 import { CalculateRefundGlobalActionContext } from "./global-actions.js";
 
 import { CreateSenditOrderGlobalActionContext } from "./global-actions.js";
@@ -91,6 +97,10 @@ import { DirectOrderTestGlobalActionContext } from "./global-actions.js";
 import { ExtractOrderSKUsGlobalActionContext } from "./global-actions.js";
 
 import { FulfillOrderGlobalActionContext } from "./global-actions.js";
+
+import { GetCombinedCityListGlobalActionContext } from "./global-actions.js";
+
+import { GetCustomCitiesGlobalActionContext } from "./global-actions.js";
 
 import { GetSenditDistrictIdGlobalActionContext } from "./global-actions.js";
 
@@ -118,6 +128,8 @@ import { TestGoogleAuthGlobalActionContext } from "./global-actions.js";
 
 import { TestLocationQueryGlobalActionContext } from "./global-actions.js";
 
+import { TestOriginalCityExtractionGlobalActionContext } from "./global-actions.js";
+
 import { TestSenditConnectionGlobalActionContext } from "./global-actions.js";
 
 import { TestWriteToSheetGlobalActionContext } from "./global-actions.js";
@@ -128,9 +140,9 @@ import { UpdateReferenceTrackingGlobalActionContext } from "./global-actions.js"
 
 import { WriteBatchOrdersToSheetsGlobalActionContext } from "./global-actions.js";
 
-import { WriteToShopifyGlobalActionContext } from "./global-actions.js";
-
 import { WriteSpeedafDataToSheetsGlobalActionContext } from "./global-actions.js";
+
+import { WriteToShopifyGlobalActionContext } from "./global-actions.js";
 
 
 
@@ -381,6 +393,24 @@ declare module "../../../api/models/speedafConfig/actions/findFirst" {
 }
 
 
+declare module "../../../api/models/customCity/actions/create" {
+  export type ActionRun = (params: CreateCustomCityActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: CreateCustomCityActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/customCity/actions/update" {
+  export type ActionRun = (params: UpdateCustomCityActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: UpdateCustomCityActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/customCity/actions/delete" {
+  export type ActionRun = (params: DeleteCustomCityActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: DeleteCustomCityActionContext) => Promise<any>;
+}
+
+
 declare module "../../../api/actions/calculateRefund" {
   export type ActionRun = (params: CalculateRefundGlobalActionContext) => Promise<any>;
   export type ActionOnSuccess = (params: CalculateRefundGlobalActionContext) => Promise<any>;
@@ -408,6 +438,18 @@ declare module "../../../api/actions/extractOrderSKUs" {
 declare module "../../../api/actions/fulfillOrder" {
   export type ActionRun = (params: FulfillOrderGlobalActionContext) => Promise<any>;
   export type ActionOnSuccess = (params: FulfillOrderGlobalActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/actions/getCombinedCityList" {
+  export type ActionRun = (params: GetCombinedCityListGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: GetCombinedCityListGlobalActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/actions/getCustomCities" {
+  export type ActionRun = (params: GetCustomCitiesGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: GetCustomCitiesGlobalActionContext) => Promise<any>;
 }
 
 
@@ -489,6 +531,12 @@ declare module "../../../api/actions/testLocationQuery" {
 }
 
 
+declare module "../../../api/actions/testOriginalCityExtraction" {
+  export type ActionRun = (params: TestOriginalCityExtractionGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: TestOriginalCityExtractionGlobalActionContext) => Promise<any>;
+}
+
+
 declare module "../../../api/actions/testSenditConnection" {
   export type ActionRun = (params: TestSenditConnectionGlobalActionContext) => Promise<any>;
   export type ActionOnSuccess = (params: TestSenditConnectionGlobalActionContext) => Promise<any>;
@@ -519,14 +567,14 @@ declare module "../../../api/actions/writeBatchOrdersToSheets" {
 }
 
 
-declare module "../../../api/actions/writeToShopify" {
-  export type ActionRun = (params: WriteToShopifyGlobalActionContext) => Promise<any>;
-  export type ActionOnSuccess = (params: WriteToShopifyGlobalActionContext) => Promise<any>;
-}
-
-
 declare module "../../../api/actions/writeSpeedafDataToSheets" {
   export type ActionRun = (params: WriteSpeedafDataToSheetsGlobalActionContext) => Promise<any>;
   export type ActionOnSuccess = (params: WriteSpeedafDataToSheetsGlobalActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/actions/writeToShopify" {
+  export type ActionRun = (params: WriteToShopifyGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: WriteToShopifyGlobalActionContext) => Promise<any>;
 }
 

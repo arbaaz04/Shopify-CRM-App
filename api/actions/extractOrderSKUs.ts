@@ -152,9 +152,9 @@ function extractOriginalCity(orderData: any): string {
       return '';
     }
 
-    // Look for the "Original City" key in noteAttributes
+    // Look for the "Original City" name in noteAttributes
     const originalCityAttribute = noteAttributes.find((attr: any) =>
-      attr && typeof attr === 'object' && attr.key === 'Original City'
+      attr && typeof attr === 'object' && attr.name === 'Original City'
     );
 
     return originalCityAttribute?.value || '';

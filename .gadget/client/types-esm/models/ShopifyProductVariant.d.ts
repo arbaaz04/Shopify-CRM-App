@@ -229,7 +229,7 @@ export type ShopifyProductVariantManager = {
         (...args: any[]): never;
         type: 'stubbedAction';
         operationName: 'createShopifyProductVariant';
-        errorMessage: 'The action create on model shopifyProductVariant does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+        errorMessage: string;
         optionsType: CreateShopifyProductVariantOptions;
         actionApiIdentifier: 'create';
         modelApiIdentifier: typeof modelApiIdentifier;
@@ -246,7 +246,7 @@ export type ShopifyProductVariantManager = {
         (...args: any[]): never;
         type: 'stubbedAction';
         operationName: 'bulkCreateShopifyProductVariants';
-        errorMessage: 'The action create on model shopifyProductVariant does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+        errorMessage: string;
         optionsType: CreateShopifyProductVariantOptions;
         actionApiIdentifier: 'create';
         modelApiIdentifier: typeof modelApiIdentifier;
@@ -263,7 +263,7 @@ export type ShopifyProductVariantManager = {
         (...args: any[]): never;
         type: 'stubbedAction';
         operationName: 'updateShopifyProductVariant';
-        errorMessage: 'The action update on model shopifyProductVariant does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+        errorMessage: string;
         optionsType: UpdateShopifyProductVariantOptions;
         actionApiIdentifier: 'update';
         modelApiIdentifier: typeof modelApiIdentifier;
@@ -280,7 +280,7 @@ export type ShopifyProductVariantManager = {
         (...args: any[]): never;
         type: 'stubbedAction';
         operationName: 'bulkUpdateShopifyProductVariants';
-        errorMessage: 'The action update on model shopifyProductVariant does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+        errorMessage: string;
         optionsType: UpdateShopifyProductVariantOptions;
         actionApiIdentifier: 'update';
         modelApiIdentifier: typeof modelApiIdentifier;
@@ -297,7 +297,7 @@ export type ShopifyProductVariantManager = {
         (...args: any[]): never;
         type: 'stubbedAction';
         operationName: 'deleteShopifyProductVariant';
-        errorMessage: 'The action delete on model shopifyProductVariant does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+        errorMessage: string;
         optionsType: DeleteShopifyProductVariantOptions;
         actionApiIdentifier: 'delete';
         modelApiIdentifier: typeof modelApiIdentifier;
@@ -314,7 +314,7 @@ export type ShopifyProductVariantManager = {
         (...args: any[]): never;
         type: 'stubbedAction';
         operationName: 'bulkDeleteShopifyProductVariants';
-        errorMessage: 'The action delete on model shopifyProductVariant does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+        errorMessage: string;
         optionsType: DeleteShopifyProductVariantOptions;
         actionApiIdentifier: 'delete';
         modelApiIdentifier: typeof modelApiIdentifier;

@@ -253,6 +253,11 @@ const buildModelManager = (apiIdentifier, pluralApiIdentifier, defaultSelection,
       }
       case "computedView": {
         modelManagerClass.prototype[operation.operationName] = isInlineComputedView(operation) ? buildInlineModelComputedView(operation) : buildModelComputedView(operation);
+        break;
+      }
+      case "stubbedComputedView": {
+        modelManagerClass.prototype[operation.operationName] = buildStubbedComputedView(operation);
+        break;
       }
     }
   }
@@ -285,6 +290,11 @@ const buildGlobalAction = (client, operation) => {
     );
   }
 };
+function buildStubbedComputedView(operation) {
+  return Object.assign(async () => {
+    throw new Error(operation.errorMessage);
+  }, operation);
+}
 function buildComputedView(client, operation) {
   const f = operation.variables ? async (variables = {}) => {
     let variablesOptions;
@@ -440,6 +450,7 @@ export {
   buildInlineModelComputedView,
   buildModelComputedView,
   buildModelManager,
+  buildStubbedComputedView,
   isInlineComputedView
 };
 //# sourceMappingURL=builder.js.map

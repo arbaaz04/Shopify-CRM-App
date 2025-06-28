@@ -9869,6 +9869,156 @@ _export(exports, {
             "stateInActionCode": false,
             "childStates": []
         }
+    },
+    "CustomCity": {
+        "key": "CustomCityKey",
+        "name": "customCity",
+        "apiIdentifier": "customCity",
+        "namespace": [],
+        "fields": {
+            "CustomCityKey-system-id": {
+                "fieldType": "ID",
+                "key": "CustomCityKey-system-id",
+                "name": "ID",
+                "apiIdentifier": "id",
+                "configuration": {
+                    "type": "IDConfig",
+                    "key": "NXUuggRk7Wb-",
+                    "createdDate": "2025-06-27T07:47:38.994Z"
+                },
+                "internalWritable": true
+            },
+            "CustomCityKey-system-createdAt": {
+                "fieldType": "DateTime",
+                "key": "CustomCityKey-system-createdAt",
+                "name": "Created At",
+                "apiIdentifier": "createdAt",
+                "configuration": {
+                    "type": "DateTimeConfig",
+                    "key": "BQ2fqNdAQ61r",
+                    "createdDate": "2025-06-27T07:47:38.995Z",
+                    "includeTime": true,
+                    "default": null
+                },
+                "internalWritable": true
+            },
+            "CustomCityKey-system-updatedAt": {
+                "fieldType": "DateTime",
+                "key": "CustomCityKey-system-updatedAt",
+                "name": "Updated At",
+                "apiIdentifier": "updatedAt",
+                "configuration": {
+                    "type": "DateTimeConfig",
+                    "key": "U_8BP0HaqS4B",
+                    "createdDate": "2025-06-27T07:47:38.996Z",
+                    "includeTime": true,
+                    "default": null
+                },
+                "internalWritable": true
+            },
+            "CustomCityActive": {
+                "fieldType": "Boolean",
+                "key": "CustomCityActive",
+                "name": "isActive",
+                "apiIdentifier": "isActive",
+                "configuration": {
+                    "type": "BooleanConfig",
+                    "key": "RN-A9C6ALox8",
+                    "createdDate": "2025-06-27T07:47:38.998Z",
+                    "default": true
+                },
+                "internalWritable": true
+            },
+            "CustomCityAddedAt": {
+                "fieldType": "DateTime",
+                "key": "CustomCityAddedAt",
+                "name": "addedAt",
+                "apiIdentifier": "addedAt",
+                "configuration": {
+                    "type": "DateTimeConfig",
+                    "key": "lRRem8MRF4BM",
+                    "createdDate": "2025-06-27T07:47:38.999Z",
+                    "includeTime": true,
+                    "default": null
+                },
+                "internalWritable": true
+            },
+            "CustomCityCourierType": {
+                "fieldType": "Enum",
+                "key": "CustomCityCourierType",
+                "name": "courierType",
+                "apiIdentifier": "courierType",
+                "configuration": {
+                    "type": "EnumConfig",
+                    "key": "HxR6Gi6rLDvv",
+                    "createdDate": "2025-06-27T07:47:38.997Z",
+                    "allowMultiple": false,
+                    "allowOther": false,
+                    "options": [
+                        {
+                            "type": "EnumOption",
+                            "key": "J6Z4fBB1Tj5k",
+                            "createdDate": 1751011428208,
+                            "name": "sendit",
+                            "color": "#FCFCFC"
+                        },
+                        {
+                            "type": "EnumOption",
+                            "key": "1dIL2O4Eh3Xi",
+                            "createdDate": 1751011428208,
+                            "name": "speedaf",
+                            "color": "#FCFCFC"
+                        },
+                        {
+                            "type": "EnumOption",
+                            "key": "IcnRinZo8dT2",
+                            "createdDate": 1751011428208,
+                            "name": "general",
+                            "color": "#FCFCFC"
+                        }
+                    ],
+                    "default": "sendit"
+                },
+                "internalWritable": true
+            },
+            "CustomCityName": {
+                "fieldType": "String",
+                "key": "CustomCityName",
+                "name": "name",
+                "apiIdentifier": "name",
+                "configuration": {
+                    "type": "StringConfig",
+                    "key": "8D9foJRlLVPr",
+                    "createdDate": "2025-06-27T07:47:38.996Z",
+                    "default": null
+                },
+                "internalWritable": true
+            },
+            "CustomCityShopRef": {
+                "fieldType": "BelongsTo",
+                "key": "CustomCityShopRef",
+                "name": "shop",
+                "apiIdentifier": "shop",
+                "configuration": {
+                    "type": "BelongsToConfig",
+                    "key": "EASKOI9CY1U_",
+                    "createdDate": "2025-06-27T07:47:38.999Z",
+                    "relatedModelKey": "DataModel-Shopify-Shop",
+                    "relatedModelApiIdentifier": "shopifyShop"
+                },
+                "internalWritable": true
+            }
+        },
+        "graphqlTypeName": "CustomCity",
+        "stateChart": {
+            "type": "StateChart",
+            "key": "LP2bukk4bcTO",
+            "createdDate": 1751010458992,
+            "actions": {},
+            "transitions": {},
+            "stateInActionCode": false,
+            "childStates": []
+        }
     }
 };
 /**
@@ -9888,5 +10038,6 @@ _export(exports, {
     "api:shopifyProduct": "ShopifyProduct",
     "api:shopifyProductVariant": "ShopifyProductVariant",
     "api:senditConfig": "SenditConfig",
-    "api:speedafConfig": "SpeedafConfig"
+    "api:speedafConfig": "SpeedafConfig",
+    "api:customCity": "CustomCity"
 };

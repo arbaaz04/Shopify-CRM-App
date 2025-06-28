@@ -76,6 +76,14 @@ export type ComputedViewOperation = {
     referencedTypenames?: string[];
     variables?: VariablesOptions;
 };
+export type StubbedComputedViewOperation = {
+    type: "stubbedComputedView";
+    operationName: string;
+    functionName: string;
+    gqlFieldName: string;
+    namespace: string | string[] | null;
+    errorMessage: string;
+};
 export type StubbedActionReason = "MissingApiTrigger";
 export type StubbedActionOperation = {
     type: "stubbedAction";
@@ -88,7 +96,7 @@ export type StubbedActionOperation = {
     reason: StubbedActionReason;
     dataPath: string;
 };
-export type ModelManagerOperation = FindOneOperation | MaybeFindOneOperation | FindManyOperation | FindFirstOperation | MaybeFindFirstOperation | FindOneByFieldOperation | MaybeFindOneByFieldOperation | SingletonGetOperation | ActionOperation | BulkActionOperation | StubbedActionOperation | ComputedViewOperation;
+export type ModelManagerOperation = FindOneOperation | MaybeFindOneOperation | FindManyOperation | FindFirstOperation | MaybeFindFirstOperation | FindOneByFieldOperation | MaybeFindOneByFieldOperation | SingletonGetOperation | ActionOperation | BulkActionOperation | StubbedActionOperation | ComputedViewOperation | StubbedComputedViewOperation;
 /**
  * Construct a model manager class out of the metadatas generated on the server
  **/
@@ -96,6 +104,7 @@ export declare const buildModelManager: (apiIdentifier: string, pluralApiIdentif
 export declare const buildGlobalAction: (client: {
     connection: GadgetConnection;
 }, operation: GlobalActionOperation | StubbedActionOperation) => AnyActionFunction;
+export declare function buildStubbedComputedView(operation: StubbedComputedViewOperation): () => Promise<never>;
 export declare function buildComputedView<ResultT>(client: {
     connection: GadgetConnection;
 }, operation: ComputedViewOperation): ComputedViewWithoutVariables<ResultT>;

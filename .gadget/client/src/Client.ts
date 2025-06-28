@@ -22,6 +22,7 @@ import { DefaultShopifyProductSelection, ShopifyProductManager } from "./models/
 import { DefaultShopifyProductVariantSelection, ShopifyProductVariantManager } from "./models/ShopifyProductVariant.js";
 import { DefaultSenditConfigSelection, SenditConfigManager } from "./models/SenditConfig.js";
 import { DefaultSpeedafConfigSelection, SpeedafConfigManager } from "./models/SpeedafConfig.js";
+import { DefaultCustomCitySelection, CustomCityManager } from "./models/CustomCity.js";
 export { DefaultShopifyCustomerSelection, type ShopifyCustomerRecord } from "./models/ShopifyCustomer.js";
 export { DefaultShopifyGdprRequestSelection, type ShopifyGdprRequestRecord } from "./models/ShopifyGdprRequest.js";
 export { DefaultShopifyOrderSelection, type ShopifyOrderRecord } from "./models/ShopifyOrder.js";
@@ -36,6 +37,7 @@ export { DefaultShopifyProductSelection, type ShopifyProductRecord } from "./mod
 export { DefaultShopifyProductVariantSelection, type ShopifyProductVariantRecord } from "./models/ShopifyProductVariant.js";
 export { DefaultSenditConfigSelection, type SenditConfigRecord } from "./models/SenditConfig.js";
 export { DefaultSpeedafConfigSelection, type SpeedafConfigRecord } from "./models/SpeedafConfig.js";
+export { DefaultCustomCitySelection, type CustomCityRecord } from "./models/CustomCity.js";
 
 type ClientOptions = Omit<ApiClientOptions, "environment"> & { environment?: string };
 type AllOptionalVariables<T> = Partial<T> extends T ? object : never;
@@ -68,6 +70,8 @@ export type InternalModelManagers = {
    senditConfig: InternalModelManager;
    /** The internal API model manager for the speedafConfig model */
    speedafConfig: InternalModelManager;
+   /** The internal API model manager for the customCity model */
+   customCity: InternalModelManager;
  };
 
 const productionEnv = "production";
@@ -260,6 +264,42 @@ export class BambeCrmAppClient implements AnyClient {
                            }
                              | null
                              | undefined;
+                   };
+  /** Executes the getCombinedCityList global action. */
+  getCombinedCityList = buildGlobalAction(this, {
+                       type: 'globalAction',
+                       functionName: 'getCombinedCityList',
+                       operationName: 'getCombinedCityList',
+                       operationReturnType: 'GetCombinedCityList',
+                       namespace: null,
+                       variables: {}
+                     } as const) as unknown as {
+                     (): Promise<any>;
+                     type: 'globalAction';
+                     operationName: 'getCombinedCityList';
+                     operationReturnType: 'GetCombinedCityList';
+                     namespace: null;
+                     typesImports: [];
+                     variables: {};
+                     variablesType: Record<string, never>;
+                   };
+  /** Executes the getCustomCities global action. */
+  getCustomCities = buildGlobalAction(this, {
+                       type: 'globalAction',
+                       functionName: 'getCustomCities',
+                       operationName: 'getCustomCities',
+                       operationReturnType: 'GetCustomCities',
+                       namespace: null,
+                       variables: {}
+                     } as const) as unknown as {
+                     (): Promise<any>;
+                     type: 'globalAction';
+                     operationName: 'getCustomCities';
+                     operationReturnType: 'GetCustomCities';
+                     namespace: null;
+                     typesImports: [];
+                     variables: {};
+                     variablesType: Record<string, never>;
                    };
   /** Executes the getSenditDistrictId global action. */
   getSenditDistrictId = buildGlobalAction(this, {
@@ -657,6 +697,24 @@ export class BambeCrmAppClient implements AnyClient {
                              | null
                              | undefined;
                    };
+  /** Executes the testOriginalCityExtraction global action. */
+  testOriginalCityExtraction = buildGlobalAction(this, {
+                       type: 'globalAction',
+                       functionName: 'testOriginalCityExtraction',
+                       operationName: 'testOriginalCityExtraction',
+                       operationReturnType: 'TestOriginalCityExtraction',
+                       namespace: null,
+                       variables: {}
+                     } as const) as unknown as {
+                     (): Promise<any>;
+                     type: 'globalAction';
+                     operationName: 'testOriginalCityExtraction';
+                     operationReturnType: 'TestOriginalCityExtraction';
+                     namespace: null;
+                     typesImports: [];
+                     variables: {};
+                     variablesType: Record<string, never>;
+                   };
   /** Executes the testSenditConnection global action. */
   testSenditConnection = buildGlobalAction(this, {
                        type: 'globalAction',
@@ -829,42 +887,6 @@ export class BambeCrmAppClient implements AnyClient {
                              | null
                              | undefined;
                    };
-  /** Executes the writeToShopify global action. */
-  writeToShopify = buildGlobalAction(this, {
-                       type: 'globalAction',
-                       functionName: 'writeToShopify',
-                       operationName: 'writeToShopify',
-                       operationReturnType: 'WriteToShopify',
-                       namespace: null,
-                       variables: {
-                         shopId: { required: false, type: 'String' },
-                         mutation: { required: false, type: 'String' },
-                         variables: { required: false, type: 'JSONObject' }
-                       }
-                     } as const) as unknown as {
-                     (variables?: {
-                                        shopId?: (Scalars['String'] | null) | null;
-                                        mutation?: (Scalars['String'] | null) | null;
-                                        variables?: (Scalars['JSONObject'] | null) | null;
-                                      } | null): Promise<any>;
-                     type: 'globalAction';
-                     operationName: 'writeToShopify';
-                     operationReturnType: 'WriteToShopify';
-                     namespace: null;
-                     typesImports: [ 'Scalars' ];
-                     variables: {
-                         shopId: { required: false, type: 'String' },
-                         mutation: { required: false, type: 'String' },
-                         variables: { required: false, type: 'JSONObject' }
-                       };
-                     variablesType: {
-                             shopId?: (Scalars['String'] | null) | null;
-                             mutation?: (Scalars['String'] | null) | null;
-                             variables?: (Scalars['JSONObject'] | null) | null;
-                           }
-                             | null
-                             | undefined;
-                   };
   /** Executes the writeSpeedafDataToSheets global action. */
   writeSpeedafDataToSheets = buildGlobalAction(this, {
                        type: 'globalAction',
@@ -903,6 +925,42 @@ export class BambeCrmAppClient implements AnyClient {
                              | null
                              | undefined;
                    };
+  /** Executes the writeToShopify global action. */
+  writeToShopify = buildGlobalAction(this, {
+                       type: 'globalAction',
+                       functionName: 'writeToShopify',
+                       operationName: 'writeToShopify',
+                       operationReturnType: 'WriteToShopify',
+                       namespace: null,
+                       variables: {
+                         shopId: { required: false, type: 'String' },
+                         mutation: { required: false, type: 'String' },
+                         variables: { required: false, type: 'JSONObject' }
+                       }
+                     } as const) as unknown as {
+                     (variables?: {
+                                        shopId?: (Scalars['String'] | null) | null;
+                                        mutation?: (Scalars['String'] | null) | null;
+                                        variables?: (Scalars['JSONObject'] | null) | null;
+                                      } | null): Promise<any>;
+                     type: 'globalAction';
+                     operationName: 'writeToShopify';
+                     operationReturnType: 'WriteToShopify';
+                     namespace: null;
+                     typesImports: [ 'Scalars' ];
+                     variables: {
+                         shopId: { required: false, type: 'String' },
+                         mutation: { required: false, type: 'String' },
+                         variables: { required: false, type: 'JSONObject' }
+                       };
+                     variablesType: {
+                             shopId?: (Scalars['String'] | null) | null;
+                             mutation?: (Scalars['String'] | null) | null;
+                             variables?: (Scalars['JSONObject'] | null) | null;
+                           }
+                             | null
+                             | undefined;
+                   };
   shopifyCustomer!: ShopifyCustomerManager;
   shopifyGdprRequest!: ShopifyGdprRequestManager;
   shopifyOrder!: ShopifyOrderManager;
@@ -918,6 +976,7 @@ export class BambeCrmAppClient implements AnyClient {
   shopifyProductVariant!: ShopifyProductVariantManager;
   senditConfig!: SenditConfigManager;
   speedafConfig!: SpeedafConfigManager;
+  customCity!: CustomCityManager;
 
   /**
   * Namespaced object for accessing models via the Gadget internal APIs, which provide lower level and higher privileged operations directly against the database. Useful for maintenance operations like migrations or correcting broken data, and for implementing the high level actions.
@@ -1054,6 +1113,7 @@ export class BambeCrmAppClient implements AnyClient {
     this.shopifyProductVariant = new ShopifyProductVariantManager(this.connection);
     this.senditConfig = new SenditConfigManager(this.connection);
     this.speedafConfig = new SpeedafConfigManager(this.connection);
+    this.customCity = new CustomCityManager(this.connection);
 
     this.internal = {
                       shopifyCustomer: new InternalModelManager("shopifyCustomer", this.connection, {"pluralApiIdentifier":"shopifyCustomers","hasAmbiguousIdentifiers":false,"namespace":[]}),
@@ -1070,6 +1130,7 @@ export class BambeCrmAppClient implements AnyClient {
                       shopifyProductVariant: new InternalModelManager("shopifyProductVariant", this.connection, {"pluralApiIdentifier":"shopifyProductVariants","hasAmbiguousIdentifiers":false,"namespace":[]}),
                       senditConfig: new InternalModelManager("senditConfig", this.connection, {"pluralApiIdentifier":"senditConfigs","hasAmbiguousIdentifiers":false,"namespace":[]}),
                       speedafConfig: new InternalModelManager("speedafConfig", this.connection, {"pluralApiIdentifier":"speedafConfigs","hasAmbiguousIdentifiers":false,"namespace":[]}),
+                      customCity: new InternalModelManager("customCity", this.connection, {"pluralApiIdentifier":"customCities","hasAmbiguousIdentifiers":false,"namespace":[]}),
                     };
   }
 
@@ -1328,7 +1389,7 @@ export class BambeCrmAppClient implements AnyClient {
   }
 }
 
-(BambeCrmAppClient.prototype as any)[Symbol.for("gadget/modelRelationships")] = {"shopifyCustomer":{"orders":{"type":"HasMany","model":"shopifyOrder"},"lastOrder":{"type":"BelongsTo","model":"shopifyOrder"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyGdprRequest":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyOrder":{"customer":{"type":"BelongsTo","model":"shopifyCustomer"},"fulfillments":{"type":"HasMany","model":"shopifyFulfillment"},"shopifyShop":{"type":"BelongsTo","model":"shopifyShop"},"fulfillmentOrders":{"type":"HasMany","model":"shopifyFulfillmentOrder"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyShop":{"syncs":{"type":"HasMany","model":"shopifySync"},"gdprRequests":{"type":"HasMany","model":"shopifyGdprRequest"},"fulfillmentOrders":{"type":"HasMany","model":"shopifyFulfillmentOrder"},"fulfillmentServices":{"type":"HasMany","model":"shopifyFulfillmentService"},"fulfillments":{"type":"HasMany","model":"shopifyFulfillment"},"customers":{"type":"HasMany","model":"shopifyCustomer"},"orders":{"type":"HasMany","model":"shopifyOrder"},"productVariants":{"type":"HasMany","model":"shopifyProductVariant"},"products":{"type":"HasMany","model":"shopifyProduct"}},"shopifySync":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"googleSheetConfig":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"session":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyFulfillment":{"order":{"type":"BelongsTo","model":"shopifyOrder"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyFulfillmentOrder":{"order":{"type":"BelongsTo","model":"shopifyOrder"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyFulfillmentService":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyProduct":{"variants":{"type":"HasMany","model":"shopifyProductVariant"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyProductVariant":{"product":{"type":"BelongsTo","model":"shopifyProduct"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"senditConfig":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"speedafConfig":{"shop":{"type":"BelongsTo","model":"shopifyShop"}}};
+(BambeCrmAppClient.prototype as any)[Symbol.for("gadget/modelRelationships")] = {"shopifyCustomer":{"orders":{"type":"HasMany","model":"shopifyOrder"},"lastOrder":{"type":"BelongsTo","model":"shopifyOrder"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyGdprRequest":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyOrder":{"customer":{"type":"BelongsTo","model":"shopifyCustomer"},"fulfillments":{"type":"HasMany","model":"shopifyFulfillment"},"shopifyShop":{"type":"BelongsTo","model":"shopifyShop"},"fulfillmentOrders":{"type":"HasMany","model":"shopifyFulfillmentOrder"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyShop":{"syncs":{"type":"HasMany","model":"shopifySync"},"gdprRequests":{"type":"HasMany","model":"shopifyGdprRequest"},"fulfillmentOrders":{"type":"HasMany","model":"shopifyFulfillmentOrder"},"fulfillmentServices":{"type":"HasMany","model":"shopifyFulfillmentService"},"fulfillments":{"type":"HasMany","model":"shopifyFulfillment"},"customers":{"type":"HasMany","model":"shopifyCustomer"},"orders":{"type":"HasMany","model":"shopifyOrder"},"productVariants":{"type":"HasMany","model":"shopifyProductVariant"},"products":{"type":"HasMany","model":"shopifyProduct"}},"shopifySync":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"googleSheetConfig":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"session":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyFulfillment":{"order":{"type":"BelongsTo","model":"shopifyOrder"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyFulfillmentOrder":{"order":{"type":"BelongsTo","model":"shopifyOrder"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyFulfillmentService":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyProduct":{"variants":{"type":"HasMany","model":"shopifyProductVariant"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyProductVariant":{"product":{"type":"BelongsTo","model":"shopifyProduct"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"senditConfig":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"speedafConfig":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"customCity":{"shop":{"type":"BelongsTo","model":"shopifyShop"}}};
 
 /** Legacy export under the `Client` name for backwards compatibility. */
 export const Client: typeof BambeCrmAppClient = BambeCrmAppClient;

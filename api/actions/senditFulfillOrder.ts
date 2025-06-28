@@ -247,12 +247,35 @@ export const run = async ({
     // Order reference/ID
     const orderReference = orderData.name || orderData.id?.toString() || "";
     
+    // Log all extracted values for debugging
+    logger.info("Extracted order data for Sendit", {
+      rawOrderData: {
+        address: orderData.address,
+        shippingAddress: orderData.shippingAddress,
+        skus: orderData.skus,
+        orderSkus: orderData.orderSkus,
+        customerName: orderData.customerName,
+        phone: orderData.phone,
+        name: orderData.name,
+        id: orderData.id,
+        totalPrice: orderData.totalPrice
+      },
+      processedData: {
+        address,
+        productsText,
+        customerName,
+        phoneNumber,
+        orderReference,
+        districtId
+      }
+    });
+    
     // STEP 6: Create Sendit order request payload
     const requestData = {
       pickup_district_id: "52", // Fixed value as specified in docs
-      district_id: districtId,
+      district_id: String(districtId), // Ensure it's a string
       name: customerName,
-      amount: orderData.totalPrice?.toString() || "0",
+      amount: String(orderData.totalPrice || "0"), // Ensure it's a string
       address: address,
       phone: phoneNumber,
       comment: packageSettings?.comment || "",
@@ -265,6 +288,65 @@ export const run = async ({
       option_exchange: packageSettings?.option_exchange ?? 0,
       delivery_exchange_id: ""
     };
+
+    // STEP 6.5: Validate all required fields before sending
+    logger.info("Validating request data before sending to Sendit API");
+    
+    const validationErrors = [];
+    
+    // Required fields validation
+    if (!requestData.district_id) validationErrors.push("district_id is missing");
+    if (!requestData.name || requestData.name.trim() === '') validationErrors.push("name is empty");
+    if (!requestData.phone || requestData.phone.trim() === '') validationErrors.push("phone is empty");
+    if (!requestData.address || requestData.address.trim() === '') validationErrors.push("address is empty");
+    if (!requestData.reference || requestData.reference.trim() === '') validationErrors.push("reference is empty");
+    if (!requestData.products || requestData.products.trim() === '') validationErrors.push("products is empty");
+    
+    // Phone number format validation for Morocco
+    if (requestData.phone) {
+      const phoneDigits = requestData.phone.replace(/\D/g, '');
+      if (phoneDigits.length < 9) {
+        validationErrors.push(`phone number too short: ${requestData.phone} (${phoneDigits.length} digits)`);
+      } else if (phoneDigits.length > 13) {
+        validationErrors.push(`phone number too long: ${requestData.phone} (${phoneDigits.length} digits)`);
+      }
+      // Check if it's a valid Moroccan format
+      if (!phoneDigits.startsWith('0') && !phoneDigits.startsWith('212') && !phoneDigits.startsWith('+212')) {
+        logger.info("Phone number may not be in Moroccan format", { phone: requestData.phone, digits: phoneDigits });
+      }
+    }
+    
+    // Type validation
+    if (typeof requestData.district_id !== 'string' && typeof requestData.district_id !== 'number') {
+      validationErrors.push(`district_id must be string or number, got ${typeof requestData.district_id}`);
+    }
+    if (isNaN(Number(requestData.amount))) validationErrors.push(`amount must be numeric, got ${requestData.amount}`);
+    
+    logger.info("Detailed field analysis", {
+      orderData: {
+        id: orderData.id,
+        name: orderData.name,
+        totalPrice: orderData.totalPrice,
+        skus: orderData.skus,
+        orderSkus: orderData.orderSkus,
+        city: orderData.city,
+        customerName: orderData.customerName,
+        phone: orderData.phone,
+        address: orderData.address,
+        shippingAddress: orderData.shippingAddress
+      },
+      requestData,
+      validationErrors
+    });
+    
+    if (validationErrors.length > 0) {
+      logger.error("Request data validation failed", { validationErrors, requestData });
+      return {
+        success: false,
+        error: `Request data validation failed: ${validationErrors.join(', ')}`,
+        validationErrors
+      };
+    }
 
     // STEP 7: Send request to Sendit API
     logger.info("Sending order to Sendit API", { requestData });
@@ -287,17 +369,38 @@ export const run = async ({
       logger.error("Sendit API create delivery request failed", { 
         status: response.status, 
         statusText: response.statusText,
-        responseText: errorText
+        responseText: errorText,
+        requestPayload: requestData,
+        headers: response.headers
       });
+      
+      // Try to parse the error response for more details
+      let errorDetails = errorText;
+      try {
+        const errorJson = JSON.parse(errorText);
+        errorDetails = errorJson;
+        logger.error("Parsed error response from Sendit API", errorJson);
+      } catch (parseError) {
+        logger.info("Error response is not JSON, keeping as text", { errorText });
+      }
+      
       return {
         success: false,
-        error: `Sendit API create delivery failed: ${response.status} ${response.statusText}`
+        error: `Sendit API create delivery failed: ${response.status} ${response.statusText}`,
+        requestData,
+        errorDetails
       };
     }
     
     // STEP 8: Process the response
     const senditResponse = await response.json();
-    logger.info("Received response from Sendit API", senditResponse);
+    logger.info("Received response from Sendit API", { 
+      fullResponse: senditResponse,
+      success: senditResponse.success,
+      hasData: !!senditResponse.data,
+      message: senditResponse.message,
+      errors: senditResponse.errors
+    });
 
     if (senditResponse.success && senditResponse.data) {
       // Extract tracking code from the response
@@ -320,12 +423,35 @@ export const run = async ({
         trackingCode: trackingCode
       };
     } else {
-      // Handle API error
-      logger.error("Sendit API returned an error", senditResponse);
+      // Handle API error - log all details for debugging
+      logger.error("Sendit API returned an error", { 
+        fullResponse: senditResponse,
+        requestData,
+        errorMessage: senditResponse.message,
+        errors: senditResponse.errors,
+        data: senditResponse.data
+      });
+      
+      // Extract more specific error information
+      let errorMessage = "Failed to create order in Sendit";
+      if (senditResponse.message) {
+        errorMessage = senditResponse.message;
+      }
+      if (senditResponse.errors && Array.isArray(senditResponse.errors)) {
+        errorMessage += ` - Errors: ${senditResponse.errors.join(', ')}`;
+      } else if (senditResponse.errors && typeof senditResponse.errors === 'object') {
+        const errorKeys = Object.keys(senditResponse.errors);
+        if (errorKeys.length > 0) {
+          const errorDetails = errorKeys.map(key => `${key}: ${senditResponse.errors[key]}`).join(', ');
+          errorMessage += ` - Field errors: ${errorDetails}`;
+        }
+      }
+      
       return {
         success: false,
-        error: senditResponse.message || "Failed to create order in Sendit",
+        error: errorMessage,
         apiResponse: senditResponse,
+        requestData
       };
     }
   } catch (error) {

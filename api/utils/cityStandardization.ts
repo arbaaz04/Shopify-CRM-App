@@ -791,9 +791,10 @@ const ARABIC_TO_ENGLISH_CITIES = {
  * Fuzzy find best match from city database
  * @param cityName City name to match
  * @param maxDistance Maximum Levenshtein distance to consider a match
+ * @param customCities Optional array of custom cities to include in matching
  * @returns The best match or null if no good match found
  */
-function findBestCityMatch(cityName: string, maxDistance: number = 3): string | null {
+function findBestCityMatch(cityName: string, maxDistance: number = 3, customCities: string[] = []): string | null {
   if (!cityName) {
     return null;
   }
@@ -805,10 +806,13 @@ function findBestCityMatch(cityName: string, maxDistance: number = 3): string | 
     return null;
   }
   
+  // Combine default cities with custom cities
+  const allCities = [...MOROCCAN_CITIES, ...customCities];
+
   // First look for exact matches after normalization
-  for (const city of MOROCCAN_CITIES) {
+  for (const city of allCities) {
     const normalizedCity = normalizeString(city);
-    
+
     if (normalizedCity === normalizedInput) {
       return city;
     }
@@ -818,10 +822,10 @@ function findBestCityMatch(cityName: string, maxDistance: number = 3): string | 
   let bestMatch: string | null = null;
   let bestDistance = maxDistance + 1;
   
-  for (const city of MOROCCAN_CITIES) {
+  for (const city of allCities) {
     const normalizedCity = normalizeString(city);
     const distance = levenshteinDistance(normalizedInput, normalizedCity);
-    
+
     if (distance < bestDistance) {
       bestDistance = distance;
       bestMatch = city;
@@ -1588,18 +1592,37 @@ function cacheCityName(inputCity: string, standardizedCity: string): void {
 }
 
 /**
+ * Get custom cities for a shop (used in city standardization)
+ * @param shopId The shop ID to get custom cities for
+ * @returns Array of custom city names
+ */
+async function getCustomCitiesForShop(shopId?: string): Promise<string[]> {
+  if (!shopId) return [];
+
+  try {
+    // This would need to be implemented with proper API access
+    // For now, return empty array as fallback
+    return [];
+  } catch (error) {
+    console.error('Error fetching custom cities for standardization:', error);
+    return [];
+  }
+}
+
+/**
  * Standardize a Moroccan city name
  * 1. Check if it's in the cache
  * 2. Check if it matches an alternative spelling
  * 3. Check if it's an Arabic name and translate
- * 4. Check for exact match in database
+ * 4. Check for exact match in database (including custom cities)
  * 5. Try fuzzy matching for typos and misspellings
  * 6. If not found, use ChatGPT to standardize
- * 
+ *
  * @param cityName The city name to standardize
+ * @param shopId Optional shop ID to include custom cities
  * @returns The standardized city name
  */
-export async function standardizeMoroccanCity(cityName: string): Promise<string> {
+export async function standardizeMoroccanCity(cityName: string, shopId?: string): Promise<string> {
   if (!cityName) {
     return cityName;
   }
@@ -1641,24 +1664,28 @@ export async function standardizeMoroccanCity(cityName: string): Promise<string>
     }
   }
   
-  // 4. Look for exact match in the database after normalization
+  // 4. Look for exact match in the database after normalization (including custom cities)
   let exactMatch = null;
-  
+
+  // Get custom cities for this shop
+  const customCities = await getCustomCitiesForShop(shopId);
+  const allCities = [...MOROCCAN_CITIES, ...customCities];
+
   // First try with the trimmed version (preserve case)
-  exactMatch = MOROCCAN_CITIES.find(city => city === trimmedCityName);
-  
+  exactMatch = allCities.find(city => city === trimmedCityName);
+
   if (!exactMatch) {
     // Then try to match using normalized versions of both the input and the database cities
-    exactMatch = MOROCCAN_CITIES.find(city => normalizeString(city) === normalizedCityName);
+    exactMatch = allCities.find(city => normalizeString(city) === normalizedCityName);
   }
-  
+
   if (exactMatch) {
     cacheCityName(trimmedCityName, exactMatch);
     return exactMatch;
   }
   
   // 5. Try fuzzy matching for typos and misspellings
-  const fuzzyMatch = findBestCityMatch(trimmedCityName);
+  const fuzzyMatch = findBestCityMatch(trimmedCityName, 3, customCities);
   if (fuzzyMatch) {
     cacheCityName(trimmedCityName, fuzzyMatch);
     return fuzzyMatch;
@@ -1666,12 +1693,12 @@ export async function standardizeMoroccanCity(cityName: string): Promise<string>
   
   // 6. If not found in database, use ChatGPT to get a match
   try {
-    const gptResult = await standardizeWithGPT(trimmedCityName, MOROCCAN_CITIES);
-    
+    const gptResult = await standardizeWithGPT(trimmedCityName, allCities);
+
     if (!gptResult) {
       return trimmedCityName;
     }
-    
+
     cacheCityName(trimmedCityName, gptResult);
     return gptResult;
   } catch (gptError) {

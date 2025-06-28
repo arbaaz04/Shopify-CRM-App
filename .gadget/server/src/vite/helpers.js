@@ -91,7 +91,7 @@ const getFrontendTypeByPluginsUsed = (config)=>{
         if (Array.isArray(pluginOptions)) {
             return pluginOptions.some((plugin)=>maybeGetPluginByName("react-router", plugin));
         } else {
-            return !!maybeGetPluginByName("react-router-virtual-modules", pluginOptions);
+            return !!maybeGetPluginByName("react-router-virtual-modules", pluginOptions) || !!maybeGetPluginByName("react-router:virtual-modules", pluginOptions);
         }
     });
     if (hasReactRouterPlugin) {

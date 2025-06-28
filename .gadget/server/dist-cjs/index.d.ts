@@ -9,7 +9,7 @@
 *  |_.__/ \__,_|_| |_| |_|_.__/ \___|      \___|_|  |_| |_| |_|      \__,_| .__/| .__/ 
 *                                                                         |_|   |_|    
 *
-* Built for environment `Development` at version 2281
+* Built for environment `Development` at version 2365
 * Framework version: ^1.3.0
 * Edit this app here: https://bambe-crm-app.gadget.dev/edit
 */
@@ -53,6 +53,7 @@ export * from "./models/ShopifyProduct";
 export * from "./models/ShopifyProductVariant";
 export * from "./models/SenditConfig";
 export * from "./models/SpeedafConfig";
+export * from "./models/CustomCity";
 /**
 * A map of connection name to instantiated connection objects for the app.
 */

@@ -278,7 +278,7 @@ export type ShopifyProductManager = {
       (...args: any[]): never;
       type: 'stubbedAction';
       operationName: 'createShopifyProduct';
-      errorMessage: 'The action create on model shopifyProduct does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+      errorMessage: string;
       optionsType: CreateShopifyProductOptions;
       actionApiIdentifier: 'create';
       modelApiIdentifier: typeof modelApiIdentifier;
@@ -295,7 +295,7 @@ export type ShopifyProductManager = {
       (...args: any[]): never;
       type: 'stubbedAction';
       operationName: 'bulkCreateShopifyProducts';
-      errorMessage: 'The action create on model shopifyProduct does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+      errorMessage: string;
       optionsType: CreateShopifyProductOptions;
       actionApiIdentifier: 'create';
       modelApiIdentifier: typeof modelApiIdentifier;
@@ -312,7 +312,7 @@ export type ShopifyProductManager = {
       (...args: any[]): never;
       type: 'stubbedAction';
       operationName: 'updateShopifyProduct';
-      errorMessage: 'The action update on model shopifyProduct does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+      errorMessage: string;
       optionsType: UpdateShopifyProductOptions;
       actionApiIdentifier: 'update';
       modelApiIdentifier: typeof modelApiIdentifier;
@@ -329,7 +329,7 @@ export type ShopifyProductManager = {
       (...args: any[]): never;
       type: 'stubbedAction';
       operationName: 'bulkUpdateShopifyProducts';
-      errorMessage: 'The action update on model shopifyProduct does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+      errorMessage: string;
       optionsType: UpdateShopifyProductOptions;
       actionApiIdentifier: 'update';
       modelApiIdentifier: typeof modelApiIdentifier;
@@ -346,7 +346,7 @@ export type ShopifyProductManager = {
       (...args: any[]): never;
       type: 'stubbedAction';
       operationName: 'deleteShopifyProduct';
-      errorMessage: 'The action delete on model shopifyProduct does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+      errorMessage: string;
       optionsType: DeleteShopifyProductOptions;
       actionApiIdentifier: 'delete';
       modelApiIdentifier: typeof modelApiIdentifier;
@@ -363,7 +363,7 @@ export type ShopifyProductManager = {
       (...args: any[]): never;
       type: 'stubbedAction';
       operationName: 'bulkDeleteShopifyProducts';
-      errorMessage: 'The action delete on model shopifyProduct does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+      errorMessage: string;
       optionsType: DeleteShopifyProductOptions;
       actionApiIdentifier: 'delete';
       modelApiIdentifier: typeof modelApiIdentifier;

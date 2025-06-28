@@ -18,6 +18,7 @@ import { ShopifyProductManager } from "./models/ShopifyProduct.js";
 import { ShopifyProductVariantManager } from "./models/ShopifyProductVariant.js";
 import { SenditConfigManager } from "./models/SenditConfig.js";
 import { SpeedafConfigManager } from "./models/SpeedafConfig.js";
+import { CustomCityManager } from "./models/CustomCity.js";
 export { DefaultShopifyCustomerSelection, type ShopifyCustomerRecord } from "./models/ShopifyCustomer.js";
 export { DefaultShopifyGdprRequestSelection, type ShopifyGdprRequestRecord } from "./models/ShopifyGdprRequest.js";
 export { DefaultShopifyOrderSelection, type ShopifyOrderRecord } from "./models/ShopifyOrder.js";
@@ -32,6 +33,7 @@ export { DefaultShopifyProductSelection, type ShopifyProductRecord } from "./mod
 export { DefaultShopifyProductVariantSelection, type ShopifyProductVariantRecord } from "./models/ShopifyProductVariant.js";
 export { DefaultSenditConfigSelection, type SenditConfigRecord } from "./models/SenditConfig.js";
 export { DefaultSpeedafConfigSelection, type SpeedafConfigRecord } from "./models/SpeedafConfig.js";
+export { DefaultCustomCitySelection, type CustomCityRecord } from "./models/CustomCity.js";
 type ClientOptions = Omit<ApiClientOptions, "environment"> & {
     environment?: string;
 };
@@ -65,6 +67,8 @@ export type InternalModelManagers = {
     senditConfig: InternalModelManager;
     /** The internal API model manager for the speedafConfig model */
     speedafConfig: InternalModelManager;
+    /** The internal API model manager for the customCity model */
+    customCity: InternalModelManager;
 };
 /**
  * Root object used for interacting with the bambe-crm-app API. `BambeCrmAppClient` has `query` and `mutation` functions for executing raw GraphQL queries and mutations, as well as `ModelManager` objects for manipulating models with a JavaScript API. `BambeCrmAppClient` also has a `fetch` function for making raw requests to your backend.
@@ -210,6 +214,28 @@ export declare class BambeCrmAppClient implements AnyClient {
             shopId?: (Scalars["String"] | null) | null;
             manualTrackingNumber?: (Scalars["String"] | null) | null;
         } | null | undefined;
+    };
+    /** Executes the getCombinedCityList global action. */
+    getCombinedCityList: {
+        (): Promise<any>;
+        type: "globalAction";
+        operationName: "getCombinedCityList";
+        operationReturnType: "GetCombinedCityList";
+        namespace: null;
+        typesImports: [];
+        variables: {};
+        variablesType: Record<string, never>;
+    };
+    /** Executes the getCustomCities global action. */
+    getCustomCities: {
+        (): Promise<any>;
+        type: "globalAction";
+        operationName: "getCustomCities";
+        operationReturnType: "GetCustomCities";
+        namespace: null;
+        typesImports: [];
+        variables: {};
+        variablesType: Record<string, never>;
     };
     /** Executes the getSenditDistrictId global action. */
     getSenditDistrictId: {
@@ -525,6 +551,17 @@ export declare class BambeCrmAppClient implements AnyClient {
             shopId?: (Scalars["String"] | null) | null;
         } | null | undefined;
     };
+    /** Executes the testOriginalCityExtraction global action. */
+    testOriginalCityExtraction: {
+        (): Promise<any>;
+        type: "globalAction";
+        operationName: "testOriginalCityExtraction";
+        operationReturnType: "TestOriginalCityExtraction";
+        namespace: null;
+        typesImports: [];
+        variables: {};
+        variablesType: Record<string, never>;
+    };
     /** Executes the testSenditConnection global action. */
     testSenditConnection: {
         (variables?: {
@@ -673,6 +710,32 @@ export declare class BambeCrmAppClient implements AnyClient {
             shopId?: (Scalars["String"] | null) | null;
         } | null | undefined;
     };
+    /** Executes the writeSpeedafDataToSheets global action. */
+    writeSpeedafDataToSheets: {
+        (variables?: {
+            shopId?: (Scalars["String"] | null) | null;
+            trackingData?: (WriteSpeedafDataToSheetsTrackingDataElementTypeInput)[];
+        } | null): Promise<any>;
+        type: "globalAction";
+        operationName: "writeSpeedafDataToSheets";
+        operationReturnType: "WriteSpeedafDataToSheets";
+        namespace: null;
+        typesImports: ["WriteSpeedafDataToSheetsTrackingDataElementTypeInput", "Scalars"];
+        variables: {
+            shopId: {
+                required: false;
+                type: "String";
+            };
+            trackingData: {
+                required: false;
+                type: "[WriteSpeedafDataToSheetsTrackingDataElementTypeInput!]";
+            };
+        };
+        variablesType: {
+            shopId?: (Scalars["String"] | null) | null;
+            trackingData?: (WriteSpeedafDataToSheetsTrackingDataElementTypeInput)[];
+        } | null | undefined;
+    };
     /** Executes the writeToShopify global action. */
     writeToShopify: {
         (variables?: {
@@ -705,32 +768,6 @@ export declare class BambeCrmAppClient implements AnyClient {
             variables?: (Scalars["JSONObject"] | null) | null;
         } | null | undefined;
     };
-    /** Executes the writeSpeedafDataToSheets global action. */
-    writeSpeedafDataToSheets: {
-        (variables?: {
-            shopId?: (Scalars["String"] | null) | null;
-            trackingData?: (WriteSpeedafDataToSheetsTrackingDataElementTypeInput)[];
-        } | null): Promise<any>;
-        type: "globalAction";
-        operationName: "writeSpeedafDataToSheets";
-        operationReturnType: "WriteSpeedafDataToSheets";
-        namespace: null;
-        typesImports: ["WriteSpeedafDataToSheetsTrackingDataElementTypeInput", "Scalars"];
-        variables: {
-            shopId: {
-                required: false;
-                type: "String";
-            };
-            trackingData: {
-                required: false;
-                type: "[WriteSpeedafDataToSheetsTrackingDataElementTypeInput!]";
-            };
-        };
-        variablesType: {
-            shopId?: (Scalars["String"] | null) | null;
-            trackingData?: (WriteSpeedafDataToSheetsTrackingDataElementTypeInput)[];
-        } | null | undefined;
-    };
     shopifyCustomer: ShopifyCustomerManager;
     shopifyGdprRequest: ShopifyGdprRequestManager;
     shopifyOrder: ShopifyOrderManager;
@@ -746,6 +783,7 @@ export declare class BambeCrmAppClient implements AnyClient {
     shopifyProductVariant: ShopifyProductVariantManager;
     senditConfig: SenditConfigManager;
     speedafConfig: SpeedafConfigManager;
+    customCity: CustomCityManager;
     /**
     * Namespaced object for accessing models via the Gadget internal APIs, which provide lower level and higher privileged operations directly against the database. Useful for maintenance operations like migrations or correcting broken data, and for implementing the high level actions.
     *

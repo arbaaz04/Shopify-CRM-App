@@ -12,6 +12,14 @@ export const permissions: GadgetPermissions = {
     "shopify-app-users": {
       storageKey: "Role-Shopify-App",
       models: {
+        customCity: {
+          read: true,
+          actions: {
+            create: true,
+            delete: true,
+            update: true,
+          },
+        },
         googleSheetConfig: {
           read: {
             filter:
@@ -146,6 +154,8 @@ export const permissions: GadgetPermissions = {
         directOrderTest: true,
         extractOrderSKUs: true,
         fulfillOrder: true,
+        getCombinedCityList: true,
+        getCustomCities: true,
         getSenditDistrictId: true,
         processBulkReturns: true,
         processOrderReturn: true,

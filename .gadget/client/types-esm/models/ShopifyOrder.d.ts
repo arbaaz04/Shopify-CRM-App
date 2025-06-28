@@ -284,7 +284,7 @@ export type ShopifyOrderManager = {
         (...args: any[]): never;
         type: 'stubbedAction';
         operationName: 'createShopifyOrder';
-        errorMessage: 'The action create on model shopifyOrder does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+        errorMessage: string;
         optionsType: CreateShopifyOrderOptions;
         actionApiIdentifier: 'create';
         modelApiIdentifier: typeof modelApiIdentifier;
@@ -301,7 +301,7 @@ export type ShopifyOrderManager = {
         (...args: any[]): never;
         type: 'stubbedAction';
         operationName: 'bulkCreateShopifyOrders';
-        errorMessage: 'The action create on model shopifyOrder does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+        errorMessage: string;
         optionsType: CreateShopifyOrderOptions;
         actionApiIdentifier: 'create';
         modelApiIdentifier: typeof modelApiIdentifier;
@@ -435,7 +435,7 @@ export type ShopifyOrderManager = {
         (...args: any[]): never;
         type: 'stubbedAction';
         operationName: 'deleteShopifyOrder';
-        errorMessage: 'The action delete on model shopifyOrder does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+        errorMessage: string;
         optionsType: DeleteShopifyOrderOptions;
         actionApiIdentifier: 'delete';
         modelApiIdentifier: typeof modelApiIdentifier;
@@ -452,7 +452,7 @@ export type ShopifyOrderManager = {
         (...args: any[]): never;
         type: 'stubbedAction';
         operationName: 'bulkDeleteShopifyOrders';
-        errorMessage: 'The action delete on model shopifyOrder does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+        errorMessage: string;
         optionsType: DeleteShopifyOrderOptions;
         actionApiIdentifier: 'delete';
         modelApiIdentifier: typeof modelApiIdentifier;

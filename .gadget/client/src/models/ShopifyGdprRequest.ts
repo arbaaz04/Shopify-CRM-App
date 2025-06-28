@@ -262,7 +262,7 @@ export type ShopifyGdprRequestManager = {
       (...args: any[]): never;
       type: 'stubbedAction';
       operationName: 'createShopifyGdprRequest';
-      errorMessage: 'The action create on model shopifyGdprRequest does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+      errorMessage: string;
       optionsType: CreateShopifyGdprRequestOptions;
       actionApiIdentifier: 'create';
       modelApiIdentifier: typeof modelApiIdentifier;
@@ -279,7 +279,7 @@ export type ShopifyGdprRequestManager = {
       (...args: any[]): never;
       type: 'stubbedAction';
       operationName: 'bulkCreateShopifyGdprRequests';
-      errorMessage: 'The action create on model shopifyGdprRequest does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+      errorMessage: string;
       optionsType: CreateShopifyGdprRequestOptions;
       actionApiIdentifier: 'create';
       modelApiIdentifier: typeof modelApiIdentifier;
@@ -296,7 +296,7 @@ export type ShopifyGdprRequestManager = {
       (...args: any[]): never;
       type: 'stubbedAction';
       operationName: 'updateShopifyGdprRequest';
-      errorMessage: 'The action update on model shopifyGdprRequest does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+      errorMessage: string;
       optionsType: UpdateShopifyGdprRequestOptions;
       actionApiIdentifier: 'update';
       modelApiIdentifier: typeof modelApiIdentifier;
@@ -313,7 +313,7 @@ export type ShopifyGdprRequestManager = {
       (...args: any[]): never;
       type: 'stubbedAction';
       operationName: 'bulkUpdateShopifyGdprRequests';
-      errorMessage: 'The action update on model shopifyGdprRequest does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+      errorMessage: string;
       optionsType: UpdateShopifyGdprRequestOptions;
       actionApiIdentifier: 'update';
       modelApiIdentifier: typeof modelApiIdentifier;

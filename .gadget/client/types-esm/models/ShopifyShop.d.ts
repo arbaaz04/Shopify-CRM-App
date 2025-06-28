@@ -271,7 +271,7 @@ export type ShopifyShopManager = {
         (...args: any[]): never;
         type: 'stubbedAction';
         operationName: 'updateShopifyShop';
-        errorMessage: 'The action update on model shopifyShop does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+        errorMessage: string;
         optionsType: UpdateShopifyShopOptions;
         actionApiIdentifier: 'update';
         modelApiIdentifier: typeof modelApiIdentifier;
@@ -288,7 +288,7 @@ export type ShopifyShopManager = {
         (...args: any[]): never;
         type: 'stubbedAction';
         operationName: 'bulkUpdateShopifyShops';
-        errorMessage: 'The action update on model shopifyShop does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+        errorMessage: string;
         optionsType: UpdateShopifyShopOptions;
         actionApiIdentifier: 'update';
         modelApiIdentifier: typeof modelApiIdentifier;
@@ -305,7 +305,7 @@ export type ShopifyShopManager = {
         (...args: any[]): never;
         type: 'stubbedAction';
         operationName: 'installShopifyShop';
-        errorMessage: 'The action install on model shopifyShop does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+        errorMessage: string;
         optionsType: InstallShopifyShopOptions;
         actionApiIdentifier: 'install';
         modelApiIdentifier: typeof modelApiIdentifier;
@@ -322,7 +322,7 @@ export type ShopifyShopManager = {
         (...args: any[]): never;
         type: 'stubbedAction';
         operationName: 'bulkInstallShopifyShops';
-        errorMessage: 'The action install on model shopifyShop does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+        errorMessage: string;
         optionsType: InstallShopifyShopOptions;
         actionApiIdentifier: 'install';
         modelApiIdentifier: typeof modelApiIdentifier;
@@ -339,7 +339,7 @@ export type ShopifyShopManager = {
         (...args: any[]): never;
         type: 'stubbedAction';
         operationName: 'reinstallShopifyShop';
-        errorMessage: 'The action reinstall on model shopifyShop does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+        errorMessage: string;
         optionsType: ReinstallShopifyShopOptions;
         actionApiIdentifier: 'reinstall';
         modelApiIdentifier: typeof modelApiIdentifier;
@@ -356,7 +356,7 @@ export type ShopifyShopManager = {
         (...args: any[]): never;
         type: 'stubbedAction';
         operationName: 'bulkReinstallShopifyShops';
-        errorMessage: 'The action reinstall on model shopifyShop does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+        errorMessage: string;
         optionsType: ReinstallShopifyShopOptions;
         actionApiIdentifier: 'reinstall';
         modelApiIdentifier: typeof modelApiIdentifier;
@@ -373,7 +373,7 @@ export type ShopifyShopManager = {
         (...args: any[]): never;
         type: 'stubbedAction';
         operationName: 'uninstallShopifyShop';
-        errorMessage: 'The action uninstall on model shopifyShop does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+        errorMessage: string;
         optionsType: UninstallShopifyShopOptions;
         actionApiIdentifier: 'uninstall';
         modelApiIdentifier: typeof modelApiIdentifier;
@@ -390,7 +390,7 @@ export type ShopifyShopManager = {
         (...args: any[]): never;
         type: 'stubbedAction';
         operationName: 'bulkUninstallShopifyShops';
-        errorMessage: 'The action uninstall on model shopifyShop does not have an api trigger and cannot be called from this api client. If you are the developer of this application and want api clients to call this action add an api trigger to the action. For more information see: https://docs.gadget.dev/guides/actions/triggers';
+        errorMessage: string;
         optionsType: UninstallShopifyShopOptions;
         actionApiIdentifier: 'uninstall';
         modelApiIdentifier: typeof modelApiIdentifier;
