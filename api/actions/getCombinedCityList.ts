@@ -24,6 +24,31 @@ const DEFAULT_SENDIT_CITIES = [
   "Rue Abou Bakr Seddik, casablanca, MAA04337, MAC00070"
 ];
 
+// Default Speedaf cities
+const DEFAULT_SPEEDAF_CITIES = [
+  "SEMARA, essemara, MAA04356, MAC00099",
+  "RAHMA, Nouaceur, MAA04355, MAC00059", 
+  "ROCHE NOIR, casablanca, MAA04354, MAC00070",
+  "Rue Choukri Mostapha Pitchou, casablanca, MAA04353, MAC00070",
+  "Benslimane, temara, MAA04352, MAC00092",
+  "Rue Al Bassatine, casablanca, MAA04351, MAC00070",
+  "Hay Raha, casablanca, MAA04350, MAC00070",
+  "Roudani, casablanca, MAA04349, MAC00070"
+  // Add more Speedaf cities as needed
+];
+
+// Default general Moroccan cities
+const DEFAULT_MOROCCAN_CITIES = [
+  "Achakkar", "Afourar", "Afra", "Afsou", "Agadir", "Agafay", "Agdez", "Agds", 
+  "Agouidir", "Agourai", "Aguelmous", "Ahfir", "Ain Aicha", "Ain Attig", 
+  "Ain chkaf", "Ain El Aouda", "Ain Erreggada", "Ain Harrouda", "Ain Leuh", 
+  "Ain Mediouna", "Ain Taoujdate", "Ain-Beni-Mathar", "Ain-Cheggag", 
+  "Ait Aiaaza", "Ait Aissa Ou Brahim", "Ait Amira", "Ait Boudaoud", "Ait Daoud",
+  "Casablanca", "Rabat", "Marrakech", "Fes", "Tangier", "Agadir", "Meknes", 
+  "Oujda", "Kenitra", "Tetouan", "Safi", "Mohammedia", "El Jadida", "Beni Mellal"
+  // Add more Moroccan cities as needed
+];
+
 /**
  * Get combined city list (default cities + custom cities) for a specific courier type
  */
@@ -55,13 +80,22 @@ export const run: ActionOptions = async ({ params, logger, api, connections }) =
 
     // Get default cities based on courier type
     let defaultCities: string[] = [];
-    if (courierType === "sendit") {
-      defaultCities = DEFAULT_SENDIT_CITIES;
+    switch (courierType) {
+      case "sendit":
+        defaultCities = DEFAULT_SENDIT_CITIES;
+        break;
+      case "speedaf":
+        defaultCities = DEFAULT_SPEEDAF_CITIES;
+        break;
+      case "general":
+        defaultCities = DEFAULT_MOROCCAN_CITIES;
+        break;
+      default:
+        defaultCities = DEFAULT_SENDIT_CITIES;
     }
-    // Add other courier types as needed
 
     // Combine custom city names with default cities
-    const customCityNames = customCities.map(city => city.name);
+    const customCityNames = customCities.map((city: any) => city.name);
     const combinedCities = [...defaultCities, ...customCityNames];
 
     // Remove duplicates and sort
@@ -83,11 +117,11 @@ export const run: ActionOptions = async ({ params, logger, api, connections }) =
       totalCount: uniqueCities.length
     };
 
-  } catch (error) {
+  } catch (error: any) {
     logger.error("Error getting combined city list", { error });
     return {
       success: false,
-      error: error.message,
+      error: error?.message || "Unknown error",
       cities: [],
       defaultCities: [],
       customCities: [],
