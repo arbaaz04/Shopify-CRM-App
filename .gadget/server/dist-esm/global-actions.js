@@ -1,4 +1,13 @@
-/** Context of the `calculateRefund` action. */ /**
+/** Context of the `applyShippingCostAbsorption` action. */ /**
+  * @deprecated Use 'returnType' instead.
+  * Useful for returning data from this action by setting `scope.result`.
+  */ /**
+  * An object specifying the trigger to this action (e.g. API call, custom params).
+  */ /**
+  * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+  */ /**
+  * @private The context of this action.
+  */ /** Context of the `calculateRefund` action. */ /**
   * @deprecated Use 'returnType' instead.
   * Useful for returning data from this action by setting `scope.result`.
   */ /**
@@ -8,6 +17,15 @@
   */ /**
   * @private The context of this action.
   */ /** Context of the `createSenditOrder` action. */ /**
+  * @deprecated Use 'returnType' instead.
+  * Useful for returning data from this action by setting `scope.result`.
+  */ /**
+  * An object specifying the trigger to this action (e.g. API call, custom params).
+  */ /**
+  * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+  */ /**
+  * @private The context of this action.
+  */ /** Context of the `debugOrderShipping` action. */ /**
   * @deprecated Use 'returnType' instead.
   * Useful for returning data from this action by setting `scope.result`.
   */ /**
@@ -34,24 +52,6 @@
   * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
   */ /**
   * @private The context of this action.
-  */ /** Context of the `fulfillOrder` action. */ /**
-  * @deprecated Use 'returnType' instead.
-  * Useful for returning data from this action by setting `scope.result`.
-  */ /**
-  * An object specifying the trigger to this action (e.g. API call, custom params).
-  */ /**
-  * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
-  */ /**
-  * @private The context of this action.
-  */ /** Context of the `getCombinedCityList` action. */ /**
-  * @deprecated Use 'returnType' instead.
-  * Useful for returning data from this action by setting `scope.result`.
-  */ /**
-  * An object specifying the trigger to this action (e.g. API call, custom params).
-  */ /**
-  * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
-  */ /**
-  * @private The context of this action.
   */ /** Context of the `getCustomCities` action. */ /**
   * @deprecated Use 'returnType' instead.
   * Useful for returning data from this action by setting `scope.result`.
@@ -61,7 +61,25 @@
   * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
   */ /**
   * @private The context of this action.
+  */ /** Context of the `getDeliveryCharges` action. */ /**
+  * @deprecated Use 'returnType' instead.
+  * Useful for returning data from this action by setting `scope.result`.
+  */ /**
+  * An object specifying the trigger to this action (e.g. API call, custom params).
+  */ /**
+  * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+  */ /**
+  * @private The context of this action.
   */ /** Context of the `getSenditDistrictId` action. */ /**
+  * @deprecated Use 'returnType' instead.
+  * Useful for returning data from this action by setting `scope.result`.
+  */ /**
+  * An object specifying the trigger to this action (e.g. API call, custom params).
+  */ /**
+  * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+  */ /**
+  * @private The context of this action.
+  */ /** Context of the `getShippingCost` action. */ /**
   * @deprecated Use 'returnType' instead.
   * Useful for returning data from this action by setting `scope.result`.
   */ /**
@@ -124,24 +142,6 @@
   * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
   */ /**
   * @private The context of this action.
-  */ /** Context of the `senditFulfillOrder` action. */ /**
-  * @deprecated Use 'returnType' instead.
-  * Useful for returning data from this action by setting `scope.result`.
-  */ /**
-  * An object specifying the trigger to this action (e.g. API call, custom params).
-  */ /**
-  * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
-  */ /**
-  * @private The context of this action.
-  */ /** Context of the `standardizeMoroccanAddress` action. */ /**
-  * @deprecated Use 'returnType' instead.
-  * Useful for returning data from this action by setting `scope.result`.
-  */ /**
-  * An object specifying the trigger to this action (e.g. API call, custom params).
-  */ /**
-  * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
-  */ /**
-  * @private The context of this action.
   */ /** Context of the `standardizeMoroccanCity` action. */ /**
   * @deprecated Use 'returnType' instead.
   * Useful for returning data from this action by setting `scope.result`.
@@ -178,7 +178,7 @@
   * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
   */ /**
   * @private The context of this action.
-  */ /** Context of the `testOriginalCityExtraction` action. */ /**
+  */ /** Context of the `testSenditConnection` action. */ /**
   * @deprecated Use 'returnType' instead.
   * Useful for returning data from this action by setting `scope.result`.
   */ /**
@@ -187,7 +187,7 @@
   * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
   */ /**
   * @private The context of this action.
-  */ /** Context of the `testSenditConnection` action. */ /**
+  */ /** Context of the `testTrackingDetection` action. */ /**
   * @deprecated Use 'returnType' instead.
   * Useful for returning data from this action by setting `scope.result`.
   */ /**
@@ -206,6 +206,15 @@
   */ /**
   * @private The context of this action.
   */ /** Context of the `trackSpeedafOrders` action. */ /**
+  * @deprecated Use 'returnType' instead.
+  * Useful for returning data from this action by setting `scope.result`.
+  */ /**
+  * An object specifying the trigger to this action (e.g. API call, custom params).
+  */ /**
+  * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+  */ /**
+  * @private The context of this action.
+  */ /** Context of the `updateDeliveryCharge` action. */ /**
   * @deprecated Use 'returnType' instead.
   * Useful for returning data from this action by setting `scope.result`.
   */ /**
@@ -241,7 +250,25 @@
   * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
   */ /**
   * @private The context of this action.
-  */ /** Context of the `writeToShopify` action. */ export { }; /**
+  */ /** Context of the `writeToShopify` action. */ /**
+  * @deprecated Use 'returnType' instead.
+  * Useful for returning data from this action by setting `scope.result`.
+  */ /**
+  * An object specifying the trigger to this action (e.g. API call, custom params).
+  */ /**
+  * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+  */ /**
+  * @private The context of this action.
+  */ /** Context of the `listRecentOrders` action. */ /**
+  * @deprecated Use 'returnType' instead.
+  * Useful for returning data from this action by setting `scope.result`.
+  */ /**
+  * An object specifying the trigger to this action (e.g. API call, custom params).
+  */ /**
+  * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+  */ /**
+  * @private The context of this action.
+  */ /** Context of the `applyDiscountsAndShipping` action. */ export { }; /**
   * @deprecated Use 'returnType' instead.
   * Useful for returning data from this action by setting `scope.result`.
   */  /**

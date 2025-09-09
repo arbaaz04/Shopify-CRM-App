@@ -336,21 +336,86 @@ export const run = async ({ params, logger, api }: any) => {
     
     logger.info(`Processing ${orders.length} orders for batch write to Google Sheets`);
     
+    // STEP: Apply discounts and shipping absorption to orders before writing to sheets
+    logger.info("Applying discounts and shipping absorption to orders...");
+    const processedOrders = await Promise.all(
+      orders.map(async (order) => {
+        try {
+          const absorptionResult = await api.applyDiscountsAndShipping({
+            orderId: order.id,
+            testMode: false
+          });
+          
+          if (absorptionResult.success && absorptionResult.testResults) {
+            const { lineItems, absorption, orderInfo } = absorptionResult.testResults;
+            
+            // Check if any absorption was applied
+            const hasAbsorption = absorption.totalAbsorbed > 0;
+            
+            if (hasAbsorption) {
+              logger.info(`Applied absorption to order ${order.name}`, {
+                shippingAbsorbed: absorption.totalShippingAbsorbed,
+                discountAbsorbed: absorption.totalDiscountAbsorbed,
+                totalAbsorbed: absorption.totalAbsorbed,
+                originalTotal: orderInfo.originalOrderTotal,
+                newTotal: absorption.newOrderTotal
+              });
+              
+              // Return order with updated line items and total
+              return {
+                ...order,
+                lineItems: lineItems.map((item: any) => ({
+                  ...order.lineItems?.find((origItem: any) => origItem.id === item.id) || {},
+                  id: item.id,
+                  name: item.name,
+                  sku: item.sku,
+                  quantity: item.quantity,
+                  price: item.newPrice.toFixed(2), // Use absorbed price for Column J
+                  originalPrice: item.originalPrice.toFixed(2)
+                })),
+                totalPrice: absorption.newOrderTotal.toFixed(2), // Use absorbed total for Column K
+                originalTotalPrice: orderInfo.originalOrderTotal.toFixed(2),
+                absorptionApplied: true,
+                shippingAbsorbed: absorption.totalShippingAbsorbed,
+                discountAbsorbed: absorption.totalDiscountAbsorbed
+              };
+            } else {
+              logger.debug(`No absorption applied to order ${order.name}: ${absorptionResult.testResults.summary.message}`);
+              return order; // Return original order if no absorption
+            }
+          } else {
+            logger.debug(`Absorption calculation failed for order ${order.name}`);
+            return order; // Return original order if calculation failed
+          }
+        } catch (absorptionError) {
+          logger.error(`Error applying absorption to order ${order.name}`, { 
+            error: absorptionError instanceof Error ? absorptionError.message : String(absorptionError)
+          });
+          return order; // Return original order on error
+        }
+      })
+    );
+    
+    logger.info("Discounts and shipping absorption processing completed", {
+      totalOrders: orders.length,
+      processedOrders: processedOrders.length
+    });
+    
     // Initialize Google Sheets client
     const sheets = await rateLimitedRequest(() => initGoogleSheetsClient());
     
     // Get sheet configuration
     const sheetConfig = await rateLimitedRequest(() => getSheetConfig(shopId, api));
     
-    // Write all orders in a single batch operation
+    // Write all processed orders in a single batch operation
     await rateLimitedRequest(() => 
-      writeBatchOrdersData(sheets, sheetConfig.spreadsheetId, orders)
+      writeBatchOrdersData(sheets, sheetConfig.spreadsheetId, processedOrders)
     );
     
-    logger.info(`Successfully wrote ${orders.length} orders to Google Sheets in batch operation`);
+    logger.info(`Successfully wrote ${processedOrders.length} orders to Google Sheets in batch operation`);
     
     // Update all orders' writeOrder and autoWrite fields to false
-    const updatePromises = orders.map(async (order) => {
+    const updatePromises = processedOrders.map(async (order) => {
       try {
         const numericOrderId = extractNumericId(order.id);
         logger.info(`Updating order ${order.id} (numeric: ${numericOrderId}) fields: writeOrder=false, autoWrite=false`);
@@ -381,7 +446,7 @@ export const run = async ({ params, logger, api }: any) => {
     
     return { 
       success: true, 
-      ordersWritten: orders.length,
+      ordersWritten: processedOrders.length,
       fieldsUpdated: successfulUpdates,
       fieldsUpdateFailed: failedUpdates
     };

@@ -1,4 +1,5 @@
 /**
+ * BEING USED
  * ChatGPT integration for standardizing Moroccan city names
  * Uses direct HTTP requests to OpenAI API
  */

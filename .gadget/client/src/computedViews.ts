@@ -23,7 +23,7 @@ export interface ComputedViewWithoutVariables<Result> extends ComputedViewFuncti
 // This is a function that represents a computed view that takes input parameters/variables.
 // Result is an explicit type parameter defining the shape of the full result.
 // Variables is an explicit type parameter that describes the shape of the variables parameter.
-export type ComputedViewFunctionWithVariables<Variables, Result> = (variables: Variables) => Promise<Result>;
+export type ComputedViewFunctionWithVariables<Variables, Result> = (variables?: Variables) => Promise<Result>;
 
 // Represents a computed view that takes input parameters/variables.
 // It includes the view function and the view metadata.
@@ -35,7 +35,7 @@ export interface ComputedViewWithVariables<Variables, Result> extends ComputedVi
   variables: VariablesOptions;
   variablesType: Variables;
   resultType: Result;
-  plan(variables: Variables): {
+  plan(variables?: Variables): {
     query: string;
     variables: Record<string, any>;
   };

@@ -86,3 +86,20 @@ export declare function globalShopifySync(params: {
 * @param record - the `bulkOperation` record updated
 */
 export declare function finishBulkOperation(record: GadgetRecord<any>): Promise<void>;
+type ThemeVersion = "v1" | "v2";
+/**
+* Determines the theme version (v1/liquid or v2/JSON) for Shopify template files by fetching the template files from the store and analyzing file extensions.
+* Note that `read_themes` Shopify API scope is required to fetch the files.
+*
+* @param {Shopify} shopify - The Shopify client to determine the theme version for.
+* @param {string[]} pageTypes - An optional array of template page type names to include in the analysis. The values should be Shopify page types. (https://shopify.dev/docs/api/liquid/objects/request#request-page_type)
+* @returns {Promise<{pageType: string; filename: string; version: ThemeVersion}[]>} An array of objects containing the page type name (e.g. "index", "product", "customers/activate_account"), filename, and theme version (v1/liquid or v2/JSONd)
+*/
+export declare const determineShopThemeVersion: (shopify: {
+	graphql: (data: string, variables?: any) => Promise<any>
+}, pageTypes?: string[]) => Promise<{
+	pageType: string
+	filename: string
+	version: ThemeVersion
+}[]>;
+export {};

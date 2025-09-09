@@ -27,6 +27,9 @@ _export(exports, {
     abortSync: function() {
         return abortSync;
     },
+    determineShopThemeVersion: function() {
+        return determineShopThemeVersion;
+    },
     finishBulkOperation: function() {
         return finishBulkOperation;
     },
@@ -43,6 +46,20 @@ _export(exports, {
         return validShopsFilter;
     }
 });
+function _interop_require_default() {
+    const data = require("@swc/helpers/_/_interop_require_default");
+    _interop_require_default = function() {
+        return data;
+    };
+    return data;
+}
+function _path() {
+    const data = /*#__PURE__*/ _interop_require_default()._(require("path"));
+    _path = function() {
+        return data;
+    };
+    return data;
+}
 const _auth = require("../auth");
 const _effects = require("../effects");
 const _errors = require("../errors");
@@ -250,7 +267,6 @@ async function globalShopifySync(params) {
     const filter = validShopsFilter(Object.values(shopModel.fields).map((f)=>({
             apiIdentifier: f.apiIdentifier
         })), {
-        skipInvalidPlans: true,
         additionalFilters: [
             {
                 [installedViaKeyFieldIdentifier]: {
@@ -363,6 +379,67 @@ async function finishBulkOperation(record) {
 const ShopifyShopKey = shopifyModelKey("Shop");
 const ShopifyCustomerKey = shopifyModelKey("Customer");
 const ShopifyBulkOperationGIDForId = (id)=>`gid://shopify/BulkOperation/${id}`;
+const determineShopThemeVersion = async (shopify, pageTypes)=>{
+    const filenames = pageTypes?.flatMap((pageType)=>[
+            `templates/${pageType}.json`,
+            `templates/${pageType}.liquid`
+        ]) ?? [];
+    if (filenames.length === 0) {
+        filenames.push("templates/*.json", "templates/*.liquid");
+    }
+    const templateFiles = [];
+    let previousFileCursor = null;
+    let hasNextPage = true;
+    // Get all template files from the theme
+    while(hasNextPage){
+        const response = await shopify.graphql(`
+      query GetThemeFiles ($filenames: [String!]!, $fileCursor: String) {
+        themes(first: 1, roles: [MAIN]) {
+          nodes {
+            files(first: 250, filenames: $filenames, after: $fileCursor) {
+              nodes {
+                filename
+              }
+              pageInfo {
+                endCursor
+                hasNextPage
+              }
+            }
+          }
+        }
+      }`, {
+            filenames,
+            fileCursor: previousFileCursor
+        });
+        const theme = response.themes.nodes[0];
+        if (!theme) {
+            throw new Error("Theme not found");
+        }
+        templateFiles.push(...theme.files.nodes);
+        if (theme.files.pageInfo.hasNextPage) {
+            previousFileCursor = theme.files.pageInfo.endCursor;
+            hasNextPage = theme.files.pageInfo.hasNextPage;
+        } else {
+            hasNextPage = false;
+        }
+    }
+    return templateFiles.map((file)=>{
+        const filename = file.filename;
+        const fileExtension = _path().default.extname(filename);
+        const version = fileExtension === ".json" ? "v2" : "v1";
+        const filePathWithoutTemplatesDirectory = filename.replace("templates/", "");
+        /**
+     * Get a page type for the template. For example:
+     * - templates/product.json -> product
+     * - templates/customers/activate_account.liquid -> customers/activate_account
+     */ const pageType = _path().default.join(_path().default.dirname(filePathWithoutTemplatesDirectory), _path().default.basename(filePathWithoutTemplatesDirectory, fileExtension));
+        return {
+            pageType,
+            filename,
+            version
+        };
+    });
+};
 
 
 //# sourceMappingURL=effects.js.map

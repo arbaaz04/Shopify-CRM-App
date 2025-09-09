@@ -33,15 +33,20 @@ const _overlay = require("../core/errors/overlay");
                         "GADGET_APP": "bambe-crm-app",
                         "GADGET_ENV": "development",
                         "GADGET_PUBLIC_APP_SLUG": "bambe-crm-app",
+                        "GADGET_ENV_ID": "447924",
                         "GADGET_PUBLIC_APP_ENV": "development",
+                        "GADGET_APP_TEMPLATE_TYPE": "ShopifyApp",
                         "GADGET_FLAG_ASSISTANT_ENABLED": "true"
                     },
                     productionEnvironmentVariables: {
                         "GADGET_APP": "bambe-crm-app",
                         "GADGET_ENV": "production",
                         "GADGET_PUBLIC_APP_SLUG": "bambe-crm-app",
-                        "GADGET_PUBLIC_APP_ENV": "production"
-                    }
+                        "GADGET_ENV_ID": "447925",
+                        "GADGET_PUBLIC_APP_ENV": "production",
+                        "GADGET_APP_TEMPLATE_TYPE": "ShopifyApp"
+                    },
+                    useSameDomainAssets: false
                 }
             });
             frontendType = result.type;

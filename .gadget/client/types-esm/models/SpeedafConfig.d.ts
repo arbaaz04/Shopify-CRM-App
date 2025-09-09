@@ -388,7 +388,7 @@ export type SpeedafConfigManager = {
           *   apiEndpoint: "example value for apiEndpoint",
           *   appCode: "example value for appCode",
           *   customerCode: "example value for customerCode",
-          *   lastAuthenticated: "2025-06-01T00:00:00.000+00:00",
+          *   lastAuthenticated: "2025-09-01T00:00:00.000+00:00",
           *   name: "example value for name",
           * });
         **/
@@ -404,7 +404,7 @@ export type SpeedafConfigManager = {
           *     apiEndpoint: "example value for apiEndpoint",
           *     appCode: "example value for appCode",
           *     customerCode: "example value for customerCode",
-          *     lastAuthenticated: "2025-06-01T00:00:00.000+00:00",
+          *     lastAuthenticated: "2025-09-01T00:00:00.000+00:00",
           *     name: "example value for name",
           *   },
           * });

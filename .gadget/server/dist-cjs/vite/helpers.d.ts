@@ -21,6 +21,7 @@ export declare const getViteConfig: (config: any, { command, mode, isSsrBuild }:
 		productionEnvironmentId: string
 		developmentEnvironmentVariables: Record<string, string>
 		productionEnvironmentVariables: Record<string, string>
+		useSameDomainAssets: boolean
 	}
 }) => Promise<{
 	config: any

@@ -1,4 +1,5 @@
 import type { FilterElement, GadgetRecord } from "@gadgetinc/api-client-core";
+import path from "path";
 import { validateBelongsToLink } from "../auth";
 import { getActionContextFromLocalStorage, getCurrentContext, getModelByApiIdentifier, internalModelManagerForModel } from "../effects";
 import { InvalidActionInputError } from "../errors";
@@ -258,7 +259,6 @@ export async function globalShopifySync(params: {
   const filter = validShopsFilter(
     Object.values(shopModel.fields).map((f) => ({ apiIdentifier: f.apiIdentifier })),
     {
-      skipInvalidPlans: true,
       additionalFilters: [{ [installedViaKeyFieldIdentifier]: { in: apiKeys } }],
     }
   );
@@ -374,3 +374,117 @@ const ShopifyShopKey: string = shopifyModelKey("Shop");
 const ShopifyCustomerKey: string = shopifyModelKey("Customer");
 
 const ShopifyBulkOperationGIDForId = (id: string) => `gid://shopify/BulkOperation/${id}`;
+
+type TemplateFile = {
+  filename: string;
+};
+
+type GetThemeFilesResponse = {
+  themes: {
+    nodes: {
+      id: string;
+      files: {
+        nodes: TemplateFile[];
+        pageInfo: {
+          endCursor: string | null;
+          hasNextPage: boolean;
+        };
+      };
+    }[];
+  };
+};
+
+type ThemeVersion = "v1" | "v2";
+
+/**
+ * Determines the theme version (v1/liquid or v2/JSON) for Shopify template files by fetching the template files from the store and analyzing file extensions.
+ * Note that `read_themes` Shopify API scope is required to fetch the files.
+ *
+ * @param {Shopify} shopify - The Shopify client to determine the theme version for.
+ * @param {string[]} pageTypes - An optional array of template page type names to include in the analysis. The values should be Shopify page types. (https://shopify.dev/docs/api/liquid/objects/request#request-page_type)
+ * @returns {Promise<{pageType: string; filename: string; version: ThemeVersion}[]>} An array of objects containing the page type name (e.g. "index", "product", "customers/activate_account"), filename, and theme version (v1/liquid or v2/JSONd)
+ */
+export const determineShopThemeVersion = async (
+  shopify: {
+    graphql: (data: string, variables?: any) => Promise<any>;
+  },
+  pageTypes?: string[]
+): Promise<
+  {
+    pageType: string;
+    filename: string;
+    version: ThemeVersion;
+  }[]
+> => {
+  const filenames: string[] = pageTypes?.flatMap((pageType) => [`templates/${pageType}.json`, `templates/${pageType}.liquid`]) ?? [];
+  if (filenames.length === 0) {
+    filenames.push("templates/*.json", "templates/*.liquid");
+  }
+
+  const templateFiles: TemplateFile[] = [];
+  let previousFileCursor: string | null = null;
+  let hasNextPage = true;
+
+  // Get all template files from the theme
+  while (hasNextPage) {
+    const response: GetThemeFilesResponse = await shopify.graphql(
+      `
+      query GetThemeFiles ($filenames: [String!]!, $fileCursor: String) {
+        themes(first: 1, roles: [MAIN]) {
+          nodes {
+            files(first: 250, filenames: $filenames, after: $fileCursor) {
+              nodes {
+                filename
+              }
+              pageInfo {
+                endCursor
+                hasNextPage
+              }
+            }
+          }
+        }
+      }`,
+      {
+        filenames,
+        fileCursor: previousFileCursor,
+      }
+    );
+
+    const theme = response.themes.nodes[0];
+    if (!theme) {
+      throw new Error("Theme not found");
+    }
+
+    templateFiles.push(...theme.files.nodes);
+
+    if (theme.files.pageInfo.hasNextPage) {
+      previousFileCursor = theme.files.pageInfo.endCursor;
+      hasNextPage = theme.files.pageInfo.hasNextPage;
+    } else {
+      hasNextPage = false;
+    }
+  }
+
+  return templateFiles.map((file) => {
+    const filename = file.filename;
+    const fileExtension = path.extname(filename);
+    const version = fileExtension === ".json" ? "v2" : "v1";
+    const filePathWithoutTemplatesDirectory = filename.replace("templates/", "");
+
+    /**
+     * Get a page type for the template. For example:
+     * - templates/product.json -> product
+     * - templates/customers/activate_account.liquid -> customers/activate_account
+     */
+    const pageType = path.join(
+      path.dirname(filePathWithoutTemplatesDirectory),
+      path.basename(filePathWithoutTemplatesDirectory, fileExtension)
+    );
+
+    return {
+      pageType,
+      filename,
+      version,
+    };
+  });
+};

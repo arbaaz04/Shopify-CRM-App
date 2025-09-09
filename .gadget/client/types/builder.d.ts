@@ -74,6 +74,10 @@ export type ComputedViewOperation = {
      * The view should be invalidated and refreshed client side when changes are made to these typenames
      */
     referencedTypenames?: string[];
+    /**
+     * List of model keys that contribute to this view's expression
+     */
+    referencedModelKeys?: string[];
     variables?: VariablesOptions;
 };
 export type StubbedComputedViewOperation = {

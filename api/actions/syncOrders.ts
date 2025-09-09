@@ -569,9 +569,63 @@ async function processSyncInBackground(api: any, orders: any[], logger: any) {
         // Determine the target sheet
         const targetSheet = (isConfirmed || isFulfilled) ? "Orders" : "Pending Orders";
 
-        // Write the order to the appropriate sheet
+        // Apply discounts and shipping absorption before writing to sheet
+        let processedOrder = order;
+        try {
+          const absorptionResult = await api.applyDiscountsAndShipping({
+            orderId: order.id,
+            testMode: false
+          });
+          
+          if (absorptionResult.success && absorptionResult.testResults) {
+            const { lineItems, absorption, orderInfo } = absorptionResult.testResults;
+            
+            // Check if any absorption was applied
+            const hasAbsorption = absorption.totalAbsorbed > 0;
+            
+            if (hasAbsorption) {
+              logger.info(`Applied absorption to order ${order.name}`, {
+                shippingAbsorbed: absorption.totalShippingAbsorbed,
+                discountAbsorbed: absorption.totalDiscountAbsorbed,
+                totalAbsorbed: absorption.totalAbsorbed,
+                originalTotal: orderInfo.originalOrderTotal,
+                newTotal: absorption.newOrderTotal
+              });
+              
+              // Create processed order with updated values
+              processedOrder = {
+                ...order,
+                lineItems: lineItems.map((item: any) => ({
+                  ...order.lineItems?.find((origItem: any) => origItem.id === item.id) || {},
+                  id: item.id,
+                  name: item.name,
+                  sku: item.sku,
+                  quantity: item.quantity,
+                  price: item.newPrice.toFixed(2), // Use absorbed price
+                  originalPrice: item.originalPrice.toFixed(2)
+                })),
+                totalPrice: absorption.newOrderTotal.toFixed(2), // Use absorbed total
+                originalTotalPrice: orderInfo.originalOrderTotal.toFixed(2),
+                absorptionApplied: true,
+                shippingAbsorbed: absorption.totalShippingAbsorbed,
+                discountAbsorbed: absorption.totalDiscountAbsorbed
+              };
+            } else {
+              logger.debug(`No absorption applied to order ${order.name}: ${absorptionResult.testResults.summary.message}`);
+            }
+          } else {
+            logger.debug(`Absorption calculation failed for order ${order.name}`);
+          }
+        } catch (absorptionError) {
+          logger.error(`Error applying absorption to order ${order.name}`, { 
+            error: absorptionError instanceof Error ? absorptionError.message : String(absorptionError)
+          });
+          // Continue with original order if absorption fails
+        }
+
+        // Write the processed order to the appropriate sheet
         const writeResult = await writeOrderToSheet(
-          order,
+          processedOrder,
           shopId,
           api,
           logger,

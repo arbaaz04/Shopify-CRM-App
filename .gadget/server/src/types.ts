@@ -398,6 +398,8 @@ export type GadgetConfig = {
   env: {
     GADGET_APP: string;
     GADGET_ENV?: string;
+    GADGET_ENV_ID?: string;
+    GADGET_APP_TEMPLATE_TYPE: string;
     GADGET_PUBLIC_APP_SLUG: string;
     GADGET_PUBLIC_APP_ENV?: string;
     GADGET_PUBLIC_SHOPIFY_APP_URL?: string;
@@ -676,3 +678,68 @@ export type Attachment = {
   /** the content of the attachment */
   content?: string | Buffer;
 };
+
+/** A function which computes the valid CORS origins given the incoming request origin. */
+export type OriginFunction = (
+  origin: string | undefined
+) =>
+  | string
+  | boolean
+  | RegExp
+  | (string | boolean | RegExp)[]
+  | null
+  | Promise<string | boolean | RegExp | (string | boolean | RegExp)[] | null>;
+
+/**
+ * Per-route options for CORS configuration
+ */
+export interface CORSRouteOptions {
+  /**
+   * Configures the Access-Control-Allow-Origin CORS header.
+   */
+  origin?: string | boolean | RegExp | (string | boolean | RegExp)[] | OriginFunction;
+  /**
+   * Configures the Access-Control-Allow-Credentials CORS header.
+   * Set to true to pass the header, otherwise it is omitted.
+   */
+  credentials?: boolean;
+  /**
+   * Configures the Access-Control-Expose-Headers CORS header.
+   * Expects an array of header strings (ex: ['Content-Range', 'X-Content-Range']).
+   * If not specified, no custom headers are exposed.
+   */
+  exposedHeaders?: string[];
+  /**
+   * Configures the Access-Control-Allow-Headers CORS header.
+   * Expects an array of header strings (ex: ['Content-Type', 'Authorization']).  If not specified, defaults to reflecting the headers specified in the request's Access-Control-Request-Headers header.
+   */
+  allowedHeaders?: string[];
+  /**
+   * Configures the Access-Control-Allow-Methods CORS header.
+   */
+  methods?: string[];
+  /**
+   * Configures the Access-Control-Max-Age CORS header.
+   * Set to an integer to pass the header, otherwise it is omitted.
+   */
+  maxAge?: number;
+  /**
+   * Configures the Cache-Control header for CORS preflight responses.
+   * Set to an integer to pass the header as `Cache-Control: max-age=${cacheControl}`,
+   * or set to a string to pass the header as `Cache-Control: ${cacheControl}` (fully define
+   * the header value), otherwise the header is omitted.
+   */
+  cacheControl?: number | string;
+  /**
+   * Provides a status code to use for successful OPTIONS requests,
+   * since some legacy browsers (IE11, various SmartTVs) choke on 204.
+   */
+  optionsSuccessStatus?: number;
+  /**
+   * Enforces strict requirement of the CORS preflight request headers (Access-Control-Request-Method and Origin).
+   * Preflight requests without the required headers will result in 400 errors when set to `true` (default: `true`).
+   */
+  strictPreflight?: boolean;
+  /** @internal */
+  dynamic?: boolean;
+}

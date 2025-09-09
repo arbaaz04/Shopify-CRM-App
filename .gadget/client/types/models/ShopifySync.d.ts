@@ -328,7 +328,7 @@ export type ShopifySyncManager = {
           *   errorDetails: "example value for errorDetails",
           *   errorMessage: "example value for errorMessage",
           *   force: true,
-          *   syncSince: "2025-06-01T00:00:00.000+00:00",
+          *   syncSince: "2025-09-01T00:00:00.000+00:00",
           * });
         **/
         <Options extends AbortShopifySyncOptions>(id: string, variables: AbortShopifySyncVariables, options?: LimitToKnownKeys<Options, AbortShopifySyncOptions>): Promise<AbortShopifySyncResult<Options>>;
@@ -344,7 +344,7 @@ export type ShopifySyncManager = {
           *     errorDetails: "example value for errorDetails",
           *     errorMessage: "example value for errorMessage",
           *     force: true,
-          *     syncSince: "2025-06-01T00:00:00.000+00:00",
+          *     syncSince: "2025-09-01T00:00:00.000+00:00",
           *   },
           * });
         **/
@@ -427,7 +427,7 @@ export type ShopifySyncManager = {
           *   errorDetails: "example value for errorDetails",
           *   errorMessage: "example value for errorMessage",
           *   force: true,
-          *   syncSince: "2025-06-01T00:00:00.000+00:00",
+          *   syncSince: "2025-09-01T00:00:00.000+00:00",
           * });
         **/
         <Options extends CompleteShopifySyncOptions>(id: string, variables: CompleteShopifySyncVariables, options?: LimitToKnownKeys<Options, CompleteShopifySyncOptions>): Promise<CompleteShopifySyncResult<Options>>;
@@ -443,7 +443,7 @@ export type ShopifySyncManager = {
           *     errorDetails: "example value for errorDetails",
           *     errorMessage: "example value for errorMessage",
           *     force: true,
-          *     syncSince: "2025-06-01T00:00:00.000+00:00",
+          *     syncSince: "2025-09-01T00:00:00.000+00:00",
           *   },
           * });
         **/
@@ -526,7 +526,7 @@ export type ShopifySyncManager = {
           *   errorDetails: "example value for errorDetails",
           *   errorMessage: "example value for errorMessage",
           *   force: true,
-          *   syncSince: "2025-06-01T00:00:00.000+00:00",
+          *   syncSince: "2025-09-01T00:00:00.000+00:00",
           * });
         **/
         <Options extends ErrorShopifySyncOptions>(id: string, variables: ErrorShopifySyncVariables, options?: LimitToKnownKeys<Options, ErrorShopifySyncOptions>): Promise<ErrorShopifySyncResult<Options>>;
@@ -542,7 +542,7 @@ export type ShopifySyncManager = {
           *     errorDetails: "example value for errorDetails",
           *     errorMessage: "example value for errorMessage",
           *     force: true,
-          *     syncSince: "2025-06-01T00:00:00.000+00:00",
+          *     syncSince: "2025-09-01T00:00:00.000+00:00",
           *   },
           * });
         **/
@@ -628,7 +628,7 @@ export type ShopifySyncManager = {
           *     _link: "1",
           *   },
           *   startReason: "example value for startReason",
-          *   syncSince: "2025-06-01T00:00:00.000+00:00",
+          *   syncSince: "2025-09-01T00:00:00.000+00:00",
           * });
         **/
         <Options extends RunShopifySyncOptions>(variables: RunShopifySyncVariables, options?: LimitToKnownKeys<Options, RunShopifySyncOptions>): Promise<RunShopifySyncResult<Options>>;
@@ -646,7 +646,7 @@ export type ShopifySyncManager = {
           *     shop: {
           *       _link: "1",
           *     },
-          *     syncSince: "2025-06-01T00:00:00.000+00:00",
+          *     syncSince: "2025-09-01T00:00:00.000+00:00",
           *   },
           *   startReason: "example value for startReason",
           * });
@@ -727,7 +727,7 @@ export type ShopifySyncManager = {
           *     _link: "1",
           *   },
           *   startReason: "example value for startReason",
-          *   syncSince: "2025-06-01T00:00:00.000+00:00",
+          *   syncSince: "2025-09-01T00:00:00.000+00:00",
           * });
         **/
         <Options extends UpsertShopifySyncOptions>(variables: UpsertShopifySyncVariables, options?: LimitToKnownKeys<Options, UpsertShopifySyncOptions>): Promise<UpsertShopifySyncResult<Options>>;
@@ -745,7 +745,7 @@ export type ShopifySyncManager = {
           *     shop: {
           *       _link: "1",
           *     },
-          *     syncSince: "2025-06-01T00:00:00.000+00:00",
+          *     syncSince: "2025-09-01T00:00:00.000+00:00",
           *   },
           *   startReason: "example value for startReason",
           * });

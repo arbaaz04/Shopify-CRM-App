@@ -2480,6 +2480,27 @@
                             "createdDate": 1744213812448,
                             "name": "ZMW",
                             "color": "#FCFCFC"
+                        },
+                        {
+                            "type": "EnumOption",
+                            "key": "s7EhbJtk9Shc",
+                            "createdDate": 1757361756160,
+                            "name": "STN",
+                            "color": "#FCFCFC"
+                        },
+                        {
+                            "type": "EnumOption",
+                            "key": "ZyzaJJA96v3s",
+                            "createdDate": 1757361756160,
+                            "name": "USDC",
+                            "color": "#FCFCFC"
+                        },
+                        {
+                            "type": "EnumOption",
+                            "key": "iXfJDt0i_Ox9",
+                            "createdDate": 1757361756160,
+                            "name": "VED",
+                            "color": "#FCFCFC"
                         }
                     ],
                     "default": null
@@ -3912,6 +3933,27 @@
                             "key": "ORHDVkpobGbq",
                             "createdDate": 1744213812467,
                             "name": "ZMW",
+                            "color": "#FCFCFC"
+                        },
+                        {
+                            "type": "EnumOption",
+                            "key": "-6NI4TrYEO62",
+                            "createdDate": 1757361756165,
+                            "name": "STN",
+                            "color": "#FCFCFC"
+                        },
+                        {
+                            "type": "EnumOption",
+                            "key": "_jFospV1_2sZ",
+                            "createdDate": 1757361756166,
+                            "name": "USDC",
+                            "color": "#FCFCFC"
+                        },
+                        {
+                            "type": "EnumOption",
+                            "key": "lgfp1Ft3FWp4",
+                            "createdDate": 1757361756166,
+                            "name": "VED",
                             "color": "#FCFCFC"
                         }
                     ],
@@ -5657,6 +5699,27 @@
                             "createdDate": 1744213796040,
                             "name": "ZMW",
                             "color": "#FCFCFC"
+                        },
+                        {
+                            "type": "EnumOption",
+                            "key": "8pPLHp4axHsk",
+                            "createdDate": 1757361756193,
+                            "name": "STN",
+                            "color": "#FCFCFC"
+                        },
+                        {
+                            "type": "EnumOption",
+                            "key": "53zSCoYNpC6K",
+                            "createdDate": 1757361756193,
+                            "name": "USDC",
+                            "color": "#FCFCFC"
+                        },
+                        {
+                            "type": "EnumOption",
+                            "key": "xPHr4mzL9z_3",
+                            "createdDate": 1757361756193,
+                            "name": "VED",
+                            "color": "#FCFCFC"
                         }
                     ],
                     "default": null
@@ -6851,6 +6914,27 @@
                             "key": "hVuWvX-KrG4t",
                             "createdDate": 1744213796054,
                             "name": "ZMW",
+                            "color": "#FCFCFC"
+                        },
+                        {
+                            "type": "EnumOption",
+                            "key": "qaL6Nbk7LVbO",
+                            "createdDate": 1757361756196,
+                            "name": "STN",
+                            "color": "#FCFCFC"
+                        },
+                        {
+                            "type": "EnumOption",
+                            "key": "kEcv4f3hcsGi",
+                            "createdDate": 1757361756196,
+                            "name": "USDC",
+                            "color": "#FCFCFC"
+                        },
+                        {
+                            "type": "EnumOption",
+                            "key": "PS-nSjEbuohj",
+                            "createdDate": 1757361756196,
+                            "name": "VED",
                             "color": "#FCFCFC"
                         }
                     ],
@@ -9020,7 +9104,7 @@
                     "key": "1uQ0rm0-7kV9",
                     "createdDate": "2025-04-10T07:48:29.648Z",
                     "allowMultiple": false,
-                    "allowOther": false,
+                    "allowOther": true,
                     "options": [
                         {
                             "type": "EnumOption",
@@ -9041,6 +9125,27 @@
                             "key": "RYu0owPCAUtu",
                             "createdDate": 1744264263996,
                             "name": "draft",
+                            "color": "#FCFCFC"
+                        },
+                        {
+                            "type": "EnumOption",
+                            "key": "B1NpnZusOHTa",
+                            "createdDate": 1757361756178,
+                            "name": "ACTIVE",
+                            "color": "#FCFCFC"
+                        },
+                        {
+                            "type": "EnumOption",
+                            "key": "FBr1e_8F9ft_",
+                            "createdDate": 1757361756178,
+                            "name": "ARCHIVED",
+                            "color": "#FCFCFC"
+                        },
+                        {
+                            "type": "EnumOption",
+                            "key": "QPrADwsotfG8",
+                            "createdDate": 1757361756178,
+                            "name": "DRAFT",
                             "color": "#FCFCFC"
                         }
                     ],
@@ -9936,22 +10041,22 @@
                     "options": [
                         {
                             "type": "EnumOption",
-                            "key": "J6Z4fBB1Tj5k",
-                            "createdDate": 1751011428208,
+                            "key": "WWXocjXmEwX7",
+                            "createdDate": 1757363703384,
                             "name": "sendit",
                             "color": "#FCFCFC"
                         },
                         {
                             "type": "EnumOption",
-                            "key": "1dIL2O4Eh3Xi",
-                            "createdDate": 1751011428208,
+                            "key": "n7z90rBIeuEP",
+                            "createdDate": 1757363703384,
                             "name": "speedaf",
                             "color": "#FCFCFC"
                         },
                         {
                             "type": "EnumOption",
-                            "key": "IcnRinZo8dT2",
-                            "createdDate": 1751011428208,
+                            "key": "mx6-XxW6V9O1",
+                            "createdDate": 1757363703384,
                             "name": "general",
                             "color": "#FCFCFC"
                         }
@@ -9998,6 +10103,133 @@
             "stateInActionCode": false,
             "childStates": []
         }
+    },
+    "DeliveryCharges": {
+        "key": "DeliveryChargesKey",
+        "name": "deliveryCharges",
+        "apiIdentifier": "deliveryCharges",
+        "namespace": [],
+        "fields": {
+            "DeliveryChargesKey-system-id": {
+                "fieldType": "ID",
+                "key": "DeliveryChargesKey-system-id",
+                "name": "ID",
+                "apiIdentifier": "id",
+                "configuration": {
+                    "type": "IDConfig",
+                    "key": "0u5QPl9MssOQ",
+                    "createdDate": "2025-09-08T15:56:47.671Z"
+                },
+                "internalWritable": true
+            },
+            "DeliveryChargesKey-system-createdAt": {
+                "fieldType": "DateTime",
+                "key": "DeliveryChargesKey-system-createdAt",
+                "name": "Created At",
+                "apiIdentifier": "createdAt",
+                "configuration": {
+                    "type": "DateTimeConfig",
+                    "key": "4Xdz-fOXNmWJ",
+                    "createdDate": "2025-09-08T15:56:47.673Z",
+                    "includeTime": true,
+                    "default": null
+                },
+                "internalWritable": true
+            },
+            "DeliveryChargesKey-system-updatedAt": {
+                "fieldType": "DateTime",
+                "key": "DeliveryChargesKey-system-updatedAt",
+                "name": "Updated At",
+                "apiIdentifier": "updatedAt",
+                "configuration": {
+                    "type": "DateTimeConfig",
+                    "key": "73krv_ScijYe",
+                    "createdDate": "2025-09-08T15:56:47.674Z",
+                    "includeTime": true,
+                    "default": null
+                },
+                "internalWritable": true
+            },
+            "DeliveryChargeCurrency": {
+                "fieldType": "String",
+                "key": "DeliveryChargeCurrency",
+                "name": "currency",
+                "apiIdentifier": "currency",
+                "configuration": {
+                    "type": "StringConfig",
+                    "key": "qF_cgT43pJZj",
+                    "createdDate": "2025-09-08T15:56:47.683Z",
+                    "default": "MAD"
+                },
+                "internalWritable": true
+            },
+            "DeliveryChargesLastUpdated": {
+                "fieldType": "DateTime",
+                "key": "DeliveryChargesLastUpdated",
+                "name": "lastUpdated",
+                "apiIdentifier": "lastUpdated",
+                "configuration": {
+                    "type": "DateTimeConfig",
+                    "key": "zRQlqh4aoaQv",
+                    "createdDate": "2025-09-08T15:56:47.684Z",
+                    "includeTime": true,
+                    "default": null
+                },
+                "internalWritable": true
+            },
+            "DeliveryChargesShopRef": {
+                "fieldType": "BelongsTo",
+                "key": "DeliveryChargesShopRef",
+                "name": "shop",
+                "apiIdentifier": "shop",
+                "configuration": {
+                    "type": "BelongsToConfig",
+                    "key": "v_jD7k9uDg7l",
+                    "createdDate": "2025-09-08T15:56:47.690Z",
+                    "relatedModelKey": "DataModel-Shopify-Shop",
+                    "relatedModelApiIdentifier": "shopifyShop"
+                },
+                "internalWritable": true
+            },
+            "SenditDeliveryCharge": {
+                "fieldType": "Number",
+                "key": "SenditDeliveryCharge",
+                "name": "senditCharge",
+                "apiIdentifier": "senditCharge",
+                "configuration": {
+                    "type": "NumberConfig",
+                    "key": "mx27NVGGDpzN",
+                    "createdDate": "2025-09-08T15:56:47.675Z",
+                    "decimals": null,
+                    "default": null
+                },
+                "internalWritable": true
+            },
+            "SpeedafDeliveryCharge": {
+                "fieldType": "Number",
+                "key": "SpeedafDeliveryCharge",
+                "name": "speedafCharge",
+                "apiIdentifier": "speedafCharge",
+                "configuration": {
+                    "type": "NumberConfig",
+                    "key": "U6MijQFQnKmr",
+                    "createdDate": "2025-09-08T15:56:47.678Z",
+                    "decimals": null,
+                    "default": null
+                },
+                "internalWritable": true
+            }
+        },
+        "graphqlTypeName": "DeliveryCharges",
+        "stateChart": {
+            "type": "StateChart",
+            "key": "IdCXBAA_MTgg",
+            "createdDate": 1757347007668,
+            "actions": {},
+            "transitions": {},
+            "stateInActionCode": false,
+            "childStates": []
+        }
     }
 };
 /**
@@ -10018,5 +10250,6 @@
     "api:shopifyProductVariant": "ShopifyProductVariant",
     "api:senditConfig": "SenditConfig",
     "api:speedafConfig": "SpeedafConfig",
-    "api:customCity": "CustomCity"
+    "api:customCity": "CustomCity",
+    "api:deliveryCharges": "DeliveryCharges"
 };

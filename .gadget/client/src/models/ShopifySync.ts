@@ -393,7 +393,7 @@ export type ShopifySyncManager = {
         *   errorDetails: "example value for errorDetails",
         *   errorMessage: "example value for errorMessage",
         *   force: true,
-        *   syncSince: "2025-06-01T00:00:00.000+00:00",
+        *   syncSince: "2025-09-01T00:00:00.000+00:00",
         * });
       **/
       <Options extends AbortShopifySyncOptions>(
@@ -413,7 +413,7 @@ export type ShopifySyncManager = {
         *     errorDetails: "example value for errorDetails",
         *     errorMessage: "example value for errorMessage",
         *     force: true,
-        *     syncSince: "2025-06-01T00:00:00.000+00:00",
+        *     syncSince: "2025-09-01T00:00:00.000+00:00",
         *   },
         * });
       **/
@@ -489,7 +489,7 @@ export type ShopifySyncManager = {
         *   errorDetails: "example value for errorDetails",
         *   errorMessage: "example value for errorMessage",
         *   force: true,
-        *   syncSince: "2025-06-01T00:00:00.000+00:00",
+        *   syncSince: "2025-09-01T00:00:00.000+00:00",
         * });
       **/
       <Options extends CompleteShopifySyncOptions>(
@@ -509,7 +509,7 @@ export type ShopifySyncManager = {
         *     errorDetails: "example value for errorDetails",
         *     errorMessage: "example value for errorMessage",
         *     force: true,
-        *     syncSince: "2025-06-01T00:00:00.000+00:00",
+        *     syncSince: "2025-09-01T00:00:00.000+00:00",
         *   },
         * });
       **/
@@ -587,7 +587,7 @@ export type ShopifySyncManager = {
         *   errorDetails: "example value for errorDetails",
         *   errorMessage: "example value for errorMessage",
         *   force: true,
-        *   syncSince: "2025-06-01T00:00:00.000+00:00",
+        *   syncSince: "2025-09-01T00:00:00.000+00:00",
         * });
       **/
       <Options extends ErrorShopifySyncOptions>(
@@ -607,7 +607,7 @@ export type ShopifySyncManager = {
         *     errorDetails: "example value for errorDetails",
         *     errorMessage: "example value for errorMessage",
         *     force: true,
-        *     syncSince: "2025-06-01T00:00:00.000+00:00",
+        *     syncSince: "2025-09-01T00:00:00.000+00:00",
         *   },
         * });
       **/
@@ -686,7 +686,7 @@ export type ShopifySyncManager = {
         *     _link: "1",
         *   },
         *   startReason: "example value for startReason",
-        *   syncSince: "2025-06-01T00:00:00.000+00:00",
+        *   syncSince: "2025-09-01T00:00:00.000+00:00",
         * });
       **/
       <Options extends RunShopifySyncOptions>(
@@ -708,7 +708,7 @@ export type ShopifySyncManager = {
         *     shop: {
         *       _link: "1",
         *     },
-        *     syncSince: "2025-06-01T00:00:00.000+00:00",
+        *     syncSince: "2025-09-01T00:00:00.000+00:00",
         *   },
         *   startReason: "example value for startReason",
         * });
@@ -788,7 +788,7 @@ export type ShopifySyncManager = {
         *     _link: "1",
         *   },
         *   startReason: "example value for startReason",
-        *   syncSince: "2025-06-01T00:00:00.000+00:00",
+        *   syncSince: "2025-09-01T00:00:00.000+00:00",
         * });
       **/
       <Options extends UpsertShopifySyncOptions>(
@@ -810,7 +810,7 @@ export type ShopifySyncManager = {
         *     shop: {
         *       _link: "1",
         *     },
-        *     syncSince: "2025-06-01T00:00:00.000+00:00",
+        *     syncSince: "2025-09-01T00:00:00.000+00:00",
         *   },
         *   startReason: "example value for startReason",
         * });

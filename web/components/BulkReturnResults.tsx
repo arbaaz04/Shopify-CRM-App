@@ -20,6 +20,14 @@ interface ProcessingResult {
   currency?: string;
   error?: string;
   processedItems?: number;
+  isInventoryOnly?: boolean; // New field to track inventory-only returns
+  lineItems?: Array<{ // Add line items details
+    name: string;
+    quantity: number;
+    price?: number;
+    sku?: string;
+    lineItemId?: string;
+  }>;
 }
 
 interface BulkReturnResultsProps {
@@ -43,48 +51,61 @@ export const BulkReturnResults: React.FC<BulkReturnResultsProps> = ({
 }) => {
   const successfulResults = results.filter(r => r.success);
   const failedResults = results.filter(r => !r.success);
+  
+  // Categorize successful results
+  const inventoryOnlyReturns = successfulResults.filter(r => r.isInventoryOnly === true);
+  const refundedReturns = successfulResults.filter(r => r.isInventoryOnly !== true);
+
+  // Helper function to format order name
+  const formatOrderName = (orderName: string) => {
+    if (!orderName) return '#Unknown';
+    const name = String(orderName);
+    return name.startsWith('#') ? name : `#${name}`;
+  };
+
+  // Helper function to clean line item names
+  const cleanItemName = (name: string) => {
+    if (!name) return '';
+    // Remove "Line Item gid://shopify/LineItem/[id]" prefix if present
+    const cleanedName = name.replace(/^Line Item gid:\/\/shopify\/LineItem\/\d+\s*/, '');
+    // Extract the part in parentheses if it looks like a product name
+    const match = cleanedName.match(/\(([^)]+)\)/);
+    return match ? match[1] : cleanedName.trim();
+  };
 
   return (
     <BlockStack gap="500">
-      {/* Summary Card */}
+      {/* Summary Card - Simplified */}
       <Card>
         <BlockStack gap="400">
-          <Text variant="headingMd" as="h3">
-            Bulk Return Processing Results
+          <Text as="h2" variant="headingMd">
+            Return Processing Results
           </Text>
 
           <InlineStack gap="400" wrap={false}>
             <BlockStack gap="200">
-              <Text variant="bodyMd" fontWeight="semibold">Total Orders</Text>
-              <Text variant="bodyMd">{summary.totalOrders}</Text>
+              <Text as="span" variant="bodyMd" fontWeight="semibold">Total Orders</Text>
+              <Text as="span" variant="bodyMd">{summary.totalOrders}</Text>
             </BlockStack>
             
             <BlockStack gap="200">
-              <Text variant="bodyMd" fontWeight="semibold">Successful</Text>
-              <Badge tone="success">{summary.successfulReturns}</Badge>
+              <Text as="span" variant="bodyMd" fontWeight="semibold">Successful</Text>
+              <Badge tone="success">{summary.successfulReturns.toString()}</Badge>
             </BlockStack>
             
             <BlockStack gap="200">
-              <Text variant="bodyMd" fontWeight="semibold">Failed</Text>
-              <Badge tone="critical">{summary.failedReturns}</Badge>
+              <Text as="span" variant="bodyMd" fontWeight="semibold">Failed</Text>
+              <Badge tone="critical">{summary.failedReturns.toString()}</Badge>
             </BlockStack>
 
-            <BlockStack gap="200">
-              <Text variant="bodyMd" fontWeight="semibold">Items Returned</Text>
-              <Text variant="bodyMd">{summary.totalProcessedItems}</Text>
-            </BlockStack>
-
-            <BlockStack gap="200">
-              <Text variant="bodyMd" fontWeight="semibold">Total Refunds</Text>
-              <Text variant="bodyMd">{summary.totalRefundAmount.toFixed(2)} {summary.currency}</Text>
-            </BlockStack>
-
-            <BlockStack gap="200">
-              <Text variant="bodyMd" fontWeight="semibold">Success Rate</Text>
-              <Badge tone={summary.successRate >= 80 ? "success" : summary.successRate >= 50 ? "attention" : "critical"}>
-                {summary.successRate}%
-              </Badge>
-            </BlockStack>
+            {summary.totalRefundAmount > 0 && (
+              <BlockStack gap="200">
+                <Text as="span" variant="bodyMd" fontWeight="semibold">Total Refunded</Text>
+                <Text as="span" variant="bodyMd" fontWeight="semibold">
+                  {summary.totalRefundAmount.toFixed(2)} {summary.currency}
+                </Text>
+              </BlockStack>
+            )}
           </InlineStack>
 
           <InlineStack gap="300">
@@ -95,49 +116,138 @@ export const BulkReturnResults: React.FC<BulkReturnResultsProps> = ({
         </BlockStack>
       </Card>
 
-      {/* Successful Returns */}
-      {successfulResults.length > 0 && (
+      {/* Refunded Returns */}
+      {refundedReturns.length > 0 && (
         <Card>
           <BlockStack gap="400">
             <InlineStack gap="200" align="space-between">
-              <Text variant="headingMd" as="h3">
-                Successful Returns ({successfulResults.length})
+              <Text as="h3" variant="headingMd">
+                Refunded Returns ({refundedReturns.length})
               </Text>
-              <Badge tone="success">Completed</Badge>
+              <InlineStack gap="200">
+                <Badge tone="success">Completed with Refunds</Badge>
+                <Text as="span" variant="bodySm" fontWeight="semibold">
+                  Total: {refundedReturns.reduce((sum, r) => sum + (r.refundAmount || 0), 0).toFixed(2)} {summary.currency}
+                </Text>
+              </InlineStack>
             </InlineStack>
 
             <Banner tone="success">
-              <p>The following returns were processed successfully:</p>
+              <Text as="p" variant="bodyMd">
+                The following orders were processed with inventory returns and monetary refunds:
+              </Text>
             </Banner>
 
             <BlockStack gap="300">
-              {successfulResults.map((result, index) => (
+              {refundedReturns.map((result, index) => (
                 <Card key={index} background="bg-surface-secondary">
                   <BlockStack gap="300">
                     <InlineStack gap="200" align="space-between">
-                      <Text variant="bodyMd" fontWeight="semibold">
-                        {result.orderName}
+                      <Text as="h4" variant="bodyMd" fontWeight="semibold">
+                        {formatOrderName(result.orderName)}
                       </Text>
-                      <Badge tone="success">Success</Badge>
+                      <Badge tone="success">Refunded</Badge>
                     </InlineStack>
 
-                    <InlineStack gap="400" wrap={false}>
-                      <BlockStack gap="100">
-                        <Text variant="bodySm" tone="subdued">Items Returned</Text>
-                        <Text variant="bodySm">{result.processedItems || 0}</Text>
+                    {/* Show returned items with prices */}
+                    {result.lineItems && result.lineItems.length > 0 ? (
+                      <BlockStack gap="200">
+                        <Text as="span" variant="bodySm" fontWeight="semibold">Refunded Items:</Text>
+                        <List type="bullet">
+                          {result.lineItems.map((item, itemIndex) => (
+                            <List.Item key={itemIndex}>
+                              <Text as="span" variant="bodySm">
+                                {item.name ? 
+                                  `${cleanItemName(item.name)} ${item.sku ? `(${item.sku})` : ''} - Qty: ${item.quantity}` :
+                                  `Item ${itemIndex + 1} - Qty: ${item.quantity}`
+                                }
+                                {item.price && item.price > 0 ? ` - ${(item.price * item.quantity).toFixed(2)} ${result.currency}` : ''}
+                              </Text>
+                            </List.Item>
+                          ))}
+                        </List>
                       </BlockStack>
-                      
-                      <BlockStack gap="100">
-                        <Text variant="bodySm" tone="subdued">Refund Amount</Text>
-                        <Text variant="bodySm">
-                          {result.refundAmount?.toFixed(2) || '0.00'} {result.currency || 'MAD'}
-                        </Text>
-                      </BlockStack>
-                    </InlineStack>
+                    ) : (
+                      <Text as="span" variant="bodySm" tone="subdued">
+                        {result.processedItems || 0} items returned
+                      </Text>
+                    )}
 
-                    <Text variant="bodySm" tone="subdued">
+                    <BlockStack gap="100">
+                      <Text as="span" variant="bodySm" tone="subdued">Total Refund Amount</Text>
+                      <Text as="span" variant="bodySm" fontWeight="semibold">
+                        {result.refundAmount?.toFixed(2) || '0.00'} {result.currency || 'MAD'}
+                      </Text>
+                    </BlockStack>
+
+                    <Text as="p" variant="bodySm" tone="subdued">
                       {result.message}
                     </Text>
+                  </BlockStack>
+                </Card>
+              ))}
+            </BlockStack>
+          </BlockStack>
+        </Card>
+      )}
+
+      {/* Inventory-Only Returns */}
+      {inventoryOnlyReturns.length > 0 && (
+        <Card>
+          <BlockStack gap="400">
+            <InlineStack gap="200" align="space-between">
+              <Text as="h3" variant="headingMd">
+                Inventory-Only Returns ({inventoryOnlyReturns.length})
+              </Text>
+              <Badge tone="attention">Inventory Updated Only</Badge>
+            </InlineStack>
+
+            <Banner tone="info">
+              <Text as="p" variant="bodyMd">
+                The following orders were processed with inventory returns but no monetary refunds:
+              </Text>
+            </Banner>
+
+            <BlockStack gap="300">
+              {inventoryOnlyReturns.map((result, index) => (
+                <Card key={index} background="bg-surface-secondary">
+                  <BlockStack gap="300">
+                    <InlineStack gap="200" align="space-between">
+                      <Text as="h4" variant="bodyMd" fontWeight="semibold">
+                        {formatOrderName(result.orderName)}
+                      </Text>
+                      <Badge tone="attention">Inventory Only</Badge>
+                    </InlineStack>
+
+                    {/* Show returned items */}
+                    {result.lineItems && result.lineItems.length > 0 ? (
+                      <BlockStack gap="200">
+                        <Text as="span" variant="bodySm" fontWeight="semibold">Returned Items:</Text>
+                        <List type="bullet">
+                          {result.lineItems.map((item, itemIndex) => (
+                            <List.Item key={itemIndex}>
+                              <Text as="span" variant="bodySm">
+                                {item.name ? 
+                                  `${cleanItemName(item.name)} ${item.sku ? `(${item.sku})` : ''} - Qty: ${item.quantity}` :
+                                  `Item ${itemIndex + 1} - Qty: ${item.quantity}`
+                                }
+                              </Text>
+                            </List.Item>
+                          ))}
+                        </List>
+                      </BlockStack>
+                    ) : (
+                      <Text as="span" variant="bodySm" tone="subdued">
+                        {result.processedItems || 0} items returned
+                      </Text>
+                    )}
+
+                    {/* Only show message for non-inventory-only returns or important messages */}
+                    {!result.isInventoryOnly && result.message && (
+                      <Text as="p" variant="bodySm" tone="subdued">
+                        {result.message}
+                      </Text>
+                    )}
                   </BlockStack>
                 </Card>
               ))}
@@ -151,24 +261,26 @@ export const BulkReturnResults: React.FC<BulkReturnResultsProps> = ({
         <Card>
           <BlockStack gap="400">
             <InlineStack gap="200" align="space-between">
-              <Text variant="headingMd" as="h3">
+              <Text as="h3" variant="headingMd">
                 Failed Returns ({failedResults.length})
               </Text>
               <Badge tone="critical">Issues</Badge>
             </InlineStack>
 
             <Banner tone="critical">
-              <p>The following returns could not be processed:</p>
+              <Text as="p" variant="bodyMd">
+                The following returns could not be processed:
+              </Text>
             </Banner>
 
             <List type="bullet">
               {failedResults.map((result, index) => (
                 <List.Item key={index}>
                   <BlockStack gap="100">
-                    <Text variant="bodyMd" fontWeight="semibold">
-                      {result.orderName}
+                    <Text as="span" variant="bodyMd" fontWeight="semibold">
+                      {formatOrderName(result.orderName)}
                     </Text>
-                    <Text variant="bodySm" tone="critical">
+                    <Text as="span" variant="bodySm" tone="critical">
                       {result.error || result.message}
                     </Text>
                   </BlockStack>
@@ -177,7 +289,9 @@ export const BulkReturnResults: React.FC<BulkReturnResultsProps> = ({
             </List>
 
             <Banner tone="info">
-              <p>You can try processing the failed orders individually or check the error messages for more details.</p>
+              <Text as="p" variant="bodyMd">
+                You can try processing the failed orders individually or check the error messages for more details.
+              </Text>
             </Banner>
           </BlockStack>
         </Card>

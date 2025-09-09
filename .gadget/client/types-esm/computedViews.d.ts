@@ -11,7 +11,7 @@ export interface ComputedViewWithoutVariables<Result> extends ComputedViewFuncti
         variables: Record<string, any>;
     };
 }
-export type ComputedViewFunctionWithVariables<Variables, Result> = (variables: Variables) => Promise<Result>;
+export type ComputedViewFunctionWithVariables<Variables, Result> = (variables?: Variables) => Promise<Result>;
 export interface ComputedViewWithVariables<Variables, Result> extends ComputedViewFunctionWithVariables<Variables, Result> {
     type: "computedView";
     operationName: string;
@@ -20,7 +20,7 @@ export interface ComputedViewWithVariables<Variables, Result> extends ComputedVi
     variables: VariablesOptions;
     variablesType: Variables;
     resultType: Result;
-    plan(variables: Variables): {
+    plan(variables?: Variables): {
         query: string;
         variables: Record<string, any>;
     };

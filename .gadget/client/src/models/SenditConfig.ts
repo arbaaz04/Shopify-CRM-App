@@ -347,7 +347,7 @@ export type SenditConfigManager = {
       * @example
       * * const senditConfigRecord = await api.senditConfig.create({
         *   accountType: "example value for accountType",
-        *   lastAuthenticated: "2025-06-01T00:00:00.000+00:00",
+        *   lastAuthenticated: "2025-09-01T00:00:00.000+00:00",
         *   publicKey: "encrypted secret",
         *   secretKey: "encrypted secret",
         *   shop: {
@@ -369,7 +369,7 @@ export type SenditConfigManager = {
       * * const senditConfigRecord = await api.senditConfig.create({
         *   senditConfig: {
         *     accountType: "example value for accountType",
-        *     lastAuthenticated: "2025-06-01T00:00:00.000+00:00",
+        *     lastAuthenticated: "2025-09-01T00:00:00.000+00:00",
         *     publicKey: "encrypted secret",
         *     secretKey: "encrypted secret",
         *     shop: {
@@ -444,7 +444,7 @@ export type SenditConfigManager = {
       * @example
       * * const senditConfigRecord = await api.senditConfig.update("1", {
         *   accountType: "example value for accountType",
-        *   lastAuthenticated: "2025-06-01T00:00:00.000+00:00",
+        *   lastAuthenticated: "2025-09-01T00:00:00.000+00:00",
         *   name: "example value for name",
         *   publicKey: "encrypted secret",
         *   secretKey: "encrypted secret",
@@ -464,7 +464,7 @@ export type SenditConfigManager = {
       * * const senditConfigRecord = await api.senditConfig.update("1", {
         *   senditConfig: {
         *     accountType: "example value for accountType",
-        *     lastAuthenticated: "2025-06-01T00:00:00.000+00:00",
+        *     lastAuthenticated: "2025-09-01T00:00:00.000+00:00",
         *     name: "example value for name",
         *     publicKey: "encrypted secret",
         *     secretKey: "encrypted secret",

@@ -1,30 +1,46 @@
 import { BuildDirectory } from "../remix/constants";
 import { FrontendType } from "./helpers";
 
-const getDefaultProductionBaseUrl = (assetsBucketDomain: string, applicationId: string, productionEnvironmentId: string): string => {
-  return `https://${assetsBucketDomain}/a/${applicationId}/${productionEnvironmentId}`;
+const getDefaultProductionBaseUrl = (
+  assetsBucketDomain: string,
+  applicationId: string,
+  productionEnvironmentId: string,
+  useSameDomainAssets: boolean = false
+): string => {
+  if (useSameDomainAssets) {
+    return `/api/assets/${applicationId}/${productionEnvironmentId}`;
+  } else {
+    return `https://${assetsBucketDomain}/a/${applicationId}/${productionEnvironmentId}`;
+  }
 };
 
 /** A descriptor object that describes how different Gadget frontend types work for our use when building vite configs */
-type InternalFrontendConfig = {
+export type InternalFrontendConfig = {
   distPath: string;
   manifestFilePaths: string[];
-  productionBaseUrl: (assetsBucketDomain: string, applicationId: string, productionEnvironmentId: string) => string;
+  productionBaseUrl: (
+    assetsBucketDomain: string,
+    applicationId: string,
+    productionEnvironmentId: string,
+    useSameDomainAssets: boolean
+  ) => string;
 };
 
 const BaseRemixFrontendConfig: InternalFrontendConfig = Object.freeze({
   distPath: `${BuildDirectory}/client`,
   manifestFilePaths: [`${BuildDirectory}/.vite/client-manifest.json`],
-  productionBaseUrl: (assetsBucketDomain: string, applicationId: string, productionEnvironmentId: string) => {
-    return `${getDefaultProductionBaseUrl(assetsBucketDomain, applicationId, productionEnvironmentId)}/`;
+  // Remix doesn't include the trailing slash in the base URL when building, so we need to add it manually
+  productionBaseUrl: (assetsBucketDomain: string, applicationId: string, productionEnvironmentId: string, useSameDomainAssets: boolean) => {
+    return `${getDefaultProductionBaseUrl(assetsBucketDomain, applicationId, productionEnvironmentId, useSameDomainAssets)}/`;
   },
 });
 
 const BaseReactRouterFrontendConfig: InternalFrontendConfig = Object.freeze({
   distPath: `${BuildDirectory}/client`,
   manifestFilePaths: [`${BuildDirectory}/client/.vite/manifest.json`],
-  productionBaseUrl: (assetsBucketDomain: string, applicationId: string, productionEnvironmentId: string) => {
-    return `${getDefaultProductionBaseUrl(assetsBucketDomain, applicationId, productionEnvironmentId)}/`;
+  // React Router doesn't include the trailing slash in the base URL when building, so we need to add it manually
+  productionBaseUrl: (assetsBucketDomain: string, applicationId: string, productionEnvironmentId: string, useSameDomainAssets: boolean) => {
+    return `${getDefaultProductionBaseUrl(assetsBucketDomain, applicationId, productionEnvironmentId, useSameDomainAssets)}/`;
   },
 });
 

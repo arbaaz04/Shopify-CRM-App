@@ -57,7 +57,7 @@ export const doesViteConfigHasGadgetPlugin = (config)=>{
     }) ?? false;
 };
 export const getViteConfig = async (config, { command, mode, isSsrBuild }, options)=>{
-    const { assetsBucketDomain, applicationId, productionEnvironmentId } = options.params;
+    const { assetsBucketDomain, applicationId, productionEnvironmentId, useSameDomainAssets } = options.params;
     const type = getFrontendTypeByPluginsUsed(config);
     const frontendConfig = getInternalFrontendConfig(type);
     config.envPrefix = VITE_PUBLIC_ENV_PREFIXES;
@@ -95,8 +95,7 @@ export const getViteConfig = async (config, { command, mode, isSsrBuild }, optio
         });
         await fs.writeFile(frontendTypeIndicatorFilePath, type);
         // Serve the assets from the Gadget CDN in production
-        config.base = frontendConfig.productionBaseUrl(assetsBucketDomain, applicationId, productionEnvironmentId);
-        // Remix doesn't include the trailing slash in the base URL when building, so we need to add it manually
+        config.base = frontendConfig.productionBaseUrl(assetsBucketDomain, applicationId, productionEnvironmentId, useSameDomainAssets);
         if (isRemixOrReactRouterFrameworkType(type)) {
             const parentDirectory = path.join(BuildDirectory, "..");
             await fs.mkdir(parentDirectory, {
@@ -104,14 +103,6 @@ export const getViteConfig = async (config, { command, mode, isSsrBuild }, optio
             });
             await fs.writeFile(path.join(parentDirectory, "package.json"), `{"type": "module"}`);
         }
-    }
-    if (command === "serve" && type === "react-router-framework") {
-        // Eagerly optimize the dependencies of the frontend routes when running in dev mode
-        config.optimizeDeps = {
-            entries: [
-                "web/routes/**/*.{jsx,tsx}"
-            ]
-        };
     }
     return {
         config,
@@ -211,5 +202,6 @@ export const VITE_PUBLIC_ENV_PREFIXES = [
     "GADGET_PUBLIC_",
     "VITE_",
     "GADGET_APP",
-    "GADGET_ENV"
+    "GADGET_ENV",
+    "GADGET_ENV_ID"
 ];

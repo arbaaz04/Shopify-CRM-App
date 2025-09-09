@@ -5,12 +5,19 @@ import { Logger } from "./AmbientContext.js";
 import { AppConfiguration } from "./AppConfiguration.js";
 import { AppConnections } from "./AppConnections.js";
 import { Session } from "./Session.js";
-import { GadgetConfig } from "./types.js";
+import { CORSRouteOptions, GadgetConfig } from "./types.js";
 /**
 * Extend the fastify request type with our added decorations like `.api`, `.emails`, etc
 * See https://fastify.dev/docs/latest/Reference/TypeScript#creating-type-definitions-for-a-fastify-plugin
 **/
 declare module "fastify" {
+	interface FastifyInstance {
+		/**
+		* Add automatic CORS request handlers for all routes added to this scope
+		* @see {CORSRouteOptions} for options
+		*/
+		setScopeCORS(scopeOptions?: CORSRouteOptions | boolean): void;
+	}
 	interface FastifyRequest {
 		/** The current request's session, if it has one. Requests made by browsers are given sessions, but requests made using Gadget API Keys are not. */
 		session: Session | null;
@@ -44,6 +51,13 @@ declare module "fastify" {
 		applicationSessionID?: string;
 	}
 	interface FastifyReply {}
+	interface RouteShorthandOptions {
+		/**
+		* Add automatic CORS request handlers for this route
+		* @see {CORSRouteOptions} for options
+		*/
+		cors?: CORSRouteOptions | boolean;
+	}
 }
 /** A server instance, for hooking into various events, decorating requests, and so on.  */
 export type Server = FastifyInstance;

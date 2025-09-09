@@ -114,7 +114,7 @@ export interface ShopifyCustomersCreatePayload {
 		zip: string
 		[k: string]: unknown
 	};
-	email: string;
+	email: null | string;
 	first_name: string;
 	id: number;
 	last_name: string;
@@ -267,7 +267,7 @@ export interface ShopifyCustomersUpdatePayload {
 		zip: string
 		[k: string]: unknown
 	};
-	email: string;
+	email: null | string;
 	first_name: string;
 	id: number;
 	last_name: string;
@@ -1417,9 +1417,9 @@ export interface ShopifyOrdersCreatePayload {
 			country_name: string
 			customer_id: number
 			default: boolean
-			first_name: null | string
+			first_name: string
 			id: number
-			last_name: null | string
+			last_name: string
 			name: string
 			phone: string
 			province: string
@@ -2209,9 +2209,9 @@ export interface ShopifyOrdersUpdatedPayload {
 			country_name: string
 			customer_id: number
 			default: boolean
-			first_name: null | string
+			first_name: string
 			id: number
-			last_name: null | string
+			last_name: string
 			name: string
 			phone: string
 			province: string
@@ -3158,7 +3158,7 @@ export interface ShopifyShopUpdateTrigger extends ShopifyWebhookActionTrigger {
 /**
 * Union type of all Shopify webhook payloads
 */
-export type ShopifyWebhookTrigger = ShopifyAppUninstalledTrigger | ShopifyCustomersCreateTrigger | ShopifyCustomersDataRequestTrigger | ShopifyCustomersDeleteTrigger | ShopifyCustomersRedactTrigger | ShopifyCustomersUpdateTrigger | ShopifyFulfillmentOrdersCancellationRequestAcceptedTrigger | ShopifyFulfillmentOrdersCancellationRequestRejectedTrigger | ShopifyFulfillmentOrdersCancellationRequestSubmittedTrigger | ShopifyFulfillmentOrdersCancelledTrigger | ShopifyFulfillmentOrdersFulfillmentRequestAcceptedTrigger | ShopifyFulfillmentOrdersFulfillmentRequestRejectedTrigger | ShopifyFulfillmentOrdersFulfillmentRequestSubmittedTrigger | ShopifyFulfillmentOrdersFulfillmentServiceFailedToCompleteTrigger | ShopifyFulfillmentOrdersHoldReleasedTrigger | ShopifyFulfillmentOrdersLineItemsPreparedForLocalDeliveryTrigger | ShopifyFulfillmentOrdersLineItemsPreparedForPickupTrigger | ShopifyFulfillmentOrdersMergedTrigger | ShopifyFulfillmentOrdersMovedTrigger | ShopifyFulfillmentOrdersOrderRoutingCompleteTrigger | ShopifyFulfillmentOrdersPlacedOnHoldTrigger | ShopifyFulfillmentOrdersRescheduledTrigger | ShopifyFulfillmentOrdersScheduledFulfillmentOrderReadyTrigger | ShopifyFulfillmentOrdersSplitTrigger | ShopifyFulfillmentsCreateTrigger | ShopifyFulfillmentsUpdateTrigger | ShopifyOrdersCreateTrigger | ShopifyOrdersDeleteTrigger | ShopifyOrdersRiskAssessmentChangedTrigger | ShopifyOrdersUpdatedTrigger | ShopifyProductsCreateTrigger | ShopifyProductsDeleteTrigger | ShopifyProductsUpdateTrigger | ShopifyShopRedactTrigger | ShopifyShopUpdateTrigger;
+export type ShopifyWebhookTrigger = ShopifyAppUninstalledTrigger | ShopifyCustomersDataRequestTrigger | ShopifyCustomersRedactTrigger | ShopifyCustomersCreateTrigger | ShopifyCustomersDeleteTrigger | ShopifyCustomersUpdateTrigger | ShopifyFulfillmentOrdersCancellationRequestAcceptedTrigger | ShopifyFulfillmentOrdersCancellationRequestRejectedTrigger | ShopifyFulfillmentOrdersCancellationRequestSubmittedTrigger | ShopifyFulfillmentOrdersCancelledTrigger | ShopifyFulfillmentOrdersFulfillmentRequestAcceptedTrigger | ShopifyFulfillmentOrdersFulfillmentRequestRejectedTrigger | ShopifyFulfillmentOrdersFulfillmentRequestSubmittedTrigger | ShopifyFulfillmentOrdersFulfillmentServiceFailedToCompleteTrigger | ShopifyFulfillmentOrdersHoldReleasedTrigger | ShopifyFulfillmentOrdersLineItemsPreparedForLocalDeliveryTrigger | ShopifyFulfillmentOrdersLineItemsPreparedForPickupTrigger | ShopifyFulfillmentOrdersMergedTrigger | ShopifyFulfillmentOrdersMovedTrigger | ShopifyFulfillmentOrdersOrderRoutingCompleteTrigger | ShopifyFulfillmentOrdersPlacedOnHoldTrigger | ShopifyFulfillmentOrdersRescheduledTrigger | ShopifyFulfillmentOrdersScheduledFulfillmentOrderReadyTrigger | ShopifyFulfillmentOrdersSplitTrigger | ShopifyFulfillmentsCreateTrigger | ShopifyFulfillmentsUpdateTrigger | ShopifyOrdersCreateTrigger | ShopifyProductsCreateTrigger | ShopifyProductsDeleteTrigger | ShopifyProductsUpdateTrigger | ShopifyShopRedactTrigger | ShopifyShopUpdateTrigger | ShopifyOrdersDeleteTrigger | ShopifyOrdersRiskAssessmentChangedTrigger | ShopifyOrdersUpdatedTrigger;
 /**
 * Shopify webhook payload for a specific topic
 */

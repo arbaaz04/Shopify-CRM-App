@@ -278,6 +278,7 @@ interface ActionParams {
   reason?: string;
   notify?: boolean;
   skipRefund?: boolean;
+  inventoryOnlyReturn?: boolean;
 }
 
 interface ActionContext {
@@ -296,10 +297,16 @@ export const run = async ({ params, api, logger, connections }: ActionContext) =
       refundShipping = false,
       reason = "Customer return",
       notify = true,
-      skipRefund = false
+      skipRefund = false,
+      inventoryOnlyReturn = false
     } = params;
 
-    logger.info('Processing return for order', { orderId, lineItems: lineItems.length, skipRefund });
+    logger.info('Processing return for order', { 
+      orderId, 
+      lineItems: lineItems.length, 
+      skipRefund, 
+      inventoryOnlyReturn 
+    });
 
     // Validate required parameters
     if (!orderId || !shopId || !lineItems || lineItems.length === 0) {
@@ -309,9 +316,9 @@ export const run = async ({ params, api, logger, connections }: ActionContext) =
       };
     }
 
-    // First, calculate the refund to validate everything (unless skipping refund)
+    // First, calculate the refund to validate everything (unless skipping refund or doing inventory-only return)
     let calculationResult;
-    if (!skipRefund) {
+    if (!skipRefund && !inventoryOnlyReturn) {
       calculationResult = await api.calculateRefund({
         orderId,
         shopId,
@@ -321,7 +328,51 @@ export const run = async ({ params, api, logger, connections }: ActionContext) =
       });
 
       if (!calculationResult.success) {
+        // If this is an insufficient refund amount error, return structured data for the frontend to handle
+        if (calculationResult.error && calculationResult.error.includes('exceeds remaining refundable amount')) {
+          // Extract amounts from error message
+          const errorMatch = calculationResult.error.match(/Refund amount \(([0-9.]+)\) exceeds remaining refundable amount \(([0-9.]+)\)/);
+          if (errorMatch) {
+            return {
+              success: false,
+              error: calculationResult.error,
+              errorType: 'INSUFFICIENT_REFUND_AMOUNT',
+              orderName: calculationResult.calculation?.orderName || `Order ${orderId}`,
+              currency: calculationResult.calculation?.currency || 'MAD',
+              refundDetails: {
+                requestedAmount: parseFloat(errorMatch[1]),
+                availableAmount: parseFloat(errorMatch[2]),
+                currency: calculationResult.calculation?.currency || 'MAD'
+              }
+            };
+          }
+        }
         return calculationResult;
+      }
+    } else if (inventoryOnlyReturn) {
+      // For inventory-only returns, we need to calculate available refund amount but proceed with limited refund
+      logger.info('Processing inventory-only return - calculating available refund amount', { orderId });
+      
+      const limitedCalculationResult = await api.calculateRefund({
+        orderId,
+        shopId,
+        lineItems,
+        refundShipping,
+        reason
+      });
+
+      if (limitedCalculationResult.success) {
+        calculationResult = limitedCalculationResult;
+      } else {
+        // Even if calculation fails due to insufficient funds, we can still process inventory-only return
+        // by using the skipRefund approach with 0 refund amount
+        logger.warn('Refund calculation failed for inventory-only return, processing with skipRefund approach', { 
+          orderId, 
+          error: limitedCalculationResult.error 
+        });
+        
+        // Set calculationResult to null to trigger the skipRefund path below
+        calculationResult = null;
       }
     } else {
       // For skip refund, we still need basic order info for sheets update
@@ -422,7 +473,25 @@ export const run = async ({ params, api, logger, connections }: ActionContext) =
       });
     }
 
-    const calculation = calculationResult.calculation;
+    // Ensure we have a valid calculation result (except for skipRefund or failed inventory-only returns)
+    if (!calculationResult || !calculationResult.calculation) {
+      if (skipRefund || inventoryOnlyReturn) {
+        logger.info('No calculation result for skipRefund or inventoryOnlyReturn - proceeding with sheets update only', { 
+          orderId, 
+          skipRefund, 
+          inventoryOnlyReturn 
+        });
+        // We'll handle this case in the sheets update section below
+      } else {
+        logger.error('No valid calculation result available', { orderId, hasCalculationResult: !!calculationResult });
+        return {
+          success: false,
+          error: "Failed to calculate refund or get order information"
+        };
+      }
+    }
+
+    const calculation = calculationResult?.calculation;
 
     // Use Shopify GraphQL API to create the refund
     const shopifyApi = await connections.shopify.forShopId(shopId);
@@ -481,14 +550,160 @@ export const run = async ({ params, api, logger, connections }: ActionContext) =
 
     let createdRefund = null;
     let actualRefundAmount = 0;
+    let effectiveRefundAmount = 0;
+    let refundNote = reason;
+    let shouldSkipRefund = skipRefund;
+    let currency = 'MAD'; // Default currency, will be updated from calculation if available
+    let refundLineItems: any[] = []; // Will store line items for refund processing
+    
+    // Extract currency and lineItems from calculation if available
+    if (calculation && calculation.currency) {
+      currency = calculation.currency;
+    }
+    if (calculation && calculation.lineItems) {
+      refundLineItems = calculation.lineItems;
+    } else {
+      // For inventory-only returns without calculation, we need to get product names from Shopify
+      logger.info('Getting product information for line items from Shopify API', { orderId });
+      
+      try {
+        // Get the shop to ensure we have access
+        const shop = await api.shopifyShop.findFirst({
+          filter: { id: { equals: shopId } }
+        });
 
-    if (!skipRefund) {
+        if (shop) {
+          // Use Shopify GraphQL API to get line item details
+          const shopifyApi = await connections.shopify.forShopId(shopId);
+
+          const orderQuery = `
+            query GetOrderLineItems($id: ID!) {
+              order(id: $id) {
+                lineItems(first: 50) {
+                  edges {
+                    node {
+                      id
+                      name
+                      sku
+                      quantity
+                      originalUnitPriceSet {
+                        shopMoney {
+                          amount
+                          currencyCode
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          `;
+
+          const result = await shopifyApi.graphql(orderQuery, {
+            id: `gid://shopify/Order/${orderId}`
+          });
+
+          const orderData = result.data?.order || result.body?.data?.order;
+          if (orderData && orderData.lineItems) {
+            const shopifyLineItems = orderData.lineItems.edges.map((edge: any) => edge.node);
+            
+            // Map our requested line items to Shopify line items to get names and prices
+            refundLineItems = lineItems.map(item => {
+              const shopifyItem = shopifyLineItems.find((sItem: any) => 
+                sItem.id === item.lineItemId || 
+                sItem.id === `gid://shopify/LineItem/${item.lineItemId}`
+              );
+              
+              return {
+                lineItemId: item.lineItemId,
+                quantity: item.quantity,
+                name: shopifyItem?.name || `Unknown Item`,
+                sku: shopifyItem?.sku || '',
+                unitPrice: shopifyItem?.originalUnitPriceSet?.shopMoney?.amount ? parseFloat(shopifyItem.originalUnitPriceSet.shopMoney.amount) : 0,
+                totalAmount: 0 // Will be calculated later
+              };
+            });
+
+            logger.info('Successfully retrieved line item details from Shopify', {
+              orderId,
+              lineItemsCount: refundLineItems.length,
+              itemsWithNames: refundLineItems.filter(item => item.name !== 'Unknown Item').length
+            });
+          } else {
+            throw new Error('Could not retrieve order line items from Shopify');
+          }
+        } else {
+          throw new Error('Shop not found');
+        }
+      } catch (error) {
+        logger.warn('Failed to get product information from Shopify, using fallback', {
+          orderId,
+          error: error instanceof Error ? error.message : String(error)
+        });
+        
+        // Create fallback line items from the original request
+        refundLineItems = lineItems.map(item => ({
+          lineItemId: item.lineItemId,
+          quantity: item.quantity,
+          name: `Line Item ${item.lineItemId}`,
+          sku: '',
+          unitPrice: 0,
+          totalAmount: 0
+        }));
+      }
+    }
+
+    if (!shouldSkipRefund && !inventoryOnlyReturn) {
+      // Normal refund processing
+      if (!calculation) {
+        return {
+          success: false,
+          error: "No calculation data available for refund processing"
+        };
+      }
+
+      // For normal returns, process the full refund
+      effectiveRefundAmount = calculation.totalRefundAmount;
+
       // Since shopify-api-node doesn't support REST, use fetch directly for REST API
       logger.info('Creating refund using direct REST API call', {
         orderId,
-        refundAmount: calculation.totalRefundAmount,
-        lineItemsCount: calculation.lineItems.length
+        refundAmount: effectiveRefundAmount,
+        lineItemsCount: refundLineItems.length
       });
+    } else if (inventoryOnlyReturn && calculation) {
+      // For inventory-only returns with successful calculation, refund available amount
+      effectiveRefundAmount = calculation.remainingRefundable > 0 ? calculation.remainingRefundable : 0;
+      refundNote = `${reason} (Inventory-only return: refunded available amount of ${currency} ${effectiveRefundAmount.toFixed(2)})`;
+      
+      if (effectiveRefundAmount > 0) {
+        logger.info('Processing inventory-only return with partial refund', {
+          orderId,
+          availableAmount: calculation.remainingRefundable,
+          effectiveAmount: effectiveRefundAmount
+        });
+
+        // Process the partial refund
+        logger.info('Creating partial refund for inventory-only return', {
+          orderId,
+          refundAmount: effectiveRefundAmount,
+          lineItemsCount: refundLineItems.length
+        });
+      } else {
+        logger.info('Processing inventory-only return with no refund (no available amount)', {
+          orderId,
+          availableAmount: calculation.remainingRefundable
+        });
+        // Skip refund processing but continue with inventory update
+        shouldSkipRefund = true;
+      }
+    } else if (inventoryOnlyReturn && !calculation) {
+      // For inventory-only returns without calculation, skip refund but update inventory
+      logger.info('Processing inventory-only return without refund (no calculation available)', { orderId });
+      shouldSkipRefund = true;
+    }
+
+    if (!shouldSkipRefund) {
 
       // Get the access token from the shopify connection
       const accessToken = shopifyApi.accessToken || shopifyApi.options?.accessToken;
@@ -551,10 +766,10 @@ export const run = async ({ params, api, logger, connections }: ActionContext) =
       // Prepare REST API refund data with parent transaction
       const refundPayload: any = {
         refund: {
-          currency: calculation.currency,
+          currency: currency,
           notify: notify,
-          note: reason,
-          refund_line_items: calculation.lineItems.map((item: any) => ({
+          note: refundNote,
+          refund_line_items: refundLineItems.map((item: any) => ({
             line_item_id: item.lineItemId.replace('gid://shopify/LineItem/', ''),
             quantity: item.quantity,
             restock_type: "return",
@@ -563,8 +778,8 @@ export const run = async ({ params, api, logger, connections }: ActionContext) =
           transactions: [
             {
               parent_id: originalTransaction.id,
-              amount: calculation.totalRefundAmount.toFixed(2),
-              currency: calculation.currency,
+              amount: effectiveRefundAmount.toFixed(2),
+              currency: currency,
               kind: "refund",
               gateway: originalTransaction.gateway
             }
@@ -582,7 +797,8 @@ export const run = async ({ params, api, logger, connections }: ActionContext) =
       logger.info('Making direct REST API call to Shopify', {
         orderId,
         shopDomain,
-        refundAmount: calculation.totalRefundAmount,
+        refundAmount: effectiveRefundAmount,
+        originalRequestedAmount: calculation.totalRefundAmount,
         payload: JSON.stringify(refundPayload, null, 2)
       });
 
@@ -646,30 +862,32 @@ export const run = async ({ params, api, logger, connections }: ActionContext) =
           actualRefundAmount = parseFloat(createdRefund.amount);
         }
 
-        // If REST API doesn't return amount correctly, use our calculated amount
+        // If REST API doesn't return amount correctly, use our effective amount
         if (actualRefundAmount === 0 || isNaN(actualRefundAmount)) {
-          actualRefundAmount = calculation.totalRefundAmount;
-          logger.warn('Using calculated amount as REST API response amount was invalid', {
+          actualRefundAmount = effectiveRefundAmount;
+          logger.warn('Using effective amount as REST API response amount was invalid', {
             restApiAmount: createdRefund.amount,
-            calculatedAmount: calculation.totalRefundAmount
+            effectiveAmount: effectiveRefundAmount,
+            originalCalculated: calculation.totalRefundAmount
           });
         }
       } catch (error) {
-        // Fallback to calculated amount
-        actualRefundAmount = calculation.totalRefundAmount;
-        logger.warn('Error parsing REST API refund amount, using calculated amount', {
+        // Fallback to effective amount
+        actualRefundAmount = effectiveRefundAmount;
+        logger.warn('Error parsing REST API refund amount, using effective amount', {
           error: error instanceof Error ? error.message : String(error),
-          calculatedAmount: calculation.totalRefundAmount
+          effectiveAmount: effectiveRefundAmount,
+          originalCalculated: calculation.totalRefundAmount
         });
       }
 
       logger.info('Refund created - comparing amounts', {
         orderId,
         refundId: createdRefund.id,
-        expectedAmount: calculation.totalRefundAmount,
+        expectedAmount: calculation ? calculation.totalRefundAmount : effectiveRefundAmount,
         actualAmount: actualRefundAmount,
-        difference: actualRefundAmount - calculation.totalRefundAmount,
-        currency: calculation.currency
+        difference: actualRefundAmount - (calculation ? calculation.totalRefundAmount : effectiveRefundAmount),
+        currency: currency
       });
     } else {
       // For payment pending orders, we still need to restock items but without monetary refund
@@ -693,10 +911,10 @@ export const run = async ({ params, api, logger, connections }: ActionContext) =
       // Create a restock-only refund (no monetary refund, just restocking)
       const restockPayload: any = {
         refund: {
-          currency: calculation.currency,
+          currency: currency,
           notify: false, // Don't notify for restock-only
           note: `${reason} (Payment Pending - Restock Only)`,
-          refund_line_items: calculation.lineItems.map((item: any) => ({
+          refund_line_items: refundLineItems.map((item: any) => ({
             line_item_id: item.lineItemId.replace('gid://shopify/LineItem/', ''),
             quantity: item.quantity,
             restock_type: "return",
@@ -752,9 +970,32 @@ export const run = async ({ params, api, logger, connections }: ActionContext) =
 
     // Update Google Sheets with return information
     try {
+      // For inventory-only returns without calculation, we need to get basic order info
+      let orderName = calculation?.orderName;
+      let returnLineItems = calculation?.lineItems;
+
+      if (!orderName || !returnLineItems) {
+        // Get basic order information for sheets update
+        logger.info('Getting basic order info for sheets update (no calculation available)', { orderId });
+        
+        const order = await api.shopifyOrder.findFirst({
+          filter: { id: { equals: orderId } }
+        });
+
+        orderName = order?.name || `Order ${orderId}`;
+        
+        // Create basic line items for sheets update
+        returnLineItems = lineItems.map(refundItem => ({
+          lineItemId: refundItem.lineItemId,
+          name: 'Item', // Basic name since we don't have detailed info
+          quantity: refundItem.quantity,
+          sku: '' // We don't have SKU info without calculation
+        }));
+      }
+
       logger.info('Starting Google Sheets update with "On Stock" status', {
-        orderName: calculation.orderName,
-        lineItems: calculation.lineItems.map((item: any) => ({
+        orderName,
+        lineItems: returnLineItems.map((item: any) => ({
           lineItemId: item.lineItemId,
           name: item.name,
           quantity: item.quantity,
@@ -765,53 +1006,64 @@ export const run = async ({ params, api, logger, connections }: ActionContext) =
       });
 
       await updateGoogleSheetsWithReturn(
-        calculation.orderName,
-        calculation.lineItems,
+        orderName,
+        returnLineItems,
         shopId,
         api,
         logger
       );
 
       logger.info('Successfully completed Google Sheets update with "On Stock" status', {
-        orderName: calculation.orderName,
-        returnedItems: calculation.lineItems.length,
+        orderName,
+        returnedItems: returnLineItems.length,
         timestamp: new Date().toISOString()
       });
     } catch (sheetsError) {
       logger.error('Failed to update Google Sheets with return information', {
         error: sheetsError instanceof Error ? sheetsError.message : String(sheetsError),
         stack: sheetsError instanceof Error ? sheetsError.stack : undefined,
-        orderName: calculation.orderName,
+        orderName: calculation?.orderName || `Order ${orderId}`,
         shopId
       });
       // Don't fail the entire return process if sheets update fails
     }
 
+    // Determine final currency and order name
+    const finalCurrency = calculation?.currency || 'MAD';
+    const finalOrderName = calculation?.orderName || `#${orderId}`;
+
     return {
       success: true,
-      message: skipRefund
-        ? `Return processed successfully without refund (payment pending). Items have been automatically restocked to inventory.`
-        : `Refund of ${actualRefundAmount.toFixed(2)} ${calculation.currency} processed successfully. Items have been automatically restocked to inventory.`,
+      message: shouldSkipRefund
+        ? `Return processed successfully. Items have been automatically restocked to inventory.`
+        : `Refund of ${actualRefundAmount.toFixed(2)} ${finalCurrency} processed successfully. Items have been automatically restocked to inventory.`,
+      isInventoryOnly: inventoryOnlyReturn || (shouldSkipRefund && actualRefundAmount === 0),
       refund: createdRefund ? {
         id: createdRefund.id,
         orderId,
-        orderName: calculation.orderName,
+        orderName: finalOrderName,
         amount: actualRefundAmount,
-        currency: calculation.currency,
-        lineItems: (createdRefund.refund_line_items || []).map((item: any) => ({
-          id: item.id,
-          lineItemId: item.line_item_id,
-          quantity: item.quantity
+        currency: finalCurrency,
+        lineItems: refundLineItems.map((item: any) => ({
+          name: item.name || 'Unknown Item',
+          sku: item.sku || '',
+          quantity: item.quantity,
+          price: item.unitPrice || 0,
+          lineItemId: item.lineItemId
         })),
         reason,
         createdAt: createdRefund.created_at || new Date().toISOString()
       } : {
         id: null,
         orderId,
-        orderName: calculation.orderName,
+        orderName: finalOrderName,
         amount: 0,
-        currency: calculation.currency,
-        lineItems: calculation.lineItems.map((item: any) => ({
+        currency: finalCurrency,
+        lineItems: calculation?.lineItems?.map((item: any) => ({
+          id: null,
+          lineItemId: item.lineItemId,
+          quantity: item.quantity
+        })) || lineItems.map(item => ({
           id: null,
           lineItemId: item.lineItemId,
           quantity: item.quantity
@@ -868,6 +1120,10 @@ export const params = {
     required: false
   },
   skipRefund: {
+    type: "boolean",
+    required: false
+  },
+  inventoryOnlyReturn: {
     type: "boolean",
     required: false
   }

@@ -42,7 +42,7 @@ export interface CreateCustomCityActionContext extends AmbientContext {
   * An object containing the incoming data(this models fields) passed by triggers or user inputs.
   */
   params: {
-customCity?: { name?: string;courierType?: string;isActive?: boolean;addedAt?: Date;shop?: { _link: string | null }; };
+customCity?: { isActive?: boolean;addedAt?: Date;courierType?: string;name?: string;shop?: { _link: string | null }; };
 };
   /**
   * @private The context of this action.
@@ -74,7 +74,7 @@ export interface UpdateCustomCityActionContext extends AmbientContext {
   * An object containing the incoming data(this models fields) passed by triggers or user inputs.
   */
   params: {
-customCity?: { name?: string;courierType?: string;isActive?: boolean;addedAt?: Date;shop?: { _link: string | null }; };    
+customCity?: { isActive?: boolean;addedAt?: Date;courierType?: string;name?: string;shop?: { _link: string | null }; };    
 id?: string;
 };
   /**

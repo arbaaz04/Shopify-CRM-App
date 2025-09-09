@@ -267,7 +267,16 @@ export const run = async ({ params, api, logger, connections }: ActionContext) =
     if (totalRefundAmount > remainingRefundable) {
       return {
         success: false,
-        error: `Refund amount (${totalRefundAmount.toFixed(2)}) exceeds remaining refundable amount (${remainingRefundable.toFixed(2)})`
+        error: `Refund amount (${totalRefundAmount.toFixed(2)}) exceeds remaining refundable amount (${remainingRefundable.toFixed(2)})`,
+        calculation: {
+          orderId,
+          orderName: orderData.name,
+          currency: orderData.totalPriceSet.shopMoney.currencyCode,
+          totalRefundAmount,
+          orderTotal,
+          existingRefunds: totalExistingRefunds,
+          remainingRefundable
+        }
       };
     }
 

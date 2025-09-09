@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { InconsolataFont, overlayTemplate } from "../core/errors/overlay";
 
-const ErrorBoundaryContainer = ({ children }: { children: React.ReactNode }): JSX.Element => {
+const ErrorBoundaryContainer = ({ children }: { children: React.ReactNode }):JSX.Element=> {
   return (
     <html>
       <head>
@@ -12,7 +12,7 @@ const ErrorBoundaryContainer = ({ children }: { children: React.ReactNode }): JS
   );
 };
 
-export const ProductionErrorPage = (): JSX.Element => {
+export const ProductionErrorPage = ():JSX.Element=> {
   return (
     <ErrorBoundaryContainer>
       <head>
@@ -49,7 +49,7 @@ export const ProductionErrorPage = (): JSX.Element => {
   );
 };
 
-export function DevelopmentErrorBoundary({ error }: { error: { status: number; statusText: string; data: any } | Error }): JSX.Element {
+export function DevelopmentErrorBoundary({ error }: { error: { status: number; statusText: string; data: any } | Error }):JSX.Element{
   let title: string;
   let data: string | undefined;
 

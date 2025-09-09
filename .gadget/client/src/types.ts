@@ -71,7 +71,7 @@ export type AvailableGadgetFieldValidationUnionSelection = GadgetRegexFieldValid
 export type ShopifyOrderCancelReasonEnum = "CUSTOMER" | "DECLINED" | "FRAUD" | "INVENTORY" | "OTHER" | "STAFF" | string;
 
 /** Represents the possible values of the Currency enum. */
-export type ShopifyOrderCurrencyEnum = "AED" | "AFN" | "ALL" | "AMD" | "ANG" | "AOA" | "ARS" | "AUD" | "AWG" | "AZN" | "BAM" | "BBD" | "BDT" | "BGN" | "BHD" | "BIF" | "BMD" | "BND" | "BOB" | "BRL" | "BSD" | "BTN" | "BWP" | "BYN" | "BYR" | "BZD" | "CAD" | "CDF" | "CHF" | "CLP" | "CNY" | "COP" | "CRC" | "CVE" | "CZK" | "DJF" | "DKK" | "DOP" | "DZD" | "EGP" | "ERN" | "ETB" | "EUR" | "FJD" | "FKP" | "GBP" | "GEL" | "GHS" | "GIP" | "GMD" | "GNF" | "GTQ" | "GYD" | "HKD" | "HNL" | "HRK" | "HTG" | "HUF" | "IDR" | "ILS" | "INR" | "IQD" | "IRR" | "ISK" | "JEP" | "JMD" | "JOD" | "JPY" | "KES" | "KGS" | "KHR" | "KID" | "KMF" | "KRW" | "KWD" | "KYD" | "KZT" | "LAK" | "LBP" | "LKR" | "LRD" | "LSL" | "LTL" | "LVL" | "LYD" | "MAD" | "MDL" | "MGA" | "MKD" | "MMK" | "MNT" | "MOP" | "MRU" | "MUR" | "MVR" | "MWK" | "MXN" | "MYR" | "MZN" | "NAD" | "NGN" | "NIO" | "NOK" | "NPR" | "NZD" | "OMR" | "PAB" | "PEN" | "PGK" | "PHP" | "PKR" | "PLN" | "PYG" | "QAR" | "RON" | "RSD" | "RUB" | "RWF" | "SAR" | "SBD" | "SCR" | "SDG" | "SEK" | "SGD" | "SHP" | "SLL" | "SOS" | "SRD" | "SSP" | "STD" | "SYP" | "SZL" | "THB" | "TJS" | "TMT" | "TND" | "TOP" | "TRY" | "TTD" | "TWD" | "TZS" | "UAH" | "UGX" | "USD" | "UYU" | "UZS" | "VEF" | "VES" | "VND" | "VUV" | "WST" | "XAF" | "XCD" | "XOF" | "XPF" | "XXX" | "YER" | "ZAR" | "ZMW" | string;
+export type ShopifyOrderCurrencyEnum = "AED" | "AFN" | "ALL" | "AMD" | "ANG" | "AOA" | "ARS" | "AUD" | "AWG" | "AZN" | "BAM" | "BBD" | "BDT" | "BGN" | "BHD" | "BIF" | "BMD" | "BND" | "BOB" | "BRL" | "BSD" | "BTN" | "BWP" | "BYN" | "BYR" | "BZD" | "CAD" | "CDF" | "CHF" | "CLP" | "CNY" | "COP" | "CRC" | "CVE" | "CZK" | "DJF" | "DKK" | "DOP" | "DZD" | "EGP" | "ERN" | "ETB" | "EUR" | "FJD" | "FKP" | "GBP" | "GEL" | "GHS" | "GIP" | "GMD" | "GNF" | "GTQ" | "GYD" | "HKD" | "HNL" | "HRK" | "HTG" | "HUF" | "IDR" | "ILS" | "INR" | "IQD" | "IRR" | "ISK" | "JEP" | "JMD" | "JOD" | "JPY" | "KES" | "KGS" | "KHR" | "KID" | "KMF" | "KRW" | "KWD" | "KYD" | "KZT" | "LAK" | "LBP" | "LKR" | "LRD" | "LSL" | "LTL" | "LVL" | "LYD" | "MAD" | "MDL" | "MGA" | "MKD" | "MMK" | "MNT" | "MOP" | "MRU" | "MUR" | "MVR" | "MWK" | "MXN" | "MYR" | "MZN" | "NAD" | "NGN" | "NIO" | "NOK" | "NPR" | "NZD" | "OMR" | "PAB" | "PEN" | "PGK" | "PHP" | "PKR" | "PLN" | "PYG" | "QAR" | "RON" | "RSD" | "RUB" | "RWF" | "SAR" | "SBD" | "SCR" | "SDG" | "SEK" | "SGD" | "SHP" | "SLL" | "SOS" | "SRD" | "SSP" | "STD" | "SYP" | "SZL" | "THB" | "TJS" | "TMT" | "TND" | "TOP" | "TRY" | "TTD" | "TWD" | "TZS" | "UAH" | "UGX" | "USD" | "UYU" | "UZS" | "VEF" | "VES" | "VND" | "VUV" | "WST" | "XAF" | "XCD" | "XOF" | "XPF" | "XXX" | "YER" | "ZAR" | "ZMW" | "STN" | "USDC" | "VED" | string;
 
 /** Represents the possible values of the Financial Status enum. */
 export type ShopifyOrderFinancialStatusEnum = "AUTHORIZED" | "EXPIRED" | "PAID" | "PARTIALLY_PAID" | "PARTIALLY_REFUNDED" | "PENDING" | "REFUNDED" | "VOIDED" | string;
@@ -80,16 +80,16 @@ export type ShopifyOrderFinancialStatusEnum = "AUTHORIZED" | "EXPIRED" | "PAID" 
 export type ShopifyOrderFulfillmentStatusEnum = "FULFILLED" | "IN_PROGRESS" | "ON_HOLD" | "OPEN" | "PARTIALLY_FULFILLED" | "PENDING_FULFILLMENT" | "REQUEST_DECLINED" | "RESTOCKED" | "SCHEDULED" | "UNFULFILLED" | string;
 
 /** Represents the possible values of the Presentment Currency enum. */
-export type ShopifyOrderPresentmentCurrencyEnum = "AED" | "AFN" | "ALL" | "AMD" | "ANG" | "AOA" | "ARS" | "AUD" | "AWG" | "AZN" | "BAM" | "BBD" | "BDT" | "BGN" | "BHD" | "BIF" | "BMD" | "BND" | "BOB" | "BRL" | "BSD" | "BTN" | "BWP" | "BYN" | "BYR" | "BZD" | "CAD" | "CDF" | "CHF" | "CLP" | "CNY" | "COP" | "CRC" | "CVE" | "CZK" | "DJF" | "DKK" | "DOP" | "DZD" | "EGP" | "ERN" | "ETB" | "EUR" | "FJD" | "FKP" | "GBP" | "GEL" | "GHS" | "GIP" | "GMD" | "GNF" | "GTQ" | "GYD" | "HKD" | "HNL" | "HRK" | "HTG" | "HUF" | "IDR" | "ILS" | "INR" | "IQD" | "IRR" | "ISK" | "JEP" | "JMD" | "JOD" | "JPY" | "KES" | "KGS" | "KHR" | "KID" | "KMF" | "KRW" | "KWD" | "KYD" | "KZT" | "LAK" | "LBP" | "LKR" | "LRD" | "LSL" | "LTL" | "LVL" | "LYD" | "MAD" | "MDL" | "MGA" | "MKD" | "MMK" | "MNT" | "MOP" | "MRU" | "MUR" | "MVR" | "MWK" | "MXN" | "MYR" | "MZN" | "NAD" | "NGN" | "NIO" | "NOK" | "NPR" | "NZD" | "OMR" | "PAB" | "PEN" | "PGK" | "PHP" | "PKR" | "PLN" | "PYG" | "QAR" | "RON" | "RSD" | "RUB" | "RWF" | "SAR" | "SBD" | "SCR" | "SDG" | "SEK" | "SGD" | "SHP" | "SLL" | "SOS" | "SRD" | "SSP" | "STD" | "SYP" | "SZL" | "THB" | "TJS" | "TMT" | "TND" | "TOP" | "TRY" | "TTD" | "TWD" | "TZS" | "UAH" | "UGX" | "USD" | "UYU" | "UZS" | "VEF" | "VES" | "VND" | "VUV" | "WST" | "XAF" | "XCD" | "XOF" | "XPF" | "XXX" | "YER" | "ZAR" | "ZMW" | string;
+export type ShopifyOrderPresentmentCurrencyEnum = "AED" | "AFN" | "ALL" | "AMD" | "ANG" | "AOA" | "ARS" | "AUD" | "AWG" | "AZN" | "BAM" | "BBD" | "BDT" | "BGN" | "BHD" | "BIF" | "BMD" | "BND" | "BOB" | "BRL" | "BSD" | "BTN" | "BWP" | "BYN" | "BYR" | "BZD" | "CAD" | "CDF" | "CHF" | "CLP" | "CNY" | "COP" | "CRC" | "CVE" | "CZK" | "DJF" | "DKK" | "DOP" | "DZD" | "EGP" | "ERN" | "ETB" | "EUR" | "FJD" | "FKP" | "GBP" | "GEL" | "GHS" | "GIP" | "GMD" | "GNF" | "GTQ" | "GYD" | "HKD" | "HNL" | "HRK" | "HTG" | "HUF" | "IDR" | "ILS" | "INR" | "IQD" | "IRR" | "ISK" | "JEP" | "JMD" | "JOD" | "JPY" | "KES" | "KGS" | "KHR" | "KID" | "KMF" | "KRW" | "KWD" | "KYD" | "KZT" | "LAK" | "LBP" | "LKR" | "LRD" | "LSL" | "LTL" | "LVL" | "LYD" | "MAD" | "MDL" | "MGA" | "MKD" | "MMK" | "MNT" | "MOP" | "MRU" | "MUR" | "MVR" | "MWK" | "MXN" | "MYR" | "MZN" | "NAD" | "NGN" | "NIO" | "NOK" | "NPR" | "NZD" | "OMR" | "PAB" | "PEN" | "PGK" | "PHP" | "PKR" | "PLN" | "PYG" | "QAR" | "RON" | "RSD" | "RUB" | "RWF" | "SAR" | "SBD" | "SCR" | "SDG" | "SEK" | "SGD" | "SHP" | "SLL" | "SOS" | "SRD" | "SSP" | "STD" | "SYP" | "SZL" | "THB" | "TJS" | "TMT" | "TND" | "TOP" | "TRY" | "TTD" | "TWD" | "TZS" | "UAH" | "UGX" | "USD" | "UYU" | "UZS" | "VEF" | "VES" | "VND" | "VUV" | "WST" | "XAF" | "XCD" | "XOF" | "XPF" | "XXX" | "YER" | "ZAR" | "ZMW" | "STN" | "USDC" | "VED" | string;
 
 /** Represents the possible values of the Status enum. */
 export type ShopifyFulfillmentStatusEnum = "CANCELLED" | "ERROR" | "FAILURE" | "SUCCESS" | "OPEN" | "PENDING" | string;
 
 /** Represents the possible values of the Currency enum. */
-export type ShopifyShopCurrencyEnum = "AED" | "AFN" | "ALL" | "AMD" | "ANG" | "AOA" | "ARS" | "AUD" | "AWG" | "AZN" | "BAM" | "BBD" | "BDT" | "BGN" | "BHD" | "BIF" | "BMD" | "BND" | "BOB" | "BRL" | "BSD" | "BTN" | "BWP" | "BYN" | "BYR" | "BZD" | "CAD" | "CDF" | "CHF" | "CLP" | "CNY" | "COP" | "CRC" | "CVE" | "CZK" | "DJF" | "DKK" | "DOP" | "DZD" | "EGP" | "ERN" | "ETB" | "EUR" | "FJD" | "FKP" | "GBP" | "GEL" | "GHS" | "GIP" | "GMD" | "GNF" | "GTQ" | "GYD" | "HKD" | "HNL" | "HRK" | "HTG" | "HUF" | "IDR" | "ILS" | "INR" | "IQD" | "IRR" | "ISK" | "JEP" | "JMD" | "JOD" | "JPY" | "KES" | "KGS" | "KHR" | "KID" | "KMF" | "KRW" | "KWD" | "KYD" | "KZT" | "LAK" | "LBP" | "LKR" | "LRD" | "LSL" | "LTL" | "LVL" | "LYD" | "MAD" | "MDL" | "MGA" | "MKD" | "MMK" | "MNT" | "MOP" | "MRU" | "MUR" | "MVR" | "MWK" | "MXN" | "MYR" | "MZN" | "NAD" | "NGN" | "NIO" | "NOK" | "NPR" | "NZD" | "OMR" | "PAB" | "PEN" | "PGK" | "PHP" | "PKR" | "PLN" | "PYG" | "QAR" | "RON" | "RSD" | "RUB" | "RWF" | "SAR" | "SBD" | "SCR" | "SDG" | "SEK" | "SGD" | "SHP" | "SLL" | "SOS" | "SRD" | "SSP" | "STD" | "SYP" | "SZL" | "THB" | "TJS" | "TMT" | "TND" | "TOP" | "TRY" | "TTD" | "TWD" | "TZS" | "UAH" | "UGX" | "USD" | "UYU" | "UZS" | "VEF" | "VES" | "VND" | "VUV" | "WST" | "XAF" | "XCD" | "XOF" | "XPF" | "XXX" | "YER" | "ZAR" | "ZMW" | string;
+export type ShopifyShopCurrencyEnum = "AED" | "AFN" | "ALL" | "AMD" | "ANG" | "AOA" | "ARS" | "AUD" | "AWG" | "AZN" | "BAM" | "BBD" | "BDT" | "BGN" | "BHD" | "BIF" | "BMD" | "BND" | "BOB" | "BRL" | "BSD" | "BTN" | "BWP" | "BYN" | "BYR" | "BZD" | "CAD" | "CDF" | "CHF" | "CLP" | "CNY" | "COP" | "CRC" | "CVE" | "CZK" | "DJF" | "DKK" | "DOP" | "DZD" | "EGP" | "ERN" | "ETB" | "EUR" | "FJD" | "FKP" | "GBP" | "GEL" | "GHS" | "GIP" | "GMD" | "GNF" | "GTQ" | "GYD" | "HKD" | "HNL" | "HRK" | "HTG" | "HUF" | "IDR" | "ILS" | "INR" | "IQD" | "IRR" | "ISK" | "JEP" | "JMD" | "JOD" | "JPY" | "KES" | "KGS" | "KHR" | "KID" | "KMF" | "KRW" | "KWD" | "KYD" | "KZT" | "LAK" | "LBP" | "LKR" | "LRD" | "LSL" | "LTL" | "LVL" | "LYD" | "MAD" | "MDL" | "MGA" | "MKD" | "MMK" | "MNT" | "MOP" | "MRU" | "MUR" | "MVR" | "MWK" | "MXN" | "MYR" | "MZN" | "NAD" | "NGN" | "NIO" | "NOK" | "NPR" | "NZD" | "OMR" | "PAB" | "PEN" | "PGK" | "PHP" | "PKR" | "PLN" | "PYG" | "QAR" | "RON" | "RSD" | "RUB" | "RWF" | "SAR" | "SBD" | "SCR" | "SDG" | "SEK" | "SGD" | "SHP" | "SLL" | "SOS" | "SRD" | "SSP" | "STD" | "SYP" | "SZL" | "THB" | "TJS" | "TMT" | "TND" | "TOP" | "TRY" | "TTD" | "TWD" | "TZS" | "UAH" | "UGX" | "USD" | "UYU" | "UZS" | "VEF" | "VES" | "VND" | "VUV" | "WST" | "XAF" | "XCD" | "XOF" | "XPF" | "XXX" | "YER" | "ZAR" | "ZMW" | "STN" | "USDC" | "VED" | string;
 
 /** Represents the possible values of the Enabled Presentment Currencies enum. */
-export type ShopifyShopEnabledPresentmentCurrenciesEnum = "AED" | "AFN" | "ALL" | "AMD" | "ANG" | "AOA" | "ARS" | "AUD" | "AWG" | "AZN" | "BAM" | "BBD" | "BDT" | "BGN" | "BHD" | "BIF" | "BMD" | "BND" | "BOB" | "BRL" | "BSD" | "BTN" | "BWP" | "BYN" | "BYR" | "BZD" | "CAD" | "CDF" | "CHF" | "CLP" | "CNY" | "COP" | "CRC" | "CVE" | "CZK" | "DJF" | "DKK" | "DOP" | "DZD" | "EGP" | "ERN" | "ETB" | "EUR" | "FJD" | "FKP" | "GBP" | "GEL" | "GHS" | "GIP" | "GMD" | "GNF" | "GTQ" | "GYD" | "HKD" | "HNL" | "HRK" | "HTG" | "HUF" | "IDR" | "ILS" | "INR" | "IQD" | "IRR" | "ISK" | "JEP" | "JMD" | "JOD" | "JPY" | "KES" | "KGS" | "KHR" | "KID" | "KMF" | "KRW" | "KWD" | "KYD" | "KZT" | "LAK" | "LBP" | "LKR" | "LRD" | "LSL" | "LTL" | "LVL" | "LYD" | "MAD" | "MDL" | "MGA" | "MKD" | "MMK" | "MNT" | "MOP" | "MRU" | "MUR" | "MVR" | "MWK" | "MXN" | "MYR" | "MZN" | "NAD" | "NGN" | "NIO" | "NOK" | "NPR" | "NZD" | "OMR" | "PAB" | "PEN" | "PGK" | "PHP" | "PKR" | "PLN" | "PYG" | "QAR" | "RON" | "RSD" | "RUB" | "RWF" | "SAR" | "SBD" | "SCR" | "SDG" | "SEK" | "SGD" | "SHP" | "SLL" | "SOS" | "SRD" | "SSP" | "STD" | "SYP" | "SZL" | "THB" | "TJS" | "TMT" | "TND" | "TOP" | "TRY" | "TTD" | "TWD" | "TZS" | "UAH" | "UGX" | "USD" | "UYU" | "UZS" | "VEF" | "VES" | "VND" | "VUV" | "WST" | "XAF" | "XCD" | "XOF" | "XPF" | "XXX" | "YER" | "ZAR" | "ZMW" | string;
+export type ShopifyShopEnabledPresentmentCurrenciesEnum = "AED" | "AFN" | "ALL" | "AMD" | "ANG" | "AOA" | "ARS" | "AUD" | "AWG" | "AZN" | "BAM" | "BBD" | "BDT" | "BGN" | "BHD" | "BIF" | "BMD" | "BND" | "BOB" | "BRL" | "BSD" | "BTN" | "BWP" | "BYN" | "BYR" | "BZD" | "CAD" | "CDF" | "CHF" | "CLP" | "CNY" | "COP" | "CRC" | "CVE" | "CZK" | "DJF" | "DKK" | "DOP" | "DZD" | "EGP" | "ERN" | "ETB" | "EUR" | "FJD" | "FKP" | "GBP" | "GEL" | "GHS" | "GIP" | "GMD" | "GNF" | "GTQ" | "GYD" | "HKD" | "HNL" | "HRK" | "HTG" | "HUF" | "IDR" | "ILS" | "INR" | "IQD" | "IRR" | "ISK" | "JEP" | "JMD" | "JOD" | "JPY" | "KES" | "KGS" | "KHR" | "KID" | "KMF" | "KRW" | "KWD" | "KYD" | "KZT" | "LAK" | "LBP" | "LKR" | "LRD" | "LSL" | "LTL" | "LVL" | "LYD" | "MAD" | "MDL" | "MGA" | "MKD" | "MMK" | "MNT" | "MOP" | "MRU" | "MUR" | "MVR" | "MWK" | "MXN" | "MYR" | "MZN" | "NAD" | "NGN" | "NIO" | "NOK" | "NPR" | "NZD" | "OMR" | "PAB" | "PEN" | "PGK" | "PHP" | "PKR" | "PLN" | "PYG" | "QAR" | "RON" | "RSD" | "RUB" | "RWF" | "SAR" | "SBD" | "SCR" | "SDG" | "SEK" | "SGD" | "SHP" | "SLL" | "SOS" | "SRD" | "SSP" | "STD" | "SYP" | "SZL" | "THB" | "TJS" | "TMT" | "TND" | "TOP" | "TRY" | "TTD" | "TWD" | "TZS" | "UAH" | "UGX" | "USD" | "UYU" | "UZS" | "VEF" | "VES" | "VND" | "VUV" | "WST" | "XAF" | "XCD" | "XOF" | "XPF" | "XXX" | "YER" | "ZAR" | "ZMW" | "STN" | "USDC" | "VED" | string;
 
 /** A sort order for a field. Can be Ascending or Descending. */
 export type SortOrder = "Ascending"|"Descending";
@@ -110,7 +110,7 @@ export type ShopifyFulfillmentOrderStatusEnum = "OPEN" | "IN_PROGRESS" | "CANCEL
 export type ShopifyFulfillmentServiceTypeEnum = "GIFT_CARD" | "MANUAL" | "THIRD_PARTY" | string;
 
 /** Represents the possible values of the Status enum. */
-export type ShopifyProductStatusEnum = "active" | "archived" | "draft";
+export type ShopifyProductStatusEnum = "active" | "archived" | "draft" | "ACTIVE" | "ARCHIVED" | "DRAFT" | string;
 
 /** Represents the possible values of the Shopify State enum. */
 export type ShopifyCustomerShopifyStateEnum = "DISABLED" | "INVITED" | "ENABLED" | "DECLINED" | string;
@@ -166,11 +166,14 @@ export type InternalSpeedafConfigRecord = Scalars["JSONObject"];
 /** Represents one customCity result record in internal api calls. Returns a JSON blob of all the record's fields. */
 export type InternalCustomCityRecord = Scalars["JSONObject"];
 
+/** Represents one deliveryCharges result record in internal api calls. Returns a JSON blob of all the record's fields. */
+export type InternalDeliveryChargesRecord = Scalars["JSONObject"];
 
-export type BackgroundActionResult = AvailableCalculateRefundResultSelection | AvailableCreateSenditOrderResultSelection | AvailableDirectOrderTestResultSelection | AvailableExtractOrderSKUsResultSelection | AvailableFulfillOrderResultSelection | AvailableGetCombinedCityListResultSelection | AvailableGetCustomCitiesResultSelection | AvailableGetSenditDistrictIdResultSelection | AvailableProcessBulkReturnsResultSelection | AvailableProcessOrderReturnResultSelection | AvailableProcessSpeedafAPIResultSelection | AvailableRemoveOrderFromSheetsResultSelection | AvailableSearchBulkOrdersForReturnResultSelection | AvailableSearchOrderForReturnResultSelection | AvailableSenditFulfillOrderResultSelection | AvailableStandardizeMoroccanAddressResultSelection | AvailableStandardizeMoroccanCityResultSelection | AvailableSyncOrdersResultSelection | AvailableTestGoogleAuthResultSelection | AvailableTestLocationQueryResultSelection | AvailableTestOriginalCityExtractionResultSelection | AvailableTestSenditConnectionResultSelection | AvailableTestWriteToSheetResultSelection | AvailableTrackSpeedafOrdersResultSelection | AvailableUpdateReferenceTrackingResultSelection | AvailableWriteBatchOrdersToSheetsResultSelection | AvailableWriteSpeedafDataToSheetsResultSelection | AvailableWriteToShopifyResultSelection | AvailableUpdateShopifyOrderResultSelection | AvailableAbortShopifySyncResultSelection | AvailableCompleteShopifySyncResultSelection | AvailableErrorShopifySyncResultSelection | AvailableRunShopifySyncResultSelection | AvailableCreateGoogleSheetConfigResultSelection | AvailableUpdateGoogleSheetConfigResultSelection | AvailableDeleteGoogleSheetConfigResultSelection | AvailableCreateSenditConfigResultSelection | AvailableUpdateSenditConfigResultSelection | AvailableDeleteSenditConfigResultSelection | AvailableCreateSpeedafConfigResultSelection | AvailableUpdateSpeedafConfigResultSelection | AvailableDeleteSpeedafConfigResultSelection | AvailableFindFirstSpeedafConfigResultSelection | AvailableCreateCustomCityResultSelection | AvailableUpdateCustomCityResultSelection | AvailableDeleteCustomCityResultSelection;
+
+export type BackgroundActionResult = AvailableApplyShippingCostAbsorptionResultSelection | AvailableCalculateRefundResultSelection | AvailableCreateSenditOrderResultSelection | AvailableDebugOrderShippingResultSelection | AvailableDirectOrderTestResultSelection | AvailableExtractOrderSKUsResultSelection | AvailableGetCustomCitiesResultSelection | AvailableGetDeliveryChargesResultSelection | AvailableGetSenditDistrictIdResultSelection | AvailableGetShippingCostResultSelection | AvailableProcessBulkReturnsResultSelection | AvailableProcessOrderReturnResultSelection | AvailableProcessSpeedafAPIResultSelection | AvailableRemoveOrderFromSheetsResultSelection | AvailableSearchBulkOrdersForReturnResultSelection | AvailableSearchOrderForReturnResultSelection | AvailableStandardizeMoroccanCityResultSelection | AvailableSyncOrdersResultSelection | AvailableTestGoogleAuthResultSelection | AvailableTestLocationQueryResultSelection | AvailableTestSenditConnectionResultSelection | AvailableTestTrackingDetectionResultSelection | AvailableTestWriteToSheetResultSelection | AvailableTrackSpeedafOrdersResultSelection | AvailableUpdateDeliveryChargeResultSelection | AvailableUpdateReferenceTrackingResultSelection | AvailableWriteBatchOrdersToSheetsResultSelection | AvailableWriteSpeedafDataToSheetsResultSelection | AvailableWriteToShopifyResultSelection | AvailableListRecentOrdersResultSelection | AvailableApplyDiscountsAndShippingResultSelection | AvailableUpdateShopifyOrderResultSelection | AvailableAbortShopifySyncResultSelection | AvailableCompleteShopifySyncResultSelection | AvailableErrorShopifySyncResultSelection | AvailableRunShopifySyncResultSelection | AvailableCreateGoogleSheetConfigResultSelection | AvailableUpdateGoogleSheetConfigResultSelection | AvailableDeleteGoogleSheetConfigResultSelection | AvailableCreateSenditConfigResultSelection | AvailableUpdateSenditConfigResultSelection | AvailableDeleteSenditConfigResultSelection | AvailableCreateSpeedafConfigResultSelection | AvailableUpdateSpeedafConfigResultSelection | AvailableDeleteSpeedafConfigResultSelection | AvailableFindFirstSpeedafConfigResultSelection | AvailableCreateCustomCityResultSelection | AvailableUpdateCustomCityResultSelection | AvailableDeleteCustomCityResultSelection | AvailableCreateDeliveryChargesResultSelection | AvailableUpdateDeliveryChargesResultSelection | AvailableDeleteDeliveryChargesResultSelection;
 
 
-export type AvailableBackgroundActionResultSelection = CalculateRefundResult | CreateSenditOrderResult | DirectOrderTestResult | ExtractOrderSKUsResult | FulfillOrderResult | GetCombinedCityListResult | GetCustomCitiesResult | GetSenditDistrictIdResult | ProcessBulkReturnsResult | ProcessOrderReturnResult | ProcessSpeedafAPIResult | RemoveOrderFromSheetsResult | SearchBulkOrdersForReturnResult | SearchOrderForReturnResult | SenditFulfillOrderResult | StandardizeMoroccanAddressResult | StandardizeMoroccanCityResult | SyncOrdersResult | TestGoogleAuthResult | TestLocationQueryResult | TestOriginalCityExtractionResult | TestSenditConnectionResult | TestWriteToSheetResult | TrackSpeedafOrdersResult | UpdateReferenceTrackingResult | WriteBatchOrdersToSheetsResult | WriteSpeedafDataToSheetsResult | WriteToShopifyResult | UpdateShopifyOrderResult | AbortShopifySyncResult | CompleteShopifySyncResult | ErrorShopifySyncResult | RunShopifySyncResult | CreateGoogleSheetConfigResult | UpdateGoogleSheetConfigResult | DeleteGoogleSheetConfigResult | CreateSenditConfigResult | UpdateSenditConfigResult | DeleteSenditConfigResult | CreateSpeedafConfigResult | UpdateSpeedafConfigResult | DeleteSpeedafConfigResult | FindFirstSpeedafConfigResult | CreateCustomCityResult | UpdateCustomCityResult | DeleteCustomCityResult;
+export type AvailableBackgroundActionResultSelection = ApplyShippingCostAbsorptionResult | CalculateRefundResult | CreateSenditOrderResult | DebugOrderShippingResult | DirectOrderTestResult | ExtractOrderSKUsResult | GetCustomCitiesResult | GetDeliveryChargesResult | GetSenditDistrictIdResult | GetShippingCostResult | ProcessBulkReturnsResult | ProcessOrderReturnResult | ProcessSpeedafAPIResult | RemoveOrderFromSheetsResult | SearchBulkOrdersForReturnResult | SearchOrderForReturnResult | StandardizeMoroccanCityResult | SyncOrdersResult | TestGoogleAuthResult | TestLocationQueryResult | TestSenditConnectionResult | TestTrackingDetectionResult | TestWriteToSheetResult | TrackSpeedafOrdersResult | UpdateDeliveryChargeResult | UpdateReferenceTrackingResult | WriteBatchOrdersToSheetsResult | WriteSpeedafDataToSheetsResult | WriteToShopifyResult | ListRecentOrdersResult | ApplyDiscountsAndShippingResult | UpdateShopifyOrderResult | AbortShopifySyncResult | CompleteShopifySyncResult | ErrorShopifySyncResult | RunShopifySyncResult | CreateGoogleSheetConfigResult | UpdateGoogleSheetConfigResult | DeleteGoogleSheetConfigResult | CreateSenditConfigResult | UpdateSenditConfigResult | DeleteSenditConfigResult | CreateSpeedafConfigResult | UpdateSpeedafConfigResult | DeleteSpeedafConfigResult | FindFirstSpeedafConfigResult | CreateCustomCityResult | UpdateCustomCityResult | DeleteCustomCityResult | CreateDeliveryChargesResult | UpdateDeliveryChargesResult | DeleteDeliveryChargesResult;
 
 
 
@@ -2909,6 +2912,61 @@ export type CustomCityFilter = {
 
 
 
+export type DeliveryChargesSort = {
+
+  /** Sort the results by the id field. Defaults to ascending (smallest value first). */
+  id?: SortOrder | null;
+
+  /** Sort the results by the createdAt field. Defaults to ascending (smallest value first). */
+  createdAt?: SortOrder | null;
+
+  /** Sort the results by the updatedAt field. Defaults to ascending (smallest value first). */
+  updatedAt?: SortOrder | null;
+
+  /** Sort the results by the currency field. Defaults to ascending (smallest value first). */
+  currency?: SortOrder | null;
+
+  /** Sort the results by the lastUpdated field. Defaults to ascending (smallest value first). */
+  lastUpdated?: SortOrder | null;
+
+  /** Sort the results by the senditCharge field. Defaults to ascending (smallest value first). */
+  senditCharge?: SortOrder | null;
+
+  /** Sort the results by the speedafCharge field. Defaults to ascending (smallest value first). */
+  speedafCharge?: SortOrder | null;
+};
+
+
+
+export type DeliveryChargesFilter = {
+
+  AND?: (DeliveryChargesFilter | null)[];
+
+  OR?: (DeliveryChargesFilter | null)[];
+
+  NOT?: (DeliveryChargesFilter | null)[];
+
+  id?: IDFilter | null;
+
+  createdAt?: DateTimeFilter | null;
+
+  updatedAt?: DateTimeFilter | null;
+
+  currency?: StringFilter | null;
+
+  lastUpdated?: DateTimeFilter | null;
+
+  shopId?: IDFilter | null;
+
+  shop?: ShopifyShopRelationshipFilter | null;
+
+  senditCharge?: FloatFilter | null;
+
+  speedafCharge?: FloatFilter | null;
+};
+
+
+
 export type UpdateShopifyOrderInput = {
 
   id?: (Scalars['GadgetID'] | null) | null;
@@ -3514,6 +3572,79 @@ export type BulkUpsertCustomCitiesInput = {
   on?: ((Scalars['String'] | null))[];
 
   customCity?: UpsertCustomCityInput | null;
+};
+
+
+
+export type CreateDeliveryChargesInput = {
+
+  currency?: (Scalars['String'] | null) | null;
+
+  lastUpdated?: Date | Scalars['ISO8601DateString'] | null;
+
+  shop?: ShopifyShopBelongsToInput | null;
+
+  senditCharge?: (Scalars['Float'] | null) | null;
+
+  speedafCharge?: (Scalars['Float'] | null) | null;
+};
+
+
+
+export type BulkCreateDeliveryChargesInput = {
+
+  deliveryCharges?: CreateDeliveryChargesInput | null;
+};
+
+
+
+export type UpdateDeliveryChargesInput = {
+
+  currency?: (Scalars['String'] | null) | null;
+
+  lastUpdated?: Date | Scalars['ISO8601DateString'] | null;
+
+  shop?: ShopifyShopBelongsToInput | null;
+
+  senditCharge?: (Scalars['Float'] | null) | null;
+
+  speedafCharge?: (Scalars['Float'] | null) | null;
+};
+
+
+
+export type BulkUpdateDeliveryChargesInput = {
+
+  deliveryCharges?: UpdateDeliveryChargesInput | null;
+
+  id: (Scalars['GadgetID'] | null);
+};
+
+
+
+export type UpsertDeliveryChargesInput = {
+
+  id?: (Scalars['GadgetID'] | null) | null;
+
+  currency?: (Scalars['String'] | null) | null;
+
+  lastUpdated?: Date | Scalars['ISO8601DateString'] | null;
+
+  shop?: ShopifyShopBelongsToInput | null;
+
+  senditCharge?: (Scalars['Float'] | null) | null;
+
+  speedafCharge?: (Scalars['Float'] | null) | null;
+};
+
+
+
+export type BulkUpsertDeliveryChargesInput = {
+
+  /** An array of Strings */
+  on?: ((Scalars['String'] | null))[];
+
+  deliveryCharges?: UpsertDeliveryChargesInput | null;
 };
 
 
@@ -4422,6 +4553,45 @@ export type InternalCustomCityInput = {
 };
 
 
+
+export type InternalDeliveryChargesInput = {
+
+  state?: (Scalars['RecordState'] | null) | null;
+
+  stateHistory?: (Scalars['RecordState'] | null) | null;
+
+  id?: (Scalars['GadgetID'] | null) | null;
+
+  createdAt?: Date | Scalars['ISO8601DateString'] | null;
+
+  updatedAt?: Date | Scalars['ISO8601DateString'] | null;
+
+  currency?: (Scalars['String'] | null) | null;
+
+  lastUpdated?: Date | Scalars['ISO8601DateString'] | null;
+
+  shop?: InternalBelongsToInput | null;
+
+  senditCharge?: (Scalars['Float'] | null) | null;
+
+  speedafCharge?: (Scalars['Float'] | null) | null;
+
+  /** An optional list of atomically applied commands for race-safe mutations of the record */
+  _atomics?: InternalDeliveryChargesAtomicsInput | null;
+};
+
+
+
+export type InternalDeliveryChargesAtomicsInput = {
+
+  /** Numeric atomic commands for operating on senditCharge. */
+  senditCharge?: (NumericAtomicFieldUpdateInput)[];
+
+  /** Numeric atomic commands for operating on speedafCharge. */
+  speedafCharge?: (NumericAtomicFieldUpdateInput)[];
+};
+
+
 /** All built-in and custom scalars, mapped to their actual values */
 export interface Scalars {
   /** Represents an amount of some currency. Specified as a string so user's aren't tempted to do math on the value. */
@@ -4616,6 +4786,12 @@ export type GadgetModel = {
 
   action: (GadgetAction | null);
 
+  views: GadgetComputedView[];
+
+  view: (GadgetComputedView | null);
+
+  hasViews: Scalars['Boolean'];
+
   pluralName: Scalars['String'];
 
   pluralApiIdentifier: Scalars['String'];
@@ -4654,6 +4830,12 @@ export type AvailableGadgetModelSelection = {
   actions?: AvailableGadgetActionSelection;
 
   action?: AvailableGadgetActionSelection;
+
+  views?: AvailableGadgetComputedViewSelection;
+
+  view?: AvailableGadgetComputedViewSelection;
+
+  hasViews?: boolean | null | undefined;
 
   pluralName?: boolean | null | undefined;
 
@@ -5068,6 +5250,90 @@ export type AvailableGadgetActionGraphQLTypeSelection = {
 
 
 
+export type GadgetComputedView = {
+
+  __typename: 'GadgetComputedView';
+
+  name: Scalars['String'];
+
+  apiIdentifier: Scalars['String'];
+
+  namespace: Scalars['String'][];
+
+  namespacedApiIdentifier: Scalars['String'];
+
+  examples: (GadgetComputedViewExamples | null);
+};
+
+
+
+export type AvailableGadgetComputedViewSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  name?: boolean | null | undefined;
+
+  apiIdentifier?: boolean | null | undefined;
+
+  namespace?: boolean | null | undefined;
+
+  namespacedApiIdentifier?: boolean | null | undefined;
+
+  examples?: AvailableGadgetComputedViewExamplesSelection;
+};
+
+
+
+export type GadgetComputedViewExamples = {
+
+  __typename: 'GadgetComputedViewExamples';
+
+  acceptsInput: Scalars['Boolean'];
+
+  inputTypescriptType: (Scalars['String'] | null);
+
+  outputTypescriptType: Scalars['String'];
+
+  inputGraphQLTypeSDL: (Scalars['String'] | null);
+
+  exampleJSInputs: Scalars['JSON'];
+
+  exampleImperativeInvocation: (Scalars['String'] | null);
+
+  referencedModelKeys: Scalars['String'][];
+
+  allowedRoles: Scalars['String'][];
+
+  exampleReactHook: Scalars['String'];
+};
+
+
+
+export type AvailableGadgetComputedViewExamplesSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  acceptsInput?: boolean | null | undefined;
+
+  inputTypescriptType?: boolean | null | undefined;
+
+  outputTypescriptType?: boolean | null | undefined;
+
+  inputGraphQLTypeSDL?: boolean | null | undefined;
+
+  exampleJSInputs?: boolean | null | undefined;
+
+  exampleImperativeInvocation?: boolean | null | undefined;
+
+  referencedModelKeys?: boolean | null | undefined;
+
+  allowedRoles?: boolean | null | undefined;
+
+  exampleReactHook?: boolean | null | undefined;
+};
+
+
+
 export interface GadgetGenericFieldConfig extends GadgetFieldConfigInterface {
   __typename: 'GadgetGenericFieldConfig';
   fieldType: GadgetFieldType;
@@ -5467,7 +5733,7 @@ export type AvailableGadgetGenericFieldValidationSelection = {
 
 
 
-export interface UpsertError extends UpsertShopifyCustomerResult, UpsertShopifyGdprRequestResult, UpsertShopifyOrderResult, UpsertShopifyShopResult, UpsertShopifySyncResult, UpsertGoogleSheetConfigResult, UpsertShopifyFulfillmentResult, UpsertShopifyFulfillmentOrderResult, UpsertShopifyFulfillmentServiceResult, UpsertShopifyProductResult, UpsertShopifyProductVariantResult, UpsertSenditConfigResult, UpsertSpeedafConfigResult, UpsertCustomCityResult {
+export interface UpsertError extends UpsertShopifyCustomerResult, UpsertShopifyGdprRequestResult, UpsertShopifyOrderResult, UpsertShopifyShopResult, UpsertShopifySyncResult, UpsertGoogleSheetConfigResult, UpsertShopifyFulfillmentResult, UpsertShopifyFulfillmentOrderResult, UpsertShopifyFulfillmentServiceResult, UpsertShopifyProductResult, UpsertShopifyProductVariantResult, UpsertSenditConfigResult, UpsertSpeedafConfigResult, UpsertCustomCityResult, UpsertDeliveryChargesResult {
   __typename: 'UpsertError';
   success: Scalars['Boolean'];
   errors: ExecutionError[];
@@ -5853,6 +6119,32 @@ export type AvailableUpsertCustomCityResultSelection = {
 
 
 
+export type UpsertDeliveryChargesResult = {
+
+  __typename: 'UpsertError'|'CreateDeliveryChargesResult'|'UpdateDeliveryChargesResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  actionRun: (Scalars['String'] | null);
+};
+
+
+
+export type AvailableUpsertDeliveryChargesResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  actionRun?: boolean | null | undefined;
+};
+
+
+
 export type Query = {
 
   __typename: 'Query';
@@ -5916,6 +6208,10 @@ export type Query = {
   customCity: (CustomCity | null);
 
   customCities: CustomCityConnection;
+
+  deliveryCharges: (DeliveryCharges | null);
+
+  deliveryChargess: DeliveryChargesConnection;
 
   currentSession: (Session | null);
 
@@ -5989,6 +6285,10 @@ export type AvailableQuerySelection = {
   customCity?: AvailableCustomCitySelection;
 
   customCities?: AvailableCustomCityConnectionSelection;
+
+  deliveryCharges?: AvailableDeliveryChargesSelection;
+
+  deliveryChargess?: AvailableDeliveryChargesConnectionSelection;
 
   currentSession?: AvailableSessionSelection;
 
@@ -8474,6 +8774,120 @@ export type AvailableCustomCityEdgeSelection = {
 };
 
 
+
+export type DeliveryCharges = {
+
+  __typename: 'DeliveryCharges';
+
+  /** The globally unique, unchanging identifier for this record. Assigned and managed by Gadget. */
+  id: Scalars['GadgetID'];
+
+  /** The time at which this record was first created. Set once upon record creation and never changed. Managed by Gadget. */
+  createdAt: Scalars['DateTime'];
+
+  /** The time at which this record was last changed. Set each time the record is successfully acted upon by an action. Managed by Gadget. */
+  updatedAt: Scalars['DateTime'];
+
+  currency: (Scalars['String'] | null);
+
+  lastUpdated: (Scalars['DateTime'] | null);
+
+  shop: ShopifyShop;
+
+  shopId: Scalars['GadgetID'];
+
+  senditCharge: (Scalars['Float'] | null);
+
+  speedafCharge: (Scalars['Float'] | null);
+
+  /** Get all the fields for this record. Useful for not having to list out all the fields you want to retrieve, but slower. */
+  _all: Scalars['JSONObject'];
+};
+
+
+
+export type AvailableDeliveryChargesSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  /** The globally unique, unchanging identifier for this record. Assigned and managed by Gadget. */
+  id?: boolean | null | undefined;
+
+  /** The time at which this record was first created. Set once upon record creation and never changed. Managed by Gadget. */
+  createdAt?: boolean | null | undefined;
+
+  /** The time at which this record was last changed. Set each time the record is successfully acted upon by an action. Managed by Gadget. */
+  updatedAt?: boolean | null | undefined;
+
+  currency?: boolean | null | undefined;
+
+  lastUpdated?: boolean | null | undefined;
+
+  shop?: AvailableShopifyShopSelection;
+
+  shopId?: boolean | null | undefined;
+
+  senditCharge?: boolean | null | undefined;
+
+  speedafCharge?: boolean | null | undefined;
+
+  /** Get all the fields for this record. Useful for not having to list out all the fields you want to retrieve, but slower. */
+  _all?: boolean | null | undefined;
+};
+
+
+/** A connection to a list of DeliveryCharges items. */
+export type DeliveryChargesConnection = {
+
+  __typename: 'DeliveryChargesConnection';
+
+  /** A list of edges. */
+  edges: DeliveryChargesEdge[];
+
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+
+
+export type AvailableDeliveryChargesConnectionSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  /** A list of edges. */
+  edges?: AvailableDeliveryChargesEdgeSelection;
+
+  /** Information to aid in pagination. */
+  pageInfo?: AvailablePageInfoSelection;
+};
+
+
+/** An edge in a DeliveryCharges connection. */
+export type DeliveryChargesEdge = {
+
+  __typename: 'DeliveryChargesEdge';
+
+  /** The item at the end of the edge */
+  node: DeliveryCharges;
+
+  /** A cursor for use in pagination */
+  cursor: Scalars['String'];
+};
+
+
+
+export type AvailableDeliveryChargesEdgeSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  /** The item at the end of the edge */
+  node?: AvailableDeliveryChargesSelection;
+
+  /** A cursor for use in pagination */
+  cursor?: boolean | null | undefined;
+};
+
+
 /** Represents one of the roles an identity in the system can be entitled to */
 export type GadgetRole = {
 
@@ -8725,6 +9139,10 @@ export type InternalQueries = {
   customCity: (InternalCustomCityRecord | null);
 
   listCustomCity: InternalCustomCityRecordConnection;
+
+  deliveryCharges: (InternalDeliveryChargesRecord | null);
+
+  listDeliveryCharges: InternalDeliveryChargesRecordConnection;
 };
 
 
@@ -8795,6 +9213,10 @@ export type AvailableInternalQueriesSelection = {
   customCity?: boolean | null | undefined;
 
   listCustomCity?: AvailableInternalCustomCityRecordConnectionSelection;
+
+  deliveryCharges?: boolean | null | undefined;
+
+  listDeliveryCharges?: AvailableInternalDeliveryChargesRecordConnectionSelection;
 };
 
 
@@ -9578,6 +10000,58 @@ export type AvailableInternalCustomCityRecordEdgeSelection = {
 };
 
 
+/** A connection to a list of InternalDeliveryChargesRecord items. */
+export type InternalDeliveryChargesRecordConnection = {
+
+  __typename: 'InternalDeliveryChargesRecordConnection';
+
+  /** A list of edges. */
+  edges: InternalDeliveryChargesRecordEdge[];
+
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+
+
+export type AvailableInternalDeliveryChargesRecordConnectionSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  /** A list of edges. */
+  edges?: AvailableInternalDeliveryChargesRecordEdgeSelection;
+
+  /** Information to aid in pagination. */
+  pageInfo?: AvailablePageInfoSelection;
+};
+
+
+/** An edge in a InternalDeliveryChargesRecord connection. */
+export type InternalDeliveryChargesRecordEdge = {
+
+  __typename: 'InternalDeliveryChargesRecordEdge';
+
+  /** The item at the end of the edge */
+  node: InternalDeliveryChargesRecord;
+
+  /** A cursor for use in pagination */
+  cursor: Scalars['String'];
+};
+
+
+
+export type AvailableInternalDeliveryChargesRecordEdgeSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  /** The item at the end of the edge */
+  node?: boolean | null | undefined;
+
+  /** A cursor for use in pagination */
+  cursor?: boolean | null | undefined;
+};
+
+
 
 export type Mutation = {
 
@@ -9675,21 +10149,41 @@ export type Mutation = {
 
   bulkUpsertCustomCities: BulkUpsertCustomCitiesResult;
 
+  createDeliveryCharges: (CreateDeliveryChargesResult | null);
+
+  bulkCreateDeliveryCharges: (BulkCreateDeliveryChargesResult | null);
+
+  updateDeliveryCharges: (UpdateDeliveryChargesResult | null);
+
+  bulkUpdateDeliveryCharges: (BulkUpdateDeliveryChargesResult | null);
+
+  deleteDeliveryCharges: (DeleteDeliveryChargesResult | null);
+
+  bulkDeleteDeliveryCharges: (BulkDeleteDeliveryChargesResult | null);
+
+  upsertDeliveryCharges: (UpsertDeliveryChargesResult | null);
+
+  bulkUpsertDeliveryCharges: BulkUpsertDeliveryChargesResult;
+
+  applyShippingCostAbsorption: (ApplyShippingCostAbsorptionResult | null);
+
   calculateRefund: (CalculateRefundResult | null);
 
   createSenditOrder: (CreateSenditOrderResult | null);
+
+  debugOrderShipping: (DebugOrderShippingResult | null);
 
   directOrderTest: (DirectOrderTestResult | null);
 
   extractOrderSKUs: (ExtractOrderSKUsResult | null);
 
-  fulfillOrder: (FulfillOrderResult | null);
-
-  getCombinedCityList: (GetCombinedCityListResult | null);
-
   getCustomCities: (GetCustomCitiesResult | null);
 
+  getDeliveryCharges: (GetDeliveryChargesResult | null);
+
   getSenditDistrictId: (GetSenditDistrictIdResult | null);
+
+  getShippingCost: (GetShippingCostResult | null);
 
   processBulkReturns: (ProcessBulkReturnsResult | null);
 
@@ -9703,10 +10197,6 @@ export type Mutation = {
 
   searchOrderForReturn: (SearchOrderForReturnResult | null);
 
-  senditFulfillOrder: (SenditFulfillOrderResult | null);
-
-  standardizeMoroccanAddress: (StandardizeMoroccanAddressResult | null);
-
   standardizeMoroccanCity: (StandardizeMoroccanCityResult | null);
 
   syncOrders: (SyncOrdersResult | null);
@@ -9715,13 +10205,15 @@ export type Mutation = {
 
   testLocationQuery: (TestLocationQueryResult | null);
 
-  testOriginalCityExtraction: (TestOriginalCityExtractionResult | null);
-
   testSenditConnection: (TestSenditConnectionResult | null);
+
+  testTrackingDetection: (TestTrackingDetectionResult | null);
 
   testWriteToSheet: (TestWriteToSheetResult | null);
 
   trackSpeedafOrders: (TrackSpeedafOrdersResult | null);
+
+  updateDeliveryCharge: (UpdateDeliveryChargeResult | null);
 
   updateReferenceTracking: (UpdateReferenceTrackingResult | null);
 
@@ -9730,6 +10222,10 @@ export type Mutation = {
   writeSpeedafDataToSheets: (WriteSpeedafDataToSheetsResult | null);
 
   writeToShopify: (WriteToShopifyResult | null);
+
+  listRecentOrders: (ListRecentOrdersResult | null);
+
+  applyDiscountsAndShipping: (ApplyDiscountsAndShippingResult | null);
 
   shopifyConnection: (ShopifyConnectionMutations | null);
 
@@ -9836,21 +10332,41 @@ export type AvailableMutationSelection = {
 
   bulkUpsertCustomCities?: AvailableBulkUpsertCustomCitiesResultSelection;
 
+  createDeliveryCharges?: AvailableCreateDeliveryChargesResultSelection;
+
+  bulkCreateDeliveryCharges?: AvailableBulkCreateDeliveryChargesResultSelection;
+
+  updateDeliveryCharges?: AvailableUpdateDeliveryChargesResultSelection;
+
+  bulkUpdateDeliveryCharges?: AvailableBulkUpdateDeliveryChargesResultSelection;
+
+  deleteDeliveryCharges?: AvailableDeleteDeliveryChargesResultSelection;
+
+  bulkDeleteDeliveryCharges?: AvailableBulkDeleteDeliveryChargesResultSelection;
+
+  upsertDeliveryCharges?: AvailableUpsertDeliveryChargesResultSelection;
+
+  bulkUpsertDeliveryCharges?: AvailableBulkUpsertDeliveryChargesResultSelection;
+
+  applyShippingCostAbsorption?: AvailableApplyShippingCostAbsorptionResultSelection;
+
   calculateRefund?: AvailableCalculateRefundResultSelection;
 
   createSenditOrder?: AvailableCreateSenditOrderResultSelection;
+
+  debugOrderShipping?: AvailableDebugOrderShippingResultSelection;
 
   directOrderTest?: AvailableDirectOrderTestResultSelection;
 
   extractOrderSKUs?: AvailableExtractOrderSKUsResultSelection;
 
-  fulfillOrder?: AvailableFulfillOrderResultSelection;
-
-  getCombinedCityList?: AvailableGetCombinedCityListResultSelection;
-
   getCustomCities?: AvailableGetCustomCitiesResultSelection;
 
+  getDeliveryCharges?: AvailableGetDeliveryChargesResultSelection;
+
   getSenditDistrictId?: AvailableGetSenditDistrictIdResultSelection;
+
+  getShippingCost?: AvailableGetShippingCostResultSelection;
 
   processBulkReturns?: AvailableProcessBulkReturnsResultSelection;
 
@@ -9864,10 +10380,6 @@ export type AvailableMutationSelection = {
 
   searchOrderForReturn?: AvailableSearchOrderForReturnResultSelection;
 
-  senditFulfillOrder?: AvailableSenditFulfillOrderResultSelection;
-
-  standardizeMoroccanAddress?: AvailableStandardizeMoroccanAddressResultSelection;
-
   standardizeMoroccanCity?: AvailableStandardizeMoroccanCityResultSelection;
 
   syncOrders?: AvailableSyncOrdersResultSelection;
@@ -9876,13 +10388,15 @@ export type AvailableMutationSelection = {
 
   testLocationQuery?: AvailableTestLocationQueryResultSelection;
 
-  testOriginalCityExtraction?: AvailableTestOriginalCityExtractionResultSelection;
-
   testSenditConnection?: AvailableTestSenditConnectionResultSelection;
+
+  testTrackingDetection?: AvailableTestTrackingDetectionResultSelection;
 
   testWriteToSheet?: AvailableTestWriteToSheetResultSelection;
 
   trackSpeedafOrders?: AvailableTrackSpeedafOrdersResultSelection;
+
+  updateDeliveryCharge?: AvailableUpdateDeliveryChargeResultSelection;
 
   updateReferenceTracking?: AvailableUpdateReferenceTrackingResultSelection;
 
@@ -9891,6 +10405,10 @@ export type AvailableMutationSelection = {
   writeSpeedafDataToSheets?: AvailableWriteSpeedafDataToSheetsResultSelection;
 
   writeToShopify?: AvailableWriteToShopifyResultSelection;
+
+  listRecentOrders?: AvailableListRecentOrdersResultSelection;
+
+  applyDiscountsAndShipping?: AvailableApplyDiscountsAndShippingResultSelection;
 
   shopifyConnection?: AvailableShopifyConnectionMutationsSelection;
 
@@ -11082,6 +11600,230 @@ export type AvailableBulkUpsertCustomCitiesResultSelection = {
 
 
 
+export interface CreateDeliveryChargesResult extends UpsertDeliveryChargesResult {
+  __typename: 'CreateDeliveryChargesResult';
+  success: Scalars['Boolean'];
+  errors: ExecutionError[];
+  actionRun: (Scalars['String'] | null);
+  deliveryCharges: (DeliveryCharges | null);
+};
+
+
+
+export type AvailableCreateDeliveryChargesResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  actionRun?: boolean | null | undefined;
+
+  deliveryCharges?: AvailableDeliveryChargesSelection;
+};
+
+
+/** The output when running the create on the deliveryCharges model in bulk. */
+export type BulkCreateDeliveryChargesResult = {
+
+  __typename: 'BulkCreateDeliveryChargesResult';
+
+  /** Boolean describing if all the bulk actions succeeded or not */
+  success: Scalars['Boolean'];
+
+  /** Aggregated list of errors that any bulk action encountered while processing */
+  errors: ExecutionError[];
+
+  /** The list of all changed deliveryCharges records by each sent bulk action. Returned in the same order as the input bulk action params. */
+  deliveryChargess: (DeliveryCharges | null)[];
+};
+
+
+
+export type AvailableBulkCreateDeliveryChargesResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  /** Boolean describing if all the bulk actions succeeded or not */
+  success?: boolean | null | undefined;
+
+  /** Aggregated list of errors that any bulk action encountered while processing */
+  errors?: AvailableExecutionErrorSelection;
+
+  /** The list of all changed deliveryCharges records by each sent bulk action. Returned in the same order as the input bulk action params. */
+  deliveryChargess?: AvailableDeliveryChargesSelection;
+};
+
+
+
+export interface UpdateDeliveryChargesResult extends UpsertDeliveryChargesResult {
+  __typename: 'UpdateDeliveryChargesResult';
+  success: Scalars['Boolean'];
+  errors: ExecutionError[];
+  actionRun: (Scalars['String'] | null);
+  deliveryCharges: (DeliveryCharges | null);
+};
+
+
+
+export type AvailableUpdateDeliveryChargesResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  actionRun?: boolean | null | undefined;
+
+  deliveryCharges?: AvailableDeliveryChargesSelection;
+};
+
+
+/** The output when running the update on the deliveryCharges model in bulk. */
+export type BulkUpdateDeliveryChargesResult = {
+
+  __typename: 'BulkUpdateDeliveryChargesResult';
+
+  /** Boolean describing if all the bulk actions succeeded or not */
+  success: Scalars['Boolean'];
+
+  /** Aggregated list of errors that any bulk action encountered while processing */
+  errors: ExecutionError[];
+
+  /** The list of all changed deliveryCharges records by each sent bulk action. Returned in the same order as the input bulk action params. */
+  deliveryChargess: (DeliveryCharges | null)[];
+};
+
+
+
+export type AvailableBulkUpdateDeliveryChargesResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  /** Boolean describing if all the bulk actions succeeded or not */
+  success?: boolean | null | undefined;
+
+  /** Aggregated list of errors that any bulk action encountered while processing */
+  errors?: AvailableExecutionErrorSelection;
+
+  /** The list of all changed deliveryCharges records by each sent bulk action. Returned in the same order as the input bulk action params. */
+  deliveryChargess?: AvailableDeliveryChargesSelection;
+};
+
+
+
+export type DeleteDeliveryChargesResult = {
+
+  __typename: 'DeleteDeliveryChargesResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  actionRun: (Scalars['String'] | null);
+};
+
+
+
+export type AvailableDeleteDeliveryChargesResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  actionRun?: boolean | null | undefined;
+};
+
+
+/** The output when running the delete on the deliveryCharges model in bulk. */
+export type BulkDeleteDeliveryChargesResult = {
+
+  __typename: 'BulkDeleteDeliveryChargesResult';
+
+  /** Boolean describing if all the bulk actions succeeded or not */
+  success: Scalars['Boolean'];
+
+  /** Aggregated list of errors that any bulk action encountered while processing */
+  errors: ExecutionError[];
+};
+
+
+
+export type AvailableBulkDeleteDeliveryChargesResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  /** Boolean describing if all the bulk actions succeeded or not */
+  success?: boolean | null | undefined;
+
+  /** Aggregated list of errors that any bulk action encountered while processing */
+  errors?: AvailableExecutionErrorSelection;
+};
+
+
+/** The result of a bulk upsert operation for the deliveryCharges model */
+export type BulkUpsertDeliveryChargesResult = {
+
+  __typename: 'BulkUpsertDeliveryChargesResult';
+
+  /** Boolean describing if all the bulk actions succeeded or not */
+  success: Scalars['Boolean'];
+
+  /** Aggregated list of errors that any bulk action encountered while processing */
+  errors: ExecutionError[];
+
+  /** The results of each upsert action in the bulk operation */
+  deliveryChargess: (DeliveryCharges | null)[];
+};
+
+
+
+export type AvailableBulkUpsertDeliveryChargesResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  /** Boolean describing if all the bulk actions succeeded or not */
+  success?: boolean | null | undefined;
+
+  /** Aggregated list of errors that any bulk action encountered while processing */
+  errors?: AvailableExecutionErrorSelection;
+
+  /** The results of each upsert action in the bulk operation */
+  deliveryChargess?: AvailableDeliveryChargesSelection;
+};
+
+
+
+export type ApplyShippingCostAbsorptionResult = {
+
+  __typename: 'ApplyShippingCostAbsorptionResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  result: (Scalars['JSON'] | null);
+};
+
+
+
+export type AvailableApplyShippingCostAbsorptionResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  result?: boolean | null | undefined;
+};
+
+
+
 export type CalculateRefundResult = {
 
   __typename: 'CalculateRefundResult';
@@ -11122,6 +11864,32 @@ export type CreateSenditOrderResult = {
 
 
 export type AvailableCreateSenditOrderResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  result?: boolean | null | undefined;
+};
+
+
+
+export type DebugOrderShippingResult = {
+
+  __typename: 'DebugOrderShippingResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  result: (Scalars['JSON'] | null);
+};
+
+
+
+export type AvailableDebugOrderShippingResultSelection = {
 
   __typename?: boolean | null | undefined;
 
@@ -11186,58 +11954,6 @@ export type AvailableExtractOrderSKUsResultSelection = {
 
 
 
-export type FulfillOrderResult = {
-
-  __typename: 'FulfillOrderResult';
-
-  success: Scalars['Boolean'];
-
-  errors: ExecutionError[];
-
-  result: (Scalars['JSON'] | null);
-};
-
-
-
-export type AvailableFulfillOrderResultSelection = {
-
-  __typename?: boolean | null | undefined;
-
-  success?: boolean | null | undefined;
-
-  errors?: AvailableExecutionErrorSelection;
-
-  result?: boolean | null | undefined;
-};
-
-
-
-export type GetCombinedCityListResult = {
-
-  __typename: 'GetCombinedCityListResult';
-
-  success: Scalars['Boolean'];
-
-  errors: ExecutionError[];
-
-  result: (Scalars['JSON'] | null);
-};
-
-
-
-export type AvailableGetCombinedCityListResultSelection = {
-
-  __typename?: boolean | null | undefined;
-
-  success?: boolean | null | undefined;
-
-  errors?: AvailableExecutionErrorSelection;
-
-  result?: boolean | null | undefined;
-};
-
-
-
 export type GetCustomCitiesResult = {
 
   __typename: 'GetCustomCitiesResult';
@@ -11264,6 +11980,32 @@ export type AvailableGetCustomCitiesResultSelection = {
 
 
 
+export type GetDeliveryChargesResult = {
+
+  __typename: 'GetDeliveryChargesResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  result: (Scalars['JSON'] | null);
+};
+
+
+
+export type AvailableGetDeliveryChargesResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  result?: boolean | null | undefined;
+};
+
+
+
 export type GetSenditDistrictIdResult = {
 
   __typename: 'GetSenditDistrictIdResult';
@@ -11278,6 +12020,32 @@ export type GetSenditDistrictIdResult = {
 
 
 export type AvailableGetSenditDistrictIdResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  result?: boolean | null | undefined;
+};
+
+
+
+export type GetShippingCostResult = {
+
+  __typename: 'GetShippingCostResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  result: (Scalars['JSON'] | null);
+};
+
+
+
+export type AvailableGetShippingCostResultSelection = {
 
   __typename?: boolean | null | undefined;
 
@@ -11446,58 +12214,6 @@ export type AvailableSearchOrderForReturnResultSelection = {
 
 
 
-export type SenditFulfillOrderResult = {
-
-  __typename: 'SenditFulfillOrderResult';
-
-  success: Scalars['Boolean'];
-
-  errors: ExecutionError[];
-
-  result: (Scalars['JSON'] | null);
-};
-
-
-
-export type AvailableSenditFulfillOrderResultSelection = {
-
-  __typename?: boolean | null | undefined;
-
-  success?: boolean | null | undefined;
-
-  errors?: AvailableExecutionErrorSelection;
-
-  result?: boolean | null | undefined;
-};
-
-
-
-export type StandardizeMoroccanAddressResult = {
-
-  __typename: 'StandardizeMoroccanAddressResult';
-
-  success: Scalars['Boolean'];
-
-  errors: ExecutionError[];
-
-  result: (Scalars['JSON'] | null);
-};
-
-
-
-export type AvailableStandardizeMoroccanAddressResultSelection = {
-
-  __typename?: boolean | null | undefined;
-
-  success?: boolean | null | undefined;
-
-  errors?: AvailableExecutionErrorSelection;
-
-  result?: boolean | null | undefined;
-};
-
-
-
 export type StandardizeMoroccanCityResult = {
 
   __typename: 'StandardizeMoroccanCityResult';
@@ -11602,32 +12318,6 @@ export type AvailableTestLocationQueryResultSelection = {
 
 
 
-export type TestOriginalCityExtractionResult = {
-
-  __typename: 'TestOriginalCityExtractionResult';
-
-  success: Scalars['Boolean'];
-
-  errors: ExecutionError[];
-
-  result: (Scalars['JSON'] | null);
-};
-
-
-
-export type AvailableTestOriginalCityExtractionResultSelection = {
-
-  __typename?: boolean | null | undefined;
-
-  success?: boolean | null | undefined;
-
-  errors?: AvailableExecutionErrorSelection;
-
-  result?: boolean | null | undefined;
-};
-
-
-
 export type TestSenditConnectionResult = {
 
   __typename: 'TestSenditConnectionResult';
@@ -11642,6 +12332,32 @@ export type TestSenditConnectionResult = {
 
 
 export type AvailableTestSenditConnectionResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  result?: boolean | null | undefined;
+};
+
+
+
+export type TestTrackingDetectionResult = {
+
+  __typename: 'TestTrackingDetectionResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  result: (Scalars['JSON'] | null);
+};
+
+
+
+export type AvailableTestTrackingDetectionResultSelection = {
 
   __typename?: boolean | null | undefined;
 
@@ -11694,6 +12410,32 @@ export type TrackSpeedafOrdersResult = {
 
 
 export type AvailableTrackSpeedafOrdersResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  result?: boolean | null | undefined;
+};
+
+
+
+export type UpdateDeliveryChargeResult = {
+
+  __typename: 'UpdateDeliveryChargeResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  result: (Scalars['JSON'] | null);
+};
+
+
+
+export type AvailableUpdateDeliveryChargeResultSelection = {
 
   __typename?: boolean | null | undefined;
 
@@ -11798,6 +12540,58 @@ export type WriteToShopifyResult = {
 
 
 export type AvailableWriteToShopifyResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  result?: boolean | null | undefined;
+};
+
+
+
+export type ListRecentOrdersResult = {
+
+  __typename: 'ListRecentOrdersResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  result: (Scalars['JSON'] | null);
+};
+
+
+
+export type AvailableListRecentOrdersResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  result?: boolean | null | undefined;
+};
+
+
+
+export type ApplyDiscountsAndShippingResult = {
+
+  __typename: 'ApplyDiscountsAndShippingResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  result: (Scalars['JSON'] | null);
+};
+
+
+
+export type AvailableApplyDiscountsAndShippingResultSelection = {
 
   __typename?: boolean | null | undefined;
 
@@ -11950,21 +12744,41 @@ export type BackgroundMutations = {
 
   bulkUpsertCustomCities: BulkEnqueueBackgroundActionResult;
 
+  createDeliveryCharges: EnqueueBackgroundActionResult;
+
+  bulkCreateDeliveryCharges: BulkEnqueueBackgroundActionResult;
+
+  updateDeliveryCharges: EnqueueBackgroundActionResult;
+
+  bulkUpdateDeliveryCharges: BulkEnqueueBackgroundActionResult;
+
+  deleteDeliveryCharges: EnqueueBackgroundActionResult;
+
+  bulkDeleteDeliveryCharges: BulkEnqueueBackgroundActionResult;
+
+  upsertDeliveryCharges: EnqueueBackgroundActionResult;
+
+  bulkUpsertDeliveryCharges: BulkEnqueueBackgroundActionResult;
+
+  applyShippingCostAbsorption: EnqueueBackgroundActionResult;
+
   calculateRefund: EnqueueBackgroundActionResult;
 
   createSenditOrder: EnqueueBackgroundActionResult;
+
+  debugOrderShipping: EnqueueBackgroundActionResult;
 
   directOrderTest: EnqueueBackgroundActionResult;
 
   extractOrderSKUs: EnqueueBackgroundActionResult;
 
-  fulfillOrder: EnqueueBackgroundActionResult;
-
-  getCombinedCityList: EnqueueBackgroundActionResult;
-
   getCustomCities: EnqueueBackgroundActionResult;
 
+  getDeliveryCharges: EnqueueBackgroundActionResult;
+
   getSenditDistrictId: EnqueueBackgroundActionResult;
+
+  getShippingCost: EnqueueBackgroundActionResult;
 
   processBulkReturns: EnqueueBackgroundActionResult;
 
@@ -11978,10 +12792,6 @@ export type BackgroundMutations = {
 
   searchOrderForReturn: EnqueueBackgroundActionResult;
 
-  senditFulfillOrder: EnqueueBackgroundActionResult;
-
-  standardizeMoroccanAddress: EnqueueBackgroundActionResult;
-
   standardizeMoroccanCity: EnqueueBackgroundActionResult;
 
   syncOrders: EnqueueBackgroundActionResult;
@@ -11990,13 +12800,15 @@ export type BackgroundMutations = {
 
   testLocationQuery: EnqueueBackgroundActionResult;
 
-  testOriginalCityExtraction: EnqueueBackgroundActionResult;
-
   testSenditConnection: EnqueueBackgroundActionResult;
+
+  testTrackingDetection: EnqueueBackgroundActionResult;
 
   testWriteToSheet: EnqueueBackgroundActionResult;
 
   trackSpeedafOrders: EnqueueBackgroundActionResult;
+
+  updateDeliveryCharge: EnqueueBackgroundActionResult;
 
   updateReferenceTracking: EnqueueBackgroundActionResult;
 
@@ -12005,6 +12817,14 @@ export type BackgroundMutations = {
   writeSpeedafDataToSheets: EnqueueBackgroundActionResult;
 
   writeToShopify: EnqueueBackgroundActionResult;
+
+  listRecentOrders: EnqueueBackgroundActionResult;
+
+  applyDiscountsAndShipping: EnqueueBackgroundActionResult;
+
+  cancel: BackgroundCancelBackgroundActionResult;
+
+  bulkCancel: BackgroundBulkCancelBackgroundActionResult;
 };
 
 
@@ -12105,21 +12925,41 @@ export type AvailableBackgroundMutationsSelection = {
 
   bulkUpsertCustomCities?: AvailableBulkEnqueueBackgroundActionResultSelection;
 
+  createDeliveryCharges?: AvailableEnqueueBackgroundActionResultSelection;
+
+  bulkCreateDeliveryCharges?: AvailableBulkEnqueueBackgroundActionResultSelection;
+
+  updateDeliveryCharges?: AvailableEnqueueBackgroundActionResultSelection;
+
+  bulkUpdateDeliveryCharges?: AvailableBulkEnqueueBackgroundActionResultSelection;
+
+  deleteDeliveryCharges?: AvailableEnqueueBackgroundActionResultSelection;
+
+  bulkDeleteDeliveryCharges?: AvailableBulkEnqueueBackgroundActionResultSelection;
+
+  upsertDeliveryCharges?: AvailableEnqueueBackgroundActionResultSelection;
+
+  bulkUpsertDeliveryCharges?: AvailableBulkEnqueueBackgroundActionResultSelection;
+
+  applyShippingCostAbsorption?: AvailableEnqueueBackgroundActionResultSelection;
+
   calculateRefund?: AvailableEnqueueBackgroundActionResultSelection;
 
   createSenditOrder?: AvailableEnqueueBackgroundActionResultSelection;
+
+  debugOrderShipping?: AvailableEnqueueBackgroundActionResultSelection;
 
   directOrderTest?: AvailableEnqueueBackgroundActionResultSelection;
 
   extractOrderSKUs?: AvailableEnqueueBackgroundActionResultSelection;
 
-  fulfillOrder?: AvailableEnqueueBackgroundActionResultSelection;
-
-  getCombinedCityList?: AvailableEnqueueBackgroundActionResultSelection;
-
   getCustomCities?: AvailableEnqueueBackgroundActionResultSelection;
 
+  getDeliveryCharges?: AvailableEnqueueBackgroundActionResultSelection;
+
   getSenditDistrictId?: AvailableEnqueueBackgroundActionResultSelection;
+
+  getShippingCost?: AvailableEnqueueBackgroundActionResultSelection;
 
   processBulkReturns?: AvailableEnqueueBackgroundActionResultSelection;
 
@@ -12133,10 +12973,6 @@ export type AvailableBackgroundMutationsSelection = {
 
   searchOrderForReturn?: AvailableEnqueueBackgroundActionResultSelection;
 
-  senditFulfillOrder?: AvailableEnqueueBackgroundActionResultSelection;
-
-  standardizeMoroccanAddress?: AvailableEnqueueBackgroundActionResultSelection;
-
   standardizeMoroccanCity?: AvailableEnqueueBackgroundActionResultSelection;
 
   syncOrders?: AvailableEnqueueBackgroundActionResultSelection;
@@ -12145,13 +12981,15 @@ export type AvailableBackgroundMutationsSelection = {
 
   testLocationQuery?: AvailableEnqueueBackgroundActionResultSelection;
 
-  testOriginalCityExtraction?: AvailableEnqueueBackgroundActionResultSelection;
-
   testSenditConnection?: AvailableEnqueueBackgroundActionResultSelection;
+
+  testTrackingDetection?: AvailableEnqueueBackgroundActionResultSelection;
 
   testWriteToSheet?: AvailableEnqueueBackgroundActionResultSelection;
 
   trackSpeedafOrders?: AvailableEnqueueBackgroundActionResultSelection;
+
+  updateDeliveryCharge?: AvailableEnqueueBackgroundActionResultSelection;
 
   updateReferenceTracking?: AvailableEnqueueBackgroundActionResultSelection;
 
@@ -12160,6 +12998,14 @@ export type AvailableBackgroundMutationsSelection = {
   writeSpeedafDataToSheets?: AvailableEnqueueBackgroundActionResultSelection;
 
   writeToShopify?: AvailableEnqueueBackgroundActionResultSelection;
+
+  listRecentOrders?: AvailableEnqueueBackgroundActionResultSelection;
+
+  applyDiscountsAndShipping?: AvailableEnqueueBackgroundActionResultSelection;
+
+  cancel?: AvailableBackgroundCancelBackgroundActionResultSelection;
+
+  bulkCancel?: AvailableBackgroundBulkCancelBackgroundActionResultSelection;
 };
 
 
@@ -12232,6 +13078,54 @@ export type AvailableBulkEnqueueBackgroundActionResultSelection = {
   errors?: AvailableExecutionErrorSelection;
 
   backgroundActions?: AvailableBackgroundActionHandleSelection;
+};
+
+
+/** The value returned from cancelling a background action */
+export type BackgroundCancelBackgroundActionResult = {
+
+  __typename: 'BackgroundCancelBackgroundActionResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  backgroundAction: (BackgroundActionHandle | null);
+};
+
+
+
+export type AvailableBackgroundCancelBackgroundActionResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  backgroundAction?: AvailableBackgroundActionHandleSelection;
+};
+
+
+/** The value returned from cancelling a background action */
+export type BackgroundBulkCancelBackgroundActionResult = {
+
+  __typename: 'BackgroundBulkCancelBackgroundActionResult';
+
+  successCount: Scalars['Int'];
+
+  failedCount: Scalars['Int'];
+};
+
+
+
+export type AvailableBackgroundBulkCancelBackgroundActionResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  successCount?: boolean | null | undefined;
+
+  failedCount?: boolean | null | undefined;
 };
 
 
@@ -12517,21 +13411,43 @@ export type InternalMutations = {
 
   triggerDeleteCustomCity: (DeleteCustomCityResult | null);
 
+  createDeliveryCharges: (InternalCreateDeliveryChargesResult | null);
+
+  updateDeliveryCharges: (InternalUpdateDeliveryChargesResult | null);
+
+  deleteDeliveryCharges: (InternalDeleteDeliveryChargesResult | null);
+
+  deleteManyDeliveryCharges: (InternalDeleteManyDeliveryChargesResult | null);
+
+  bulkCreateDeliveryChargess: (InternalBulkCreateDeliveryChargessResult | null);
+
+  upsertDeliveryCharges: (InternalUpsertDeliveryChargesResult | null);
+
+  triggerCreateDeliveryCharges: (CreateDeliveryChargesResult | null);
+
+  triggerUpdateDeliveryCharges: (UpdateDeliveryChargesResult | null);
+
+  triggerDeleteDeliveryCharges: (DeleteDeliveryChargesResult | null);
+
+  triggerApplyShippingCostAbsorption: (ApplyShippingCostAbsorptionResult | null);
+
   triggerCalculateRefund: (CalculateRefundResult | null);
 
   triggerCreateSenditOrder: (CreateSenditOrderResult | null);
+
+  triggerDebugOrderShipping: (DebugOrderShippingResult | null);
 
   triggerDirectOrderTest: (DirectOrderTestResult | null);
 
   triggerExtractOrderSKUs: (ExtractOrderSKUsResult | null);
 
-  triggerFulfillOrder: (FulfillOrderResult | null);
-
-  triggerGetCombinedCityList: (GetCombinedCityListResult | null);
-
   triggerGetCustomCities: (GetCustomCitiesResult | null);
 
+  triggerGetDeliveryCharges: (GetDeliveryChargesResult | null);
+
   triggerGetSenditDistrictId: (GetSenditDistrictIdResult | null);
+
+  triggerGetShippingCost: (GetShippingCostResult | null);
 
   triggerProcessBulkReturns: (ProcessBulkReturnsResult | null);
 
@@ -12545,10 +13461,6 @@ export type InternalMutations = {
 
   triggerSearchOrderForReturn: (SearchOrderForReturnResult | null);
 
-  triggerSenditFulfillOrder: (SenditFulfillOrderResult | null);
-
-  triggerStandardizeMoroccanAddress: (StandardizeMoroccanAddressResult | null);
-
   triggerStandardizeMoroccanCity: (StandardizeMoroccanCityResult | null);
 
   triggerSyncOrders: (SyncOrdersResult | null);
@@ -12557,13 +13469,15 @@ export type InternalMutations = {
 
   triggerTestLocationQuery: (TestLocationQueryResult | null);
 
-  triggerTestOriginalCityExtraction: (TestOriginalCityExtractionResult | null);
-
   triggerTestSenditConnection: (TestSenditConnectionResult | null);
+
+  triggerTestTrackingDetection: (TestTrackingDetectionResult | null);
 
   triggerTestWriteToSheet: (TestWriteToSheetResult | null);
 
   triggerTrackSpeedafOrders: (TrackSpeedafOrdersResult | null);
+
+  triggerUpdateDeliveryCharge: (UpdateDeliveryChargeResult | null);
 
   triggerUpdateReferenceTracking: (UpdateReferenceTrackingResult | null);
 
@@ -12573,8 +13487,14 @@ export type InternalMutations = {
 
   triggerWriteToShopify: (WriteToShopifyResult | null);
 
+  triggerListRecentOrders: (ListRecentOrdersResult | null);
+
+  triggerApplyDiscountsAndShipping: (ApplyDiscountsAndShippingResult | null);
+
+  /** @deprecated Use background.cancelBackgroundAction */
   cancelBackgroundAction: CancelBackgroundActionResult;
 
+  /** @deprecated Use background.bulkCancelBackgroundAction */
   bulkCancelBackgroundActions: BulkCancelBackgroundActionResult;
 };
 
@@ -12861,21 +13781,43 @@ export type AvailableInternalMutationsSelection = {
 
   triggerDeleteCustomCity?: AvailableDeleteCustomCityResultSelection;
 
+  createDeliveryCharges?: AvailableInternalCreateDeliveryChargesResultSelection;
+
+  updateDeliveryCharges?: AvailableInternalUpdateDeliveryChargesResultSelection;
+
+  deleteDeliveryCharges?: AvailableInternalDeleteDeliveryChargesResultSelection;
+
+  deleteManyDeliveryCharges?: AvailableInternalDeleteManyDeliveryChargesResultSelection;
+
+  bulkCreateDeliveryChargess?: AvailableInternalBulkCreateDeliveryChargessResultSelection;
+
+  upsertDeliveryCharges?: AvailableInternalUpsertDeliveryChargesResultSelection;
+
+  triggerCreateDeliveryCharges?: AvailableCreateDeliveryChargesResultSelection;
+
+  triggerUpdateDeliveryCharges?: AvailableUpdateDeliveryChargesResultSelection;
+
+  triggerDeleteDeliveryCharges?: AvailableDeleteDeliveryChargesResultSelection;
+
+  triggerApplyShippingCostAbsorption?: AvailableApplyShippingCostAbsorptionResultSelection;
+
   triggerCalculateRefund?: AvailableCalculateRefundResultSelection;
 
   triggerCreateSenditOrder?: AvailableCreateSenditOrderResultSelection;
+
+  triggerDebugOrderShipping?: AvailableDebugOrderShippingResultSelection;
 
   triggerDirectOrderTest?: AvailableDirectOrderTestResultSelection;
 
   triggerExtractOrderSKUs?: AvailableExtractOrderSKUsResultSelection;
 
-  triggerFulfillOrder?: AvailableFulfillOrderResultSelection;
-
-  triggerGetCombinedCityList?: AvailableGetCombinedCityListResultSelection;
-
   triggerGetCustomCities?: AvailableGetCustomCitiesResultSelection;
 
+  triggerGetDeliveryCharges?: AvailableGetDeliveryChargesResultSelection;
+
   triggerGetSenditDistrictId?: AvailableGetSenditDistrictIdResultSelection;
+
+  triggerGetShippingCost?: AvailableGetShippingCostResultSelection;
 
   triggerProcessBulkReturns?: AvailableProcessBulkReturnsResultSelection;
 
@@ -12889,10 +13831,6 @@ export type AvailableInternalMutationsSelection = {
 
   triggerSearchOrderForReturn?: AvailableSearchOrderForReturnResultSelection;
 
-  triggerSenditFulfillOrder?: AvailableSenditFulfillOrderResultSelection;
-
-  triggerStandardizeMoroccanAddress?: AvailableStandardizeMoroccanAddressResultSelection;
-
   triggerStandardizeMoroccanCity?: AvailableStandardizeMoroccanCityResultSelection;
 
   triggerSyncOrders?: AvailableSyncOrdersResultSelection;
@@ -12901,13 +13839,15 @@ export type AvailableInternalMutationsSelection = {
 
   triggerTestLocationQuery?: AvailableTestLocationQueryResultSelection;
 
-  triggerTestOriginalCityExtraction?: AvailableTestOriginalCityExtractionResultSelection;
-
   triggerTestSenditConnection?: AvailableTestSenditConnectionResultSelection;
+
+  triggerTestTrackingDetection?: AvailableTestTrackingDetectionResultSelection;
 
   triggerTestWriteToSheet?: AvailableTestWriteToSheetResultSelection;
 
   triggerTrackSpeedafOrders?: AvailableTrackSpeedafOrdersResultSelection;
+
+  triggerUpdateDeliveryCharge?: AvailableUpdateDeliveryChargeResultSelection;
 
   triggerUpdateReferenceTracking?: AvailableUpdateReferenceTrackingResultSelection;
 
@@ -12917,8 +13857,14 @@ export type AvailableInternalMutationsSelection = {
 
   triggerWriteToShopify?: AvailableWriteToShopifyResultSelection;
 
+  triggerListRecentOrders?: AvailableListRecentOrdersResultSelection;
+
+  triggerApplyDiscountsAndShipping?: AvailableApplyDiscountsAndShippingResultSelection;
+
+  /** @deprecated Use background.cancelBackgroundAction */
   cancelBackgroundAction?: AvailableCancelBackgroundActionResultSelection;
 
+  /** @deprecated Use background.bulkCancelBackgroundAction */
   bulkCancelBackgroundActions?: AvailableBulkCancelBackgroundActionResultSelection;
 };
 
@@ -16253,6 +17199,182 @@ export type AvailableInternalUpsertCustomCityResultSelection = {
   created?: boolean | null | undefined;
 
   customCity?: boolean | null | undefined;
+};
+
+
+
+export type InternalCreateDeliveryChargesResult = {
+
+  __typename: 'InternalCreateDeliveryChargesResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  /** Whether the record was created by this upsert operation */
+  created: Scalars['Boolean'];
+
+  deliveryCharges: (InternalDeliveryChargesRecord | null);
+};
+
+
+
+export type AvailableInternalCreateDeliveryChargesResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  /** Whether the record was created by this upsert operation */
+  created?: boolean | null | undefined;
+
+  deliveryCharges?: boolean | null | undefined;
+};
+
+
+
+export type InternalUpdateDeliveryChargesResult = {
+
+  __typename: 'InternalUpdateDeliveryChargesResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  /** Whether the record was created by this upsert operation */
+  created: Scalars['Boolean'];
+
+  deliveryCharges: (InternalDeliveryChargesRecord | null);
+};
+
+
+
+export type AvailableInternalUpdateDeliveryChargesResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  /** Whether the record was created by this upsert operation */
+  created?: boolean | null | undefined;
+
+  deliveryCharges?: boolean | null | undefined;
+};
+
+
+
+export type InternalDeleteDeliveryChargesResult = {
+
+  __typename: 'InternalDeleteDeliveryChargesResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  /** Whether the record was created by this upsert operation */
+  created: Scalars['Boolean'];
+
+  deliveryCharges: (InternalDeliveryChargesRecord | null);
+};
+
+
+
+export type AvailableInternalDeleteDeliveryChargesResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  /** Whether the record was created by this upsert operation */
+  created?: boolean | null | undefined;
+
+  deliveryCharges?: boolean | null | undefined;
+};
+
+
+
+export type InternalDeleteManyDeliveryChargesResult = {
+
+  __typename: 'InternalDeleteManyDeliveryChargesResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+};
+
+
+
+export type AvailableInternalDeleteManyDeliveryChargesResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+};
+
+
+
+export type InternalBulkCreateDeliveryChargessResult = {
+
+  __typename: 'InternalBulkCreateDeliveryChargessResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  deliveryChargess: (InternalDeliveryChargesRecord | null)[];
+};
+
+
+
+export type AvailableInternalBulkCreateDeliveryChargessResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  deliveryChargess?: boolean | null | undefined;
+};
+
+
+
+export type InternalUpsertDeliveryChargesResult = {
+
+  __typename: 'InternalUpsertDeliveryChargesResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  /** Whether the record was created by this upsert operation */
+  created: Scalars['Boolean'];
+
+  deliveryCharges: (InternalDeliveryChargesRecord | null);
+};
+
+
+
+export type AvailableInternalUpsertDeliveryChargesResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  /** Whether the record was created by this upsert operation */
+  created?: boolean | null | undefined;
+
+  deliveryCharges?: boolean | null | undefined;
 };
 
 

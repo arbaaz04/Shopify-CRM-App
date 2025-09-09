@@ -3,7 +3,7 @@
  * Eventually these should probably supersede the api-client-core ones.
  */
 
-import type { FieldSelection, VariablesOptions } from "@gadgetinc/api-client-core";
+import { type FieldSelection, type VariablesOptions } from "@gadgetinc/api-client-core";
 import type { FieldSelection as BuilderFieldSelection, Variable } from "tiny-graphql-query-compiler";
 import { Var } from "tiny-graphql-query-compiler";
 

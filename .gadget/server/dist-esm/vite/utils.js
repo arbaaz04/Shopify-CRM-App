@@ -1,15 +1,20 @@
 import { BuildDirectory } from "../remix/constants.js";
 import { FrontendType } from "./helpers.js";
-const getDefaultProductionBaseUrl = (assetsBucketDomain, applicationId, productionEnvironmentId)=>{
-    return `https://${assetsBucketDomain}/a/${applicationId}/${productionEnvironmentId}`;
+const getDefaultProductionBaseUrl = (assetsBucketDomain, applicationId, productionEnvironmentId, useSameDomainAssets = false)=>{
+    if (useSameDomainAssets) {
+        return `/api/assets/${applicationId}/${productionEnvironmentId}`;
+    } else {
+        return `https://${assetsBucketDomain}/a/${applicationId}/${productionEnvironmentId}`;
+    }
 };
 /** A descriptor object that describes how different Gadget frontend types work for our use when building vite configs */ const BaseRemixFrontendConfig = Object.freeze({
     distPath: `${BuildDirectory}/client`,
     manifestFilePaths: [
         `${BuildDirectory}/.vite/client-manifest.json`
     ],
-    productionBaseUrl: (assetsBucketDomain, applicationId, productionEnvironmentId)=>{
-        return `${getDefaultProductionBaseUrl(assetsBucketDomain, applicationId, productionEnvironmentId)}/`;
+    // Remix doesn't include the trailing slash in the base URL when building, so we need to add it manually
+    productionBaseUrl: (assetsBucketDomain, applicationId, productionEnvironmentId, useSameDomainAssets)=>{
+        return `${getDefaultProductionBaseUrl(assetsBucketDomain, applicationId, productionEnvironmentId, useSameDomainAssets)}/`;
     }
 });
 const BaseReactRouterFrontendConfig = Object.freeze({
@@ -17,8 +22,9 @@ const BaseReactRouterFrontendConfig = Object.freeze({
     manifestFilePaths: [
         `${BuildDirectory}/client/.vite/manifest.json`
     ],
-    productionBaseUrl: (assetsBucketDomain, applicationId, productionEnvironmentId)=>{
-        return `${getDefaultProductionBaseUrl(assetsBucketDomain, applicationId, productionEnvironmentId)}/`;
+    // React Router doesn't include the trailing slash in the base URL when building, so we need to add it manually
+    productionBaseUrl: (assetsBucketDomain, applicationId, productionEnvironmentId, useSameDomainAssets)=>{
+        return `${getDefaultProductionBaseUrl(assetsBucketDomain, applicationId, productionEnvironmentId, useSameDomainAssets)}/`;
     }
 });
 const BaseViteFrontendConfig = Object.freeze({

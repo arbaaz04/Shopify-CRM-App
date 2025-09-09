@@ -74,4 +74,34 @@
  * @internal
  */ /**
  * @internal
- */ /** The options for the mail object being sent */ /** An array of recipients e-mail addresses that will appear on the To: field */ /** The subject of the e-mail */ /** The body of the email in plain text */ /** The body of the email in HTML */ /** The From address displayed to users as to who the email came from. If using Gadget transport, must end in the app's approved subdomain, the value of primaryDomain found in Config. If one is not provided then a default address for the app will be used */ /** The Sender header used to identify the agent responsible for the actual transmission of the email. Can only be set when using a Custom transport */ /** An array of attachments */ /** Comma separated list or an array of recipients e-mail addresses that will appear on the Cc: field */ /** Comma separated list or an array of recipients e-mail addresses that will appear on the Bcc: field */ /** Comma separated list or an array of e-mail addresses that will appear on the Reply-To: field */ /** The message-id this message is replying */ /** Message-id list (an array or space separated string) */ /** An object or array of additional header fields */ export { }; /** the filename of the attachment. If not provided, will be derived from the path */  /** path to a file */  /** the content of the attachment */ 
+ */ /** The options for the mail object being sent */ /** An array of recipients e-mail addresses that will appear on the To: field */ /** The subject of the e-mail */ /** The body of the email in plain text */ /** The body of the email in HTML */ /** The From address displayed to users as to who the email came from. If using Gadget transport, must end in the app's approved subdomain, the value of primaryDomain found in Config. If one is not provided then a default address for the app will be used */ /** The Sender header used to identify the agent responsible for the actual transmission of the email. Can only be set when using a Custom transport */ /** An array of attachments */ /** Comma separated list or an array of recipients e-mail addresses that will appear on the Cc: field */ /** Comma separated list or an array of recipients e-mail addresses that will appear on the Bcc: field */ /** Comma separated list or an array of e-mail addresses that will appear on the Reply-To: field */ /** The message-id this message is replying */ /** Message-id list (an array or space separated string) */ /** An object or array of additional header fields */ /** the filename of the attachment. If not provided, will be derived from the path */ /** path to a file */ /** the content of the attachment */ /** A function which computes the valid CORS origins given the incoming request origin. */ /**
+ * Per-route options for CORS configuration
+ */ export { }; /**
+   * Configures the Access-Control-Allow-Origin CORS header.
+   */  /**
+   * Configures the Access-Control-Allow-Credentials CORS header.
+   * Set to true to pass the header, otherwise it is omitted.
+   */  /**
+   * Configures the Access-Control-Expose-Headers CORS header.
+   * Expects an array of header strings (ex: ['Content-Range', 'X-Content-Range']).
+   * If not specified, no custom headers are exposed.
+   */  /**
+   * Configures the Access-Control-Allow-Headers CORS header.
+   * Expects an array of header strings (ex: ['Content-Type', 'Authorization']).  If not specified, defaults to reflecting the headers specified in the request's Access-Control-Request-Headers header.
+   */  /**
+   * Configures the Access-Control-Allow-Methods CORS header.
+   */  /**
+   * Configures the Access-Control-Max-Age CORS header.
+   * Set to an integer to pass the header, otherwise it is omitted.
+   */  /**
+   * Configures the Cache-Control header for CORS preflight responses.
+   * Set to an integer to pass the header as `Cache-Control: max-age=${cacheControl}`,
+   * or set to a string to pass the header as `Cache-Control: ${cacheControl}` (fully define
+   * the header value), otherwise the header is omitted.
+   */  /**
+   * Provides a status code to use for successful OPTIONS requests,
+   * since some legacy browsers (IE11, various SmartTVs) choke on 204.
+   */  /**
+   * Enforces strict requirement of the CORS preflight request headers (Access-Control-Request-Method and Origin).
+   * Preflight requests without the required headers will result in 400 errors when set to `true` (default: `true`).
+   */  /** @internal */ 

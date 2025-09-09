@@ -115,7 +115,7 @@ const doesViteConfigHasGadgetPlugin = (config)=>{
     }) ?? false;
 };
 const getViteConfig = async (config, { command, mode, isSsrBuild }, options)=>{
-    const { assetsBucketDomain, applicationId, productionEnvironmentId } = options.params;
+    const { assetsBucketDomain, applicationId, productionEnvironmentId, useSameDomainAssets } = options.params;
     const type = getFrontendTypeByPluginsUsed(config);
     const frontendConfig = (0, _utils.getInternalFrontendConfig)(type);
     config.envPrefix = VITE_PUBLIC_ENV_PREFIXES;
@@ -153,8 +153,7 @@ const getViteConfig = async (config, { command, mode, isSsrBuild }, options)=>{
         });
         await _promises().default.writeFile(frontendTypeIndicatorFilePath, type);
         // Serve the assets from the Gadget CDN in production
-        config.base = frontendConfig.productionBaseUrl(assetsBucketDomain, applicationId, productionEnvironmentId);
-        // Remix doesn't include the trailing slash in the base URL when building, so we need to add it manually
+        config.base = frontendConfig.productionBaseUrl(assetsBucketDomain, applicationId, productionEnvironmentId, useSameDomainAssets);
         if (isRemixOrReactRouterFrameworkType(type)) {
             const parentDirectory = _path().default.join(_constants.BuildDirectory, "..");
             await _promises().default.mkdir(parentDirectory, {
@@ -162,14 +161,6 @@ const getViteConfig = async (config, { command, mode, isSsrBuild }, options)=>{
             });
             await _promises().default.writeFile(_path().default.join(parentDirectory, "package.json"), `{"type": "module"}`);
         }
-    }
-    if (command === "serve" && type === "react-router-framework") {
-        // Eagerly optimize the dependencies of the frontend routes when running in dev mode
-        config.optimizeDeps = {
-            entries: [
-                "web/routes/**/*.{jsx,tsx}"
-            ]
-        };
     }
     return {
         config,
@@ -269,7 +260,8 @@ const VITE_PUBLIC_ENV_PREFIXES = [
     "GADGET_PUBLIC_",
     "VITE_",
     "GADGET_APP",
-    "GADGET_ENV"
+    "GADGET_ENV",
+    "GADGET_ENV_ID"
 ];
 
 

@@ -86,6 +86,7 @@ export const getViteConfig = async (
       productionEnvironmentId: string;
       developmentEnvironmentVariables: Record<string, string>;
       productionEnvironmentVariables: Record<string, string>;
+      useSameDomainAssets: boolean;
     };
   }
 ): Promise<{
@@ -93,7 +94,7 @@ export const getViteConfig = async (
   type: FrontendType;
   command: "serve" | "build";
 }> => {
-  const { assetsBucketDomain, applicationId, productionEnvironmentId } = options.params;
+  const { assetsBucketDomain, applicationId, productionEnvironmentId, useSameDomainAssets } = options.params;
 
   const type = getFrontendTypeByPluginsUsed(config);
   const frontendConfig = getInternalFrontendConfig(type);
@@ -135,21 +136,13 @@ export const getViteConfig = async (
     await fs.writeFile(frontendTypeIndicatorFilePath, type);
 
     // Serve the assets from the Gadget CDN in production
-    config.base = frontendConfig.productionBaseUrl(assetsBucketDomain, applicationId, productionEnvironmentId);
+    config.base = frontendConfig.productionBaseUrl(assetsBucketDomain, applicationId, productionEnvironmentId, useSameDomainAssets);
 
-    // Remix doesn't include the trailing slash in the base URL when building, so we need to add it manually
     if (isRemixOrReactRouterFrameworkType(type)) {
       const parentDirectory = path.join(BuildDirectory, "..");
       await fs.mkdir(parentDirectory, { recursive: true });
       await fs.writeFile(path.join(parentDirectory, "package.json"), `{"type": "module"}`);
     }
-  }
-
-  if (command === "serve" && type === FrontendType.ReactRouterFramework) {
-    // Eagerly optimize the dependencies of the frontend routes when running in dev mode
-    config.optimizeDeps = {
-      entries: ["web/routes/**/*.{jsx,tsx}"],
-    };
   }
 
   return {
@@ -270,4 +263,4 @@ export const buildDefinesMap = (env: Record<string, string | undefined>, mode: "
   return defines;
 };
 
-export const VITE_PUBLIC_ENV_PREFIXES: string[] = ["GADGET_PUBLIC_", "VITE_", "GADGET_APP", "GADGET_ENV"];
+export const VITE_PUBLIC_ENV_PREFIXES: string[] = ["GADGET_PUBLIC_", "VITE_", "GADGET_APP", "GADGET_ENV", "GADGET_ENV_ID"];

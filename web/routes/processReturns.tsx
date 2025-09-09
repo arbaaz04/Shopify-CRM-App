@@ -12,6 +12,7 @@ import { api } from "../api";
 import { BulkOrderInput } from "../components/BulkOrderInput";
 import { BulkReturnInterface } from "../components/BulkReturnInterface";
 import { BulkReturnResults } from "../components/BulkReturnResults";
+import { RefundConflictModal } from "../components/modals";
 
 
 
@@ -31,6 +32,19 @@ const ProcessReturnsPage = () => {
   const [bulkReturnResults, setBulkReturnResults] = useState<any>(null);
   const [showBulkReturnResults, setShowBulkReturnResults] = useState(false);
   const [isBulkReturning, setIsBulkReturning] = useState(false);
+
+  // Refund conflict modal state
+  const [showRefundConflictModal, setShowRefundConflictModal] = useState(false);
+  const [conflictData, setConflictData] = useState<{
+    orderName: string;
+    orderSelections: any[];
+    currentIndex: number;
+    requestedAmount: number;
+    availableAmount: number;
+    currency: string;
+  } | null>(null);
+  const [isProcessingConflict, setIsProcessingConflict] = useState(false);
+  const [processedResults, setProcessedResults] = useState<any[]>([]); // Accumulate all results
 
 
 
@@ -78,7 +92,7 @@ const ProcessReturnsPage = () => {
     setBulkReturnResults(null);
   }, []);
 
-  // Handle bulk return processing
+  // Handle bulk return processing with conflict detection
   const handleBulkReturns = useCallback(async (orderSelections: any[]) => {
     if (!shop?.id) {
       setError('Shop information not available');
@@ -87,27 +101,316 @@ const ProcessReturnsPage = () => {
 
     setIsBulkReturning(true);
     setError(null);
+    setProcessedResults([]); // Reset accumulated results for new batch
 
     try {
-      const result = await (api as any).processBulkReturns({
-        orderSelections,
-        shopId: shop.id
-      });
-
-      if (result.success) {
-        setBulkReturnResults(result);
-        setShowBulkReturnResults(true);
-        setShowBulkReturnInterface(false);
-      } else {
-        setError(result.error || 'Failed to process bulk returns');
-      }
+      await processOrderSelectionsSequentially(orderSelections, 0);
     } catch (err) {
       setError('An error occurred while processing bulk returns');
       console.error('Bulk return processing error:', err);
-    } finally {
       setIsBulkReturning(false);
     }
   }, [shop?.id]);
+
+  // Process orders sequentially to handle conflicts individually
+  const processOrderSelectionsSequentially = useCallback(async (orderSelections: any[], startIndex: number, accumulatedResults: any[] = []) => {
+    const results: any[] = [...accumulatedResults]; // Start with accumulated results
+    
+    for (let i = startIndex; i < orderSelections.length; i++) {
+      const orderSelection = orderSelections[i];
+      const orderData = foundOrders.find(order => order.id === orderSelection.orderId);
+      
+      try {
+        // Try to process individual order
+        const result = await (api as any).processOrderReturn({
+          orderId: orderSelection.orderId,
+          shopId: shop!.id,
+          lineItems: orderSelection.selectedItems.map((item: any) => ({
+            lineItemId: item.lineItemId,
+            quantity: item.quantity,
+            reason: "Bulk return processing"
+          })),
+          refundShipping: false,
+          reason: "Bulk return processing",
+          notify: false,
+          skipRefund: false
+        });
+
+        if (result.success) {
+          // Use order name from API response first, then fall back to orderData, then to orderId
+          const orderName = result.refund?.orderName || 
+                           result.orderName ||
+                           (orderData?.name ? (orderData.name.startsWith('#') ? orderData.name : `#${orderData.name}`) : `#${orderSelection.orderId}`);
+          
+          // Enhance line items with proper names from original order data
+          let enhancedLineItems = result.refund?.lineItems || [];
+          if (orderData?.lineItems && enhancedLineItems.length > 0) {
+            enhancedLineItems = enhancedLineItems.map((refundItem: any) => {
+              const originalItem = orderData.lineItems.find((item: any) => 
+                item.id === refundItem.lineItemId || 
+                item.lineItemId === refundItem.lineItemId
+              );
+              return {
+                ...refundItem,
+                name: refundItem.name || originalItem?.name || originalItem?.title || `Item ${refundItem.lineItemId}`,
+                sku: refundItem.sku || originalItem?.sku || originalItem?.variant?.sku || ''
+              };
+            });
+          }
+          
+          results.push({
+            orderId: orderSelection.orderId,
+            orderName: orderName,
+            success: true,
+            message: result.message || 'Return processed successfully',
+            refundAmount: result.refund?.amount || 0,
+            currency: result.refund?.currency || 'MAD',
+            isInventoryOnly: result.isInventoryOnly || false,
+            processedItems: orderSelection.selectedItems.reduce((sum: number, item: any) => sum + item.quantity, 0),
+            lineItems: enhancedLineItems
+          });
+        } else if (result.errorType === 'INSUFFICIENT_REFUND_AMOUNT') {
+          // Show conflict modal for this order
+          // Use order name from API response if available, otherwise fall back to orderData lookup
+          const orderName = result.orderName || 
+                           (orderData?.name ? (orderData.name.startsWith('#') ? orderData.name : `#${orderData.name}`) : `#${orderSelection.orderId}`);
+          
+          // Save current results before stopping processing
+          setProcessedResults(results);
+          
+          setConflictData({
+            orderName: orderName,
+            orderSelections,
+            currentIndex: i,
+            requestedAmount: result.refundDetails.requestedAmount,
+            availableAmount: result.refundDetails.availableAmount,
+            currency: result.currency || result.refundDetails.currency || orderData?.currency || 'MAD'
+          });
+          setShowRefundConflictModal(true);
+          return; // Stop processing and wait for user decision
+        } else {
+          results.push({
+            orderId: orderSelection.orderId,
+            orderName: orderData?.name || `Order ${orderSelection.orderId}`,
+            success: false,
+            message: result.error || 'Failed to process return',
+            error: result.error,
+            processedItems: 0
+          });
+        }
+      } catch (orderError) {
+        const errorMessage = orderError instanceof Error ? orderError.message : String(orderError);
+        results.push({
+          orderId: orderSelection.orderId,
+          orderName: orderData?.name || `Order ${orderSelection.orderId}`,
+          success: false,
+          message: `Processing error: ${errorMessage}`,
+          error: errorMessage,
+          processedItems: 0
+        });
+      }
+    }
+
+    // All orders processed successfully
+    const successfulReturns = results.filter(r => r.success).length;
+    const failedReturns = results.filter(r => !r.success).length;
+    const totalRefundAmount = results.reduce((sum, r) => sum + (r.refundAmount || 0), 0);
+
+    setBulkReturnResults({
+      success: true,
+      results,
+      summary: {
+        totalOrders: orderSelections.length,
+        successfulReturns,
+        failedReturns,
+        totalRefundAmount,
+        currency: results[0]?.currency || 'MAD'
+      }
+    });
+    setShowBulkReturnResults(true);
+    setShowBulkReturnInterface(false);
+    setIsBulkReturning(false);
+  }, [shop, foundOrders]);
+
+  // Handle inventory-only return from conflict modal
+  const handleInventoryOnlyReturn = useCallback(async () => {
+    if (!conflictData || !shop?.id) return;
+
+    setIsProcessingConflict(true);
+    
+    try {
+      const orderSelection = conflictData.orderSelections[conflictData.currentIndex];
+      const orderData = foundOrders.find(order => order.id === orderSelection.orderId);
+      
+      // Process with inventory-only flag
+      const result = await (api as any).processOrderReturn({
+        orderId: orderSelection.orderId,
+        shopId: shop.id,
+        lineItems: orderSelection.selectedItems.map((item: any) => ({
+          lineItemId: item.lineItemId,
+          quantity: item.quantity,
+          reason: "Bulk return processing"
+        })),
+        refundShipping: false,
+        reason: "Bulk return processing (inventory-only)",
+        notify: false,
+        skipRefund: false,
+        inventoryOnlyReturn: true
+      });
+
+      setShowRefundConflictModal(false);
+      setIsProcessingConflict(false);
+      setConflictData(null);
+
+      // Continue processing remaining orders
+      if (conflictData.currentIndex + 1 < conflictData.orderSelections.length) {
+        // Enhance line items with proper names from original order data
+        let enhancedLineItems = result.refund?.lineItems || [];
+        if (orderData?.lineItems && enhancedLineItems.length > 0) {
+          enhancedLineItems = enhancedLineItems.map((refundItem: any) => {
+            const originalItem = orderData.lineItems.find((item: any) => 
+              item.id === refundItem.lineItemId || 
+              item.lineItemId === refundItem.lineItemId
+            );
+            return {
+              ...refundItem,
+              name: refundItem.name || originalItem?.name || originalItem?.title || `Item ${refundItem.lineItemId}`,
+              sku: refundItem.sku || originalItem?.sku || originalItem?.variant?.sku || ''
+            };
+          });
+        }
+        
+        // Add the current result to accumulated results
+        const currentResult = {
+          orderId: orderSelection.orderId,
+          orderName: conflictData.orderName,
+          success: result.success,
+          message: result.success ? 'Inventory-only return processed successfully' : result.error,
+          refundAmount: result.refund?.amount || 0,
+          currency: result.refund?.currency || 'MAD',
+          isInventoryOnly: result.isInventoryOnly || true,
+          processedItems: orderSelection.selectedItems.reduce((sum: number, item: any) => sum + item.quantity, 0),
+          lineItems: enhancedLineItems
+        };
+        
+        const accumulatedResults = [...processedResults, currentResult];
+        setProcessedResults(accumulatedResults);
+        
+        await processOrderSelectionsSequentially(conflictData.orderSelections, conflictData.currentIndex + 1, accumulatedResults);
+      } else {
+        // Enhance line items with proper names from original order data
+        let enhancedLineItems = result.refund?.lineItems || [];
+        if (orderData?.lineItems && enhancedLineItems.length > 0) {
+          enhancedLineItems = enhancedLineItems.map((refundItem: any) => {
+            const originalItem = orderData.lineItems.find((item: any) => 
+              item.id === refundItem.lineItemId || 
+              item.lineItemId === refundItem.lineItemId
+            );
+            return {
+              ...refundItem,
+              name: refundItem.name || originalItem?.name || originalItem?.title || `Item ${refundItem.lineItemId}`,
+              sku: refundItem.sku || originalItem?.sku || originalItem?.variant?.sku || ''
+            };
+          });
+        }
+        
+        // This was the last order, show final results with all accumulated data
+        const currentResult = {
+          orderId: orderSelection.orderId,
+          orderName: conflictData.orderName,
+          success: result.success,
+          message: result.success ? 'Inventory-only return processed successfully' : result.error,
+          refundAmount: result.refund?.amount || 0,
+          currency: result.refund?.currency || 'MAD',
+          isInventoryOnly: result.isInventoryOnly || true,
+          processedItems: orderSelection.selectedItems.reduce((sum: number, item: any) => sum + item.quantity, 0),
+          lineItems: enhancedLineItems
+        };
+        
+        const finalResults = [...processedResults, currentResult];
+        const successfulReturns = finalResults.filter(r => r.success).length;
+        const failedReturns = finalResults.filter(r => !r.success).length;
+        const totalRefundAmount = finalResults.reduce((sum, r) => sum + (r.refundAmount || 0), 0);
+
+        setBulkReturnResults({
+          success: true,
+          results: finalResults,
+          summary: {
+            totalOrders: conflictData.orderSelections.length,
+            successfulReturns,
+            failedReturns,
+            totalRefundAmount,
+            currency: finalResults[0]?.currency || 'MAD'
+          }
+        });
+        setShowBulkReturnResults(true);
+        setShowBulkReturnInterface(false);
+        setIsBulkReturning(false);
+        setProcessedResults([]); // Reset for next batch
+      }
+    } catch (error) {
+      console.error('Error processing inventory-only return:', error);
+      setError('Failed to process inventory-only return');
+      setIsProcessingConflict(false);
+    }
+  }, [conflictData, shop, processOrderSelectionsSequentially, foundOrders, processedResults]);
+
+  // Handle skip order from conflict modal
+  const handleSkipOrder = useCallback(async () => {
+    if (!conflictData) return;
+
+    setShowRefundConflictModal(false);
+    setConflictData(null);
+
+    // Add a skipped result to accumulated results
+    const skippedResult = {
+      orderId: conflictData.orderSelections[conflictData.currentIndex].orderId,
+      orderName: conflictData.orderName,
+      success: false,
+      message: 'Order skipped due to insufficient refund amount',
+      refundAmount: 0,
+      currency: conflictData.currency,
+      isInventoryOnly: false,
+      processedItems: 0,
+      lineItems: []
+    };
+    
+    const accumulatedResults = [...processedResults, skippedResult];
+    setProcessedResults(accumulatedResults);
+
+    // Continue processing remaining orders
+    if (conflictData.currentIndex + 1 < conflictData.orderSelections.length) {
+      await processOrderSelectionsSequentially(conflictData.orderSelections, conflictData.currentIndex + 1, accumulatedResults);
+    } else {
+      // This was the last order, finish processing with accumulated results
+      const successfulReturns = accumulatedResults.filter(r => r.success).length;
+      const failedReturns = accumulatedResults.filter(r => !r.success).length;
+      const totalRefundAmount = accumulatedResults.reduce((sum, r) => sum + (r.refundAmount || 0), 0);
+
+      setBulkReturnResults({
+        success: true,
+        results: accumulatedResults,
+        summary: {
+          totalOrders: conflictData.orderSelections.length,
+          successfulReturns,
+          failedReturns,
+          totalRefundAmount,
+          currency: accumulatedResults[0]?.currency || 'MAD'
+        }
+      });
+      setShowBulkReturnResults(true);
+      setShowBulkReturnInterface(false);
+      setIsBulkReturning(false);
+      setProcessedResults([]); // Reset for next batch
+    }
+  }, [conflictData, processOrderSelectionsSequentially, processedResults]);
+
+  // Handle close conflict modal
+  const handleCloseConflictModal = useCallback(() => {
+    setShowRefundConflictModal(false);
+    setConflictData(null);
+    setIsBulkReturning(false);
+  }, []);
 
   // Show loading state while fetching shop data
   if (shopFetching) {
@@ -188,6 +491,21 @@ const ProcessReturnsPage = () => {
           Designed by Scrptble in Pakistan
         </div>
       </BlockStack>
+
+      {/* Refund Conflict Modal */}
+      {conflictData && (
+        <RefundConflictModal
+          isOpen={showRefundConflictModal}
+          onClose={handleCloseConflictModal}
+          orderName={conflictData.orderName}
+          requestedAmount={conflictData.requestedAmount}
+          availableAmount={conflictData.availableAmount}
+          currency={conflictData.currency}
+          onProceedInventoryOnly={handleInventoryOnlyReturn}
+          onSkipOrder={handleSkipOrder}
+          isProcessing={isProcessingConflict}
+        />
+      )}
     </Page>
   );
 };

@@ -2,7 +2,7 @@
  * Most of these utility types are straight duplicates or refined versions of the types with the same name from api-client-core.
  * Eventually these should probably supersede the api-client-core ones.
  */
-import type { FieldSelection, VariablesOptions } from "@gadgetinc/api-client-core";
+import { type FieldSelection, type VariablesOptions } from "@gadgetinc/api-client-core";
 import type { FieldSelection as BuilderFieldSelection, Variable } from "tiny-graphql-query-compiler";
 /**
  * Allows detecting an any type, this is rather tricky:

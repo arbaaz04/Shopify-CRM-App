@@ -38,10 +38,10 @@ export interface CreateCustomCityActionContext extends AmbientContext {
 	*/
 	params: {
 		customCity?: {
-			name?: string
-			courierType?: string
 			isActive?: boolean
 			addedAt?: Date
+			courierType?: string
+			name?: string
 			shop?: {
 				_link: string | null
 			}
@@ -75,10 +75,10 @@ export interface UpdateCustomCityActionContext extends AmbientContext {
 	*/
 	params: {
 		customCity?: {
-			name?: string
-			courierType?: string
 			isActive?: boolean
 			addedAt?: Date
+			courierType?: string
+			name?: string
 			shop?: {
 				_link: string | null
 			}

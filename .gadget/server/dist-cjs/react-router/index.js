@@ -9,6 +9,7 @@ function _export(target, all) {
     });
 }
 _export(exports, {
+    // @ts-ignore - ErrorBoundary generated dynamically
     DevelopmentErrorBoundary: function() {
         return _ErrorBoundary.DevelopmentErrorBoundary;
     },
@@ -28,5 +29,8 @@ const _ErrorBoundary = require("./ErrorBoundary");
  * Parameters for running a React Router app in Gadget.
  */ const reactRouterConfigOptions = {
     buildDirectory: _constants.BuildDirectory,
-    appDirectory: _constants.AppDirectory
+    appDirectory: _constants.AppDirectory,
+    future: {
+        unstable_optimizeDeps: true
+    }
 };

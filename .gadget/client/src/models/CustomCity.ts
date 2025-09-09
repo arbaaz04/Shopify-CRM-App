@@ -376,7 +376,7 @@ export type CustomCityManager = {
       *
       * @example
       * * const customCityRecord = await api.customCity.create({
-        *   addedAt: "2025-06-01T00:00:00.000+00:00",
+        *   addedAt: "2025-09-01T00:00:00.000+00:00",
         *   courierType: "sendit",
         *   isActive: true,
         *   name: "example value for name",
@@ -398,7 +398,7 @@ export type CustomCityManager = {
       * @example
       * * const customCityRecord = await api.customCity.create({
         *   customCity: {
-        *     addedAt: "2025-06-01T00:00:00.000+00:00",
+        *     addedAt: "2025-09-01T00:00:00.000+00:00",
         *     courierType: "sendit",
         *     isActive: true,
         *     name: "example value for name",
@@ -473,7 +473,7 @@ export type CustomCityManager = {
       *
       * @example
       * * const customCityRecord = await api.customCity.update("1", {
-        *   addedAt: "2025-06-01T00:00:00.000+00:00",
+        *   addedAt: "2025-09-01T00:00:00.000+00:00",
         *   courierType: "sendit",
         *   isActive: true,
         *   name: "example value for name",
@@ -495,7 +495,7 @@ export type CustomCityManager = {
       * @example
       * * const customCityRecord = await api.customCity.update("1", {
         *   customCity: {
-        *     addedAt: "2025-06-01T00:00:00.000+00:00",
+        *     addedAt: "2025-09-01T00:00:00.000+00:00",
         *     courierType: "sendit",
         *     isActive: true,
         *     name: "example value for name",

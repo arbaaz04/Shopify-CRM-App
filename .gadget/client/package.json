@@ -1,11 +1,11 @@
 {
   "name": "@gadget-client/bambe-crm-app",
-  "version": "1.115.0-development.2373",
+  "version": "1.116.0-development.2497",
   "files": [
-    "dist-*/",
+    "dist-cjs",
+    "dist-esm",
     "types",
-    "types-esm",
-    "bin/"
+    "types-esm"
   ],
   "source": "src/index.ts",
   "types": "types/index.d.ts",
@@ -25,7 +25,7 @@
   },
   "private": true,
   "dependencies": {
-    "@gadgetinc/api-client-core": "0.15.43",
+    "@gadgetinc/api-client-core": "0.15.45",
     "tiny-graphql-query-compiler": "^0.2.2"
   },
   "devDependencies": {
@@ -41,6 +41,6 @@
   "gadget": {
     "applicationName": "bambe-crm-app",
     "environmentName": "Development",
-    "environmentVersion": "2373"
+    "environmentVersion": "2497"
   }
 }

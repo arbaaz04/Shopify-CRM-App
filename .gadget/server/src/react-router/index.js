@@ -26,7 +26,10 @@ const _constants = require("./constants");
 const _ErrorBoundary = require("./ErrorBoundary");
 const reactRouterConfigOptions = {
     buildDirectory: _constants.BuildDirectory,
-    appDirectory: _constants.AppDirectory
+    appDirectory: _constants.AppDirectory,
+    future: {
+        unstable_optimizeDeps: true
+    }
 };
 
 
