@@ -18,6 +18,7 @@ import { SenditConfigManager } from "./models/SenditConfig.js";
 import { SpeedafConfigManager } from "./models/SpeedafConfig.js";
 import { CustomCityManager } from "./models/CustomCity.js";
 import { DeliveryChargesManager } from "./models/DeliveryCharges.js";
+import { BlacklistedPhoneManager } from "./models/BlacklistedPhone.js";
 import { DefaultShopifyCustomerSelection as DefaultShopifyCustomerSelection2 } from "./models/ShopifyCustomer.js";
 import { DefaultShopifyGdprRequestSelection as DefaultShopifyGdprRequestSelection2 } from "./models/ShopifyGdprRequest.js";
 import { DefaultShopifyOrderSelection as DefaultShopifyOrderSelection2 } from "./models/ShopifyOrder.js";
@@ -34,6 +35,7 @@ import { DefaultSenditConfigSelection as DefaultSenditConfigSelection2 } from ".
 import { DefaultSpeedafConfigSelection as DefaultSpeedafConfigSelection2 } from "./models/SpeedafConfig.js";
 import { DefaultCustomCitySelection as DefaultCustomCitySelection2 } from "./models/CustomCity.js";
 import { DefaultDeliveryChargesSelection as DefaultDeliveryChargesSelection2 } from "./models/DeliveryCharges.js";
+import { DefaultBlacklistedPhoneSelection as DefaultBlacklistedPhoneSelection2 } from "./models/BlacklistedPhone.js";
 const productionEnv = "production";
 const fallbackEnv = "development";
 const availableAuthenticationModes = [
@@ -73,6 +75,18 @@ const getImplicitEnv = () => {
 };
 class BambeCrmAppClient {
   constructor(options) {
+    /** Executes the applyDiscountsAndShipping global action. */
+    this.applyDiscountsAndShipping = buildGlobalAction(this, {
+      type: "globalAction",
+      functionName: "applyDiscountsAndShipping",
+      operationName: "applyDiscountsAndShipping",
+      operationReturnType: "ApplyDiscountsAndShipping",
+      namespace: null,
+      variables: {
+        orderId: { required: false, type: "String" },
+        testMode: { required: false, type: "Boolean" }
+      }
+    });
     /** Executes the applyShippingCostAbsorption global action. */
     this.applyShippingCostAbsorption = buildGlobalAction(this, {
       type: "globalAction",
@@ -117,6 +131,27 @@ class BambeCrmAppClient {
       operationReturnType: "DebugOrderShipping",
       namespace: null,
       variables: {}
+    });
+    /** Executes the deleteSenditRecord global action. */
+    this.deleteSenditRecord = buildGlobalAction(this, {
+      type: "globalAction",
+      functionName: "deleteSenditRecord",
+      operationName: "deleteSenditRecord",
+      operationReturnType: "DeleteSenditRecord",
+      namespace: null,
+      variables: {}
+    });
+    /** Executes the deleteSheetRowsByTrackingNumber global action. */
+    this.deleteSheetRowsByTrackingNumber = buildGlobalAction(this, {
+      type: "globalAction",
+      functionName: "deleteSheetRowsByTrackingNumber",
+      operationName: "deleteSheetRowsByTrackingNumber",
+      operationReturnType: "DeleteSheetRowsByTrackingNumber",
+      namespace: null,
+      variables: {
+        trackingNumbers: { required: false, type: "String" },
+        shopId: { required: false, type: "String" }
+      }
     });
     /** Executes the directOrderTest global action. */
     this.directOrderTest = buildGlobalAction(this, {
@@ -177,6 +212,15 @@ class BambeCrmAppClient {
       operationReturnType: "GetShippingCost",
       namespace: null,
       variables: { orderId: { required: false, type: "String" } }
+    });
+    /** Executes the listRecentOrders global action. */
+    this.listRecentOrders = buildGlobalAction(this, {
+      type: "globalAction",
+      functionName: "listRecentOrders",
+      operationName: "listRecentOrders",
+      operationReturnType: "ListRecentOrders",
+      namespace: null,
+      variables: {}
     });
     /** Executes the processBulkReturns global action. */
     this.processBulkReturns = buildGlobalAction(this, {
@@ -321,6 +365,15 @@ class BambeCrmAppClient {
         saveToPersistent: { required: false, type: "Boolean" }
       }
     });
+    /** Executes the testSenditDeletion global action. */
+    this.testSenditDeletion = buildGlobalAction(this, {
+      type: "globalAction",
+      functionName: "testSenditDeletion",
+      operationName: "testSenditDeletion",
+      operationReturnType: "TestSenditDeletion",
+      namespace: null,
+      variables: {}
+    });
     /** Executes the testTrackingDetection global action. */
     this.testTrackingDetection = buildGlobalAction(this, {
       type: "globalAction",
@@ -419,27 +472,6 @@ class BambeCrmAppClient {
         shopId: { required: false, type: "String" },
         mutation: { required: false, type: "String" },
         variables: { required: false, type: "JSONObject" }
-      }
-    });
-    /** Executes the listRecentOrders global action. */
-    this.listRecentOrders = buildGlobalAction(this, {
-      type: "globalAction",
-      functionName: "listRecentOrders",
-      operationName: "listRecentOrders",
-      operationReturnType: "ListRecentOrders",
-      namespace: null,
-      variables: {}
-    });
-    /** Executes the applyDiscountsAndShipping global action. */
-    this.applyDiscountsAndShipping = buildGlobalAction(this, {
-      type: "globalAction",
-      functionName: "applyDiscountsAndShipping",
-      operationName: "applyDiscountsAndShipping",
-      operationReturnType: "ApplyDiscountsAndShipping",
-      namespace: null,
-      variables: {
-        orderId: { required: false, type: "String" },
-        testMode: { required: false, type: "Boolean" }
       }
     });
     /**
@@ -558,6 +590,7 @@ class BambeCrmAppClient {
     this.speedafConfig = new SpeedafConfigManager(this.connection);
     this.customCity = new CustomCityManager(this.connection);
     this.deliveryCharges = new DeliveryChargesManager(this.connection);
+    this.blacklistedPhone = new BlacklistedPhoneManager(this.connection);
     this.internal = {
       shopifyCustomer: new InternalModelManager("shopifyCustomer", this.connection, { "pluralApiIdentifier": "shopifyCustomers", "hasAmbiguousIdentifiers": false, "namespace": [] }),
       shopifyGdprRequest: new InternalModelManager("shopifyGdprRequest", this.connection, { "pluralApiIdentifier": "shopifyGdprRequests", "hasAmbiguousIdentifiers": false, "namespace": [] }),
@@ -574,7 +607,8 @@ class BambeCrmAppClient {
       senditConfig: new InternalModelManager("senditConfig", this.connection, { "pluralApiIdentifier": "senditConfigs", "hasAmbiguousIdentifiers": false, "namespace": [] }),
       speedafConfig: new InternalModelManager("speedafConfig", this.connection, { "pluralApiIdentifier": "speedafConfigs", "hasAmbiguousIdentifiers": false, "namespace": [] }),
       customCity: new InternalModelManager("customCity", this.connection, { "pluralApiIdentifier": "customCities", "hasAmbiguousIdentifiers": false, "namespace": [] }),
-      deliveryCharges: new InternalModelManager("deliveryCharges", this.connection, { "pluralApiIdentifier": "deliveryChargess", "hasAmbiguousIdentifiers": false, "namespace": [] })
+      deliveryCharges: new InternalModelManager("deliveryCharges", this.connection, { "pluralApiIdentifier": "deliveryChargess", "hasAmbiguousIdentifiers": false, "namespace": [] }),
+      blacklistedPhone: new InternalModelManager("blacklistedPhone", this.connection, { "pluralApiIdentifier": "blacklistedPhones", "hasAmbiguousIdentifiers": false, "namespace": [] })
     };
   }
   /**
@@ -680,11 +714,12 @@ class BambeCrmAppClient {
     return this.toString();
   }
 }
-BambeCrmAppClient.prototype[Symbol.for("gadget/modelRelationships")] = { "shopifyCustomer": { "orders": { "type": "HasMany", "model": "shopifyOrder" }, "lastOrder": { "type": "BelongsTo", "model": "shopifyOrder" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyGdprRequest": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyOrder": { "customer": { "type": "BelongsTo", "model": "shopifyCustomer" }, "fulfillments": { "type": "HasMany", "model": "shopifyFulfillment" }, "shopifyShop": { "type": "BelongsTo", "model": "shopifyShop" }, "fulfillmentOrders": { "type": "HasMany", "model": "shopifyFulfillmentOrder" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyShop": { "syncs": { "type": "HasMany", "model": "shopifySync" }, "gdprRequests": { "type": "HasMany", "model": "shopifyGdprRequest" }, "fulfillmentOrders": { "type": "HasMany", "model": "shopifyFulfillmentOrder" }, "fulfillmentServices": { "type": "HasMany", "model": "shopifyFulfillmentService" }, "fulfillments": { "type": "HasMany", "model": "shopifyFulfillment" }, "customers": { "type": "HasMany", "model": "shopifyCustomer" }, "orders": { "type": "HasMany", "model": "shopifyOrder" }, "productVariants": { "type": "HasMany", "model": "shopifyProductVariant" }, "products": { "type": "HasMany", "model": "shopifyProduct" } }, "shopifySync": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "googleSheetConfig": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "session": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyFulfillment": { "order": { "type": "BelongsTo", "model": "shopifyOrder" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyFulfillmentOrder": { "order": { "type": "BelongsTo", "model": "shopifyOrder" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyFulfillmentService": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyProduct": { "variants": { "type": "HasMany", "model": "shopifyProductVariant" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyProductVariant": { "product": { "type": "BelongsTo", "model": "shopifyProduct" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "senditConfig": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "speedafConfig": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "customCity": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "deliveryCharges": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } } };
+BambeCrmAppClient.prototype[Symbol.for("gadget/modelRelationships")] = { "shopifyCustomer": { "orders": { "type": "HasMany", "model": "shopifyOrder" }, "lastOrder": { "type": "BelongsTo", "model": "shopifyOrder" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyGdprRequest": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyOrder": { "customer": { "type": "BelongsTo", "model": "shopifyCustomer" }, "fulfillments": { "type": "HasMany", "model": "shopifyFulfillment" }, "shopifyShop": { "type": "BelongsTo", "model": "shopifyShop" }, "fulfillmentOrders": { "type": "HasMany", "model": "shopifyFulfillmentOrder" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyShop": { "syncs": { "type": "HasMany", "model": "shopifySync" }, "gdprRequests": { "type": "HasMany", "model": "shopifyGdprRequest" }, "fulfillmentOrders": { "type": "HasMany", "model": "shopifyFulfillmentOrder" }, "fulfillmentServices": { "type": "HasMany", "model": "shopifyFulfillmentService" }, "fulfillments": { "type": "HasMany", "model": "shopifyFulfillment" }, "customers": { "type": "HasMany", "model": "shopifyCustomer" }, "orders": { "type": "HasMany", "model": "shopifyOrder" }, "productVariants": { "type": "HasMany", "model": "shopifyProductVariant" }, "products": { "type": "HasMany", "model": "shopifyProduct" } }, "shopifySync": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "googleSheetConfig": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "session": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyFulfillment": { "order": { "type": "BelongsTo", "model": "shopifyOrder" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyFulfillmentOrder": { "order": { "type": "BelongsTo", "model": "shopifyOrder" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyFulfillmentService": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyProduct": { "variants": { "type": "HasMany", "model": "shopifyProductVariant" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyProductVariant": { "product": { "type": "BelongsTo", "model": "shopifyProduct" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "senditConfig": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "speedafConfig": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "customCity": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "deliveryCharges": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "blacklistedPhone": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } } };
 const Client = BambeCrmAppClient;
 export {
   BambeCrmAppClient,
   Client,
+  DefaultBlacklistedPhoneSelection2 as DefaultBlacklistedPhoneSelection,
   DefaultCustomCitySelection2 as DefaultCustomCitySelection,
   DefaultDeliveryChargesSelection2 as DefaultDeliveryChargesSelection,
   DefaultGoogleSheetConfigSelection2 as DefaultGoogleSheetConfigSelection,

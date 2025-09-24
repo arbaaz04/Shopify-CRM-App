@@ -20,6 +20,7 @@ var Client_exports = {};
 __export(Client_exports, {
   BambeCrmAppClient: () => BambeCrmAppClient,
   Client: () => Client,
+  DefaultBlacklistedPhoneSelection: () => import_BlacklistedPhone2.DefaultBlacklistedPhoneSelection,
   DefaultCustomCitySelection: () => import_CustomCity2.DefaultCustomCitySelection,
   DefaultDeliveryChargesSelection: () => import_DeliveryCharges2.DefaultDeliveryChargesSelection,
   DefaultGoogleSheetConfigSelection: () => import_GoogleSheetConfig2.DefaultGoogleSheetConfigSelection,
@@ -59,6 +60,7 @@ var import_SenditConfig = require("./models/SenditConfig.js");
 var import_SpeedafConfig = require("./models/SpeedafConfig.js");
 var import_CustomCity = require("./models/CustomCity.js");
 var import_DeliveryCharges = require("./models/DeliveryCharges.js");
+var import_BlacklistedPhone = require("./models/BlacklistedPhone.js");
 var import_ShopifyCustomer2 = require("./models/ShopifyCustomer.js");
 var import_ShopifyGdprRequest2 = require("./models/ShopifyGdprRequest.js");
 var import_ShopifyOrder2 = require("./models/ShopifyOrder.js");
@@ -75,6 +77,7 @@ var import_SenditConfig2 = require("./models/SenditConfig.js");
 var import_SpeedafConfig2 = require("./models/SpeedafConfig.js");
 var import_CustomCity2 = require("./models/CustomCity.js");
 var import_DeliveryCharges2 = require("./models/DeliveryCharges.js");
+var import_BlacklistedPhone2 = require("./models/BlacklistedPhone.js");
 const import_meta = {};
 const productionEnv = "production";
 const fallbackEnv = "development";
@@ -115,6 +118,18 @@ const getImplicitEnv = () => {
 };
 class BambeCrmAppClient {
   constructor(options) {
+    /** Executes the applyDiscountsAndShipping global action. */
+    this.applyDiscountsAndShipping = (0, import_builder.buildGlobalAction)(this, {
+      type: "globalAction",
+      functionName: "applyDiscountsAndShipping",
+      operationName: "applyDiscountsAndShipping",
+      operationReturnType: "ApplyDiscountsAndShipping",
+      namespace: null,
+      variables: {
+        orderId: { required: false, type: "String" },
+        testMode: { required: false, type: "Boolean" }
+      }
+    });
     /** Executes the applyShippingCostAbsorption global action. */
     this.applyShippingCostAbsorption = (0, import_builder.buildGlobalAction)(this, {
       type: "globalAction",
@@ -159,6 +174,27 @@ class BambeCrmAppClient {
       operationReturnType: "DebugOrderShipping",
       namespace: null,
       variables: {}
+    });
+    /** Executes the deleteSenditRecord global action. */
+    this.deleteSenditRecord = (0, import_builder.buildGlobalAction)(this, {
+      type: "globalAction",
+      functionName: "deleteSenditRecord",
+      operationName: "deleteSenditRecord",
+      operationReturnType: "DeleteSenditRecord",
+      namespace: null,
+      variables: {}
+    });
+    /** Executes the deleteSheetRowsByTrackingNumber global action. */
+    this.deleteSheetRowsByTrackingNumber = (0, import_builder.buildGlobalAction)(this, {
+      type: "globalAction",
+      functionName: "deleteSheetRowsByTrackingNumber",
+      operationName: "deleteSheetRowsByTrackingNumber",
+      operationReturnType: "DeleteSheetRowsByTrackingNumber",
+      namespace: null,
+      variables: {
+        trackingNumbers: { required: false, type: "String" },
+        shopId: { required: false, type: "String" }
+      }
     });
     /** Executes the directOrderTest global action. */
     this.directOrderTest = (0, import_builder.buildGlobalAction)(this, {
@@ -219,6 +255,15 @@ class BambeCrmAppClient {
       operationReturnType: "GetShippingCost",
       namespace: null,
       variables: { orderId: { required: false, type: "String" } }
+    });
+    /** Executes the listRecentOrders global action. */
+    this.listRecentOrders = (0, import_builder.buildGlobalAction)(this, {
+      type: "globalAction",
+      functionName: "listRecentOrders",
+      operationName: "listRecentOrders",
+      operationReturnType: "ListRecentOrders",
+      namespace: null,
+      variables: {}
     });
     /** Executes the processBulkReturns global action. */
     this.processBulkReturns = (0, import_builder.buildGlobalAction)(this, {
@@ -363,6 +408,15 @@ class BambeCrmAppClient {
         saveToPersistent: { required: false, type: "Boolean" }
       }
     });
+    /** Executes the testSenditDeletion global action. */
+    this.testSenditDeletion = (0, import_builder.buildGlobalAction)(this, {
+      type: "globalAction",
+      functionName: "testSenditDeletion",
+      operationName: "testSenditDeletion",
+      operationReturnType: "TestSenditDeletion",
+      namespace: null,
+      variables: {}
+    });
     /** Executes the testTrackingDetection global action. */
     this.testTrackingDetection = (0, import_builder.buildGlobalAction)(this, {
       type: "globalAction",
@@ -461,27 +515,6 @@ class BambeCrmAppClient {
         shopId: { required: false, type: "String" },
         mutation: { required: false, type: "String" },
         variables: { required: false, type: "JSONObject" }
-      }
-    });
-    /** Executes the listRecentOrders global action. */
-    this.listRecentOrders = (0, import_builder.buildGlobalAction)(this, {
-      type: "globalAction",
-      functionName: "listRecentOrders",
-      operationName: "listRecentOrders",
-      operationReturnType: "ListRecentOrders",
-      namespace: null,
-      variables: {}
-    });
-    /** Executes the applyDiscountsAndShipping global action. */
-    this.applyDiscountsAndShipping = (0, import_builder.buildGlobalAction)(this, {
-      type: "globalAction",
-      functionName: "applyDiscountsAndShipping",
-      operationName: "applyDiscountsAndShipping",
-      operationReturnType: "ApplyDiscountsAndShipping",
-      namespace: null,
-      variables: {
-        orderId: { required: false, type: "String" },
-        testMode: { required: false, type: "Boolean" }
       }
     });
     /**
@@ -601,6 +634,7 @@ class BambeCrmAppClient {
     this.speedafConfig = new import_SpeedafConfig.SpeedafConfigManager(this.connection);
     this.customCity = new import_CustomCity.CustomCityManager(this.connection);
     this.deliveryCharges = new import_DeliveryCharges.DeliveryChargesManager(this.connection);
+    this.blacklistedPhone = new import_BlacklistedPhone.BlacklistedPhoneManager(this.connection);
     this.internal = {
       shopifyCustomer: new import_api_client_core.InternalModelManager("shopifyCustomer", this.connection, { "pluralApiIdentifier": "shopifyCustomers", "hasAmbiguousIdentifiers": false, "namespace": [] }),
       shopifyGdprRequest: new import_api_client_core.InternalModelManager("shopifyGdprRequest", this.connection, { "pluralApiIdentifier": "shopifyGdprRequests", "hasAmbiguousIdentifiers": false, "namespace": [] }),
@@ -617,7 +651,8 @@ class BambeCrmAppClient {
       senditConfig: new import_api_client_core.InternalModelManager("senditConfig", this.connection, { "pluralApiIdentifier": "senditConfigs", "hasAmbiguousIdentifiers": false, "namespace": [] }),
       speedafConfig: new import_api_client_core.InternalModelManager("speedafConfig", this.connection, { "pluralApiIdentifier": "speedafConfigs", "hasAmbiguousIdentifiers": false, "namespace": [] }),
       customCity: new import_api_client_core.InternalModelManager("customCity", this.connection, { "pluralApiIdentifier": "customCities", "hasAmbiguousIdentifiers": false, "namespace": [] }),
-      deliveryCharges: new import_api_client_core.InternalModelManager("deliveryCharges", this.connection, { "pluralApiIdentifier": "deliveryChargess", "hasAmbiguousIdentifiers": false, "namespace": [] })
+      deliveryCharges: new import_api_client_core.InternalModelManager("deliveryCharges", this.connection, { "pluralApiIdentifier": "deliveryChargess", "hasAmbiguousIdentifiers": false, "namespace": [] }),
+      blacklistedPhone: new import_api_client_core.InternalModelManager("blacklistedPhone", this.connection, { "pluralApiIdentifier": "blacklistedPhones", "hasAmbiguousIdentifiers": false, "namespace": [] })
     };
   }
   /**
@@ -725,12 +760,13 @@ class BambeCrmAppClient {
     return this.toString();
   }
 }
-BambeCrmAppClient.prototype[Symbol.for("gadget/modelRelationships")] = { "shopifyCustomer": { "orders": { "type": "HasMany", "model": "shopifyOrder" }, "lastOrder": { "type": "BelongsTo", "model": "shopifyOrder" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyGdprRequest": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyOrder": { "customer": { "type": "BelongsTo", "model": "shopifyCustomer" }, "fulfillments": { "type": "HasMany", "model": "shopifyFulfillment" }, "shopifyShop": { "type": "BelongsTo", "model": "shopifyShop" }, "fulfillmentOrders": { "type": "HasMany", "model": "shopifyFulfillmentOrder" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyShop": { "syncs": { "type": "HasMany", "model": "shopifySync" }, "gdprRequests": { "type": "HasMany", "model": "shopifyGdprRequest" }, "fulfillmentOrders": { "type": "HasMany", "model": "shopifyFulfillmentOrder" }, "fulfillmentServices": { "type": "HasMany", "model": "shopifyFulfillmentService" }, "fulfillments": { "type": "HasMany", "model": "shopifyFulfillment" }, "customers": { "type": "HasMany", "model": "shopifyCustomer" }, "orders": { "type": "HasMany", "model": "shopifyOrder" }, "productVariants": { "type": "HasMany", "model": "shopifyProductVariant" }, "products": { "type": "HasMany", "model": "shopifyProduct" } }, "shopifySync": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "googleSheetConfig": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "session": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyFulfillment": { "order": { "type": "BelongsTo", "model": "shopifyOrder" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyFulfillmentOrder": { "order": { "type": "BelongsTo", "model": "shopifyOrder" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyFulfillmentService": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyProduct": { "variants": { "type": "HasMany", "model": "shopifyProductVariant" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyProductVariant": { "product": { "type": "BelongsTo", "model": "shopifyProduct" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "senditConfig": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "speedafConfig": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "customCity": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "deliveryCharges": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } } };
+BambeCrmAppClient.prototype[Symbol.for("gadget/modelRelationships")] = { "shopifyCustomer": { "orders": { "type": "HasMany", "model": "shopifyOrder" }, "lastOrder": { "type": "BelongsTo", "model": "shopifyOrder" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyGdprRequest": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyOrder": { "customer": { "type": "BelongsTo", "model": "shopifyCustomer" }, "fulfillments": { "type": "HasMany", "model": "shopifyFulfillment" }, "shopifyShop": { "type": "BelongsTo", "model": "shopifyShop" }, "fulfillmentOrders": { "type": "HasMany", "model": "shopifyFulfillmentOrder" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyShop": { "syncs": { "type": "HasMany", "model": "shopifySync" }, "gdprRequests": { "type": "HasMany", "model": "shopifyGdprRequest" }, "fulfillmentOrders": { "type": "HasMany", "model": "shopifyFulfillmentOrder" }, "fulfillmentServices": { "type": "HasMany", "model": "shopifyFulfillmentService" }, "fulfillments": { "type": "HasMany", "model": "shopifyFulfillment" }, "customers": { "type": "HasMany", "model": "shopifyCustomer" }, "orders": { "type": "HasMany", "model": "shopifyOrder" }, "productVariants": { "type": "HasMany", "model": "shopifyProductVariant" }, "products": { "type": "HasMany", "model": "shopifyProduct" } }, "shopifySync": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "googleSheetConfig": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "session": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyFulfillment": { "order": { "type": "BelongsTo", "model": "shopifyOrder" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyFulfillmentOrder": { "order": { "type": "BelongsTo", "model": "shopifyOrder" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyFulfillmentService": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyProduct": { "variants": { "type": "HasMany", "model": "shopifyProductVariant" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "shopifyProductVariant": { "product": { "type": "BelongsTo", "model": "shopifyProduct" }, "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "senditConfig": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "speedafConfig": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "customCity": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "deliveryCharges": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } }, "blacklistedPhone": { "shop": { "type": "BelongsTo", "model": "shopifyShop" } } };
 const Client = BambeCrmAppClient;
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   BambeCrmAppClient,
   Client,
+  DefaultBlacklistedPhoneSelection,
   DefaultCustomCitySelection,
   DefaultDeliveryChargesSelection,
   DefaultGoogleSheetConfigSelection,

@@ -27,7 +27,7 @@ _export(exports, {
 *  |_.__/ \__,_|_| |_| |_|_.__/ \___|      \___|_|  |_| |_| |_|      \__,_| .__/| .__/ 
 *                                                                         |_|   |_|    
 *
-* Built for environment `Development` at version 2497
+* Built for environment `Development` at version 2613
 * Framework version: ^1.3.0
 * Edit this app here: https://bambe-crm-app.gadget.dev/edit
 */ /// <reference path="./ActionContextTypes.d.ts" />
@@ -127,6 +127,7 @@ _export_star(require("./models/SenditConfig"), exports);
 _export_star(require("./models/SpeedafConfig"), exports);
 _export_star(require("./models/CustomCity"), exports);
 _export_star(require("./models/DeliveryCharges"), exports);
+_export_star(require("./models/BlacklistedPhone"), exports);
 function _export_star(from, to) {
     Object.keys(from).forEach(function(k) {
         if (k !== "default" && !Object.prototype.hasOwnProperty.call(to, k)) {

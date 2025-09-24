@@ -10,7 +10,7 @@ export type AppTenancy = Partial<{
   bigcommerce: BigCommerceTenancy;
 }>;
 
-export type ShopifyTenant = Pick<ShopifyTenancy, "shopId" | "customerId" | "currentSession">;
+export type ShopifyTenant = Pick<ShopifyTenancy, "shopId" | "customerId" | "currentSession" | "currentAppProxy">;
 export type ShopifyTenancy = {
   shopId: bigint;
   domain: string;
@@ -22,6 +22,10 @@ export type ShopifyTenancy = {
   currentSession?: {
     token: string;
     userId?: string;
+  };
+  currentAppProxy?: {
+    pathPrefix: string | null;
+    loggedInCustomerId: string | null;
   };
 };
 

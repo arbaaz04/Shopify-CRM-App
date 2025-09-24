@@ -1,6 +1,6 @@
 {
   "name": "@gadget-client/bambe-crm-app",
-  "version": "1.116.0-development.2497",
+  "version": "1.116.0-development.2613",
   "files": [
     "dist-cjs",
     "dist-esm",
@@ -25,7 +25,7 @@
   },
   "private": true,
   "dependencies": {
-    "@gadgetinc/api-client-core": "0.15.45",
+    "@gadgetinc/api-client-core": "0.15.46",
     "tiny-graphql-query-compiler": "^0.2.2"
   },
   "devDependencies": {
@@ -41,6 +41,6 @@
   "gadget": {
     "applicationName": "bambe-crm-app",
     "environmentName": "Development",
-    "environmentVersion": "2497"
+    "environmentVersion": "2613"
   }
 }

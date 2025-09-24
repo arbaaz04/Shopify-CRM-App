@@ -135,6 +135,13 @@ export const IndexPage = () => {
   // Local delivery state - tracks which orders should have TNG- prefix for Tanger deliveries
   const [localDeliveryOrders, setLocalDeliveryOrders] = useState<Record<string, boolean>>({});
   
+  // Blacklisted phones state - for performance optimization
+  const [blacklistedPhones, setBlacklistedPhones] = useState<Set<string>>(new Set());
+  const [blacklistedPhonesFetching, setBlacklistedPhonesFetching] = useState(false);
+  const [blacklistedCache, setBlacklistedCache] = useState<Record<string, boolean>>({});
+  const [sheetBlacklistedCache, setSheetBlacklistedCache] = useState<Record<string, boolean>>({});
+  const [exchangeBlacklistedCache, setExchangeBlacklistedCache] = useState<Record<string, boolean>>({});
+  
   // GROUP 2: useFindFirst hooks
   const [{ data: shop, fetching: shopFetching, error: shopError }] = useFindFirst(api.shopifyShop);
   const [{ data: config, fetching: configFetching, error: configError }] = useFindFirst(api.googleSheetConfig, {
@@ -146,6 +153,121 @@ export const IndexPage = () => {
     const defaultCities = selectedCourier === 'speedaf' ? SPEEDAF_CITIES : MOROCCAN_CITIES;
     return [...defaultCities, ...customCities];
   }, [selectedCourier, customCities]);
+
+  // Function to fetch blacklisted phone numbers
+  const fetchBlacklistedPhones = useCallback(async () => {
+    if (!shop || blacklistedPhonesFetching) return;
+    
+    setBlacklistedPhonesFetching(true);
+    try {
+      console.log("🚫 [fetchBlacklistedPhones] Fetching blacklisted phone numbers...");
+      
+      const response = await api.blacklistedPhone.findMany({
+        filter: { shop: { id: { equals: shop.id } } },
+        select: { phone: true }
+      });
+      
+      console.log(`🚫 [fetchBlacklistedPhones] Raw response:`, response);
+      console.log(`🚫 [fetchBlacklistedPhones] First item:`, response[0]);
+      
+      // Convert to Set for O(1) lookup performance
+      const phoneSet = new Set<string>();
+      
+      response.forEach(item => {
+        if (item.phone) {
+          // Add original version
+          phoneSet.add(item.phone);
+          
+          // Normalize phone number: +212656884023 -> 0656884023
+          let normalizedPhone = item.phone.replace(/[\s\-\(\)]/g, ''); // Remove spaces, dashes, parentheses
+          
+          // Handle international format: +212 or 212 -> 0
+          if (normalizedPhone.startsWith('+212')) {
+            normalizedPhone = '0' + normalizedPhone.substring(4);
+          } else if (normalizedPhone.startsWith('212') && normalizedPhone.length >= 12) {
+            normalizedPhone = '0' + normalizedPhone.substring(3);
+          }
+          
+          if (normalizedPhone && normalizedPhone !== item.phone) {
+            phoneSet.add(normalizedPhone);
+          }
+        }
+      });
+      
+      console.log(`🚫 [fetchBlacklistedPhones] Loaded ${phoneSet.size} blacklisted phone numbers (original + normalized)`);
+      if (phoneSet.size > 0) {
+        console.log(`🚫 [fetchBlacklistedPhones] Sample blacklisted phones:`, Array.from(phoneSet).slice(0, 6));
+      } else {
+        console.log(`🚫 [fetchBlacklistedPhones] No phone numbers found in response`);
+      }
+      setBlacklistedPhones(phoneSet);
+    } catch (error) {
+      console.error("🚫 [fetchBlacklistedPhones] Error fetching blacklisted phones:", error);
+    } finally {
+      setBlacklistedPhonesFetching(false);
+    }
+  }, [shop, blacklistedPhonesFetching]);
+
+  // Function to check if a phone number is blacklisted
+  const isPhoneBlacklisted = useCallback((phoneNumber: string | null): boolean => {
+    if (!phoneNumber || blacklistedPhones.size === 0) return false;
+    
+    // Create a helper function to normalize phone numbers consistently
+    const normalizePhoneNumber = (phone: string): string[] => {
+      const results: string[] = [];
+      
+      // Add original version
+      results.push(phone);
+      
+      // Normalize phone number: +212656884023 -> 0656884023
+      let normalizedPhone = phone.replace(/[\s\-\(\),]/g, ''); // Remove spaces, dashes, parentheses, commas
+      
+      // Handle international format: +212 or 212 -> 0
+      if (normalizedPhone.startsWith('+212')) {
+        normalizedPhone = '0' + normalizedPhone.substring(4);
+      } else if (normalizedPhone.startsWith('212') && normalizedPhone.length >= 12) {
+        normalizedPhone = '0' + normalizedPhone.substring(3);
+      }
+      
+      // Add normalized version if different
+      if (normalizedPhone && normalizedPhone !== phone) {
+        results.push(normalizedPhone);
+      }
+      
+      return results;
+    };
+    
+    // Check all possible normalized versions of the phone number
+    const phoneVariations = normalizePhoneNumber(phoneNumber);
+    const isBlacklisted = phoneVariations.some(variation => blacklistedPhones.has(variation));
+    
+    return isBlacklisted;
+  }, [blacklistedPhones]);
+
+  // Function to calculate blacklisted status for all orders (similar to shipping analysis)
+  const calculateBlacklistedStatusForOrders = useCallback(async (orders: any[], setCacheFunction: (cache: Record<string, boolean>) => void) => {
+    const newBlacklistedCache: Record<string, boolean> = {};
+    
+    // Helper function to extract phone number from an order
+    const extractPhoneNumber = (order: any): string | null => {
+      if (order.shippingAddress && order.shippingAddress.phone) {
+        return order.shippingAddress.phone;
+      } else if (order.phone) {
+        return order.phone;
+      } else {
+        return null;
+      }
+    };
+    
+    // Process all orders to check blacklisted status
+    orders.forEach(order => {
+      const phoneNumber = extractPhoneNumber(order);
+      const isBlacklisted = isPhoneBlacklisted(phoneNumber);
+      newBlacklistedCache[order.id] = isBlacklisted;
+    });
+    
+    setCacheFunction(newBlacklistedCache);
+  }, [isPhoneBlacklisted]);
 
   // Function to load custom cities
   const loadCustomCities = useCallback(async () => {
@@ -228,10 +350,12 @@ export const IndexPage = () => {
       // Also fetch exchange orders on initial load
       fetchExchangeOrders();
       fetchSheetOrders(); // Uncommented this line
+      // Also fetch blacklisted phones for checking
+      fetchBlacklistedPhones();
       // Load custom cities
       loadCustomCities();
     }
-  }, [isAuthenticated, shop]);
+  }, [isAuthenticated, shop, fetchBlacklistedPhones]);
 
   // Load custom cities when courier type changes
   useEffect(() => {
@@ -239,6 +363,19 @@ export const IndexPage = () => {
       loadCustomCities();
     }
   }, [selectedCourier, loadCustomCities, shop?.id]);
+  
+  // Calculate blacklisted status when blacklisted phones are loaded/updated and orders exist
+  useEffect(() => {
+    if (blacklistedPhones.size > 0 && orders.length > 0) {
+      calculateBlacklistedStatusForOrders(orders, setBlacklistedCache);
+    }
+    if (blacklistedPhones.size > 0 && sheetOrders.length > 0) {
+      calculateBlacklistedStatusForOrders(sheetOrders, setSheetBlacklistedCache);
+    }
+    if (blacklistedPhones.size > 0 && exchangeOrders.length > 0) {
+      calculateBlacklistedStatusForOrders(exchangeOrders, setExchangeBlacklistedCache);
+    }
+  }, [blacklistedPhones, orders, sheetOrders, exchangeOrders, calculateBlacklistedStatusForOrders]);
   
   // Reset pagination when tab changes
   useEffect(() => {
@@ -427,6 +564,7 @@ export const IndexPage = () => {
         console.log(`🔍 [fetchOrders] No orders passed the tag filtering - nothing to load`);
         setOrders([]);
         setShippingAnalysisCache({}); // Clear shipping analysis cache
+        setBlacklistedCache({}); // Clear blacklisted cache
         setOrdersFetching(false);
         return;
       }
@@ -648,6 +786,7 @@ export const IndexPage = () => {
         console.log(`🔍 [fetchSheetOrders] No orders passed the filtering - nothing to load`);
         setSheetOrders([]);
         setSheetShippingAnalysisCache({}); // Clear sheet shipping analysis cache
+        setSheetBlacklistedCache({}); // Clear blacklisted cache for sheet orders
         setSheetOrdersFetching(false);
         return;
       }
@@ -962,6 +1101,10 @@ export const IndexPage = () => {
       
       setExchangeOrders(exchangeOrders);
       setExchangeOrdersFetching(false);
+      // Recalculate blacklisted status for exchange orders after loading
+      if (blacklistedPhones.size > 0 && exchangeOrders.length > 0) {
+        calculateBlacklistedStatusForOrders(exchangeOrders, setExchangeBlacklistedCache);
+      }
     } catch (error) {
       console.error("Error fetching exchange orders:", error);
       setExchangeOrdersError(error instanceof Error ? error : new Error(String(error)));
@@ -1949,6 +2092,17 @@ export const IndexPage = () => {
                   {shippingAnalysis.label}
                 </Badge>
               )}
+              
+              {(
+                selectedTab === 0 ? blacklistedCache[item.id]
+                : selectedTab === 1 ? exchangeBlacklistedCache[item.id]
+                : selectedTab === 2 ? sheetBlacklistedCache[item.id]
+                : false
+              ) && (
+                <Badge tone="critical">
+                  Blacklisted Customer
+                </Badge>
+              )}
             </InlineStack>
             
             <InlineStack gap="200">
@@ -2316,7 +2470,7 @@ export const IndexPage = () => {
             amount: orderData.totalPrice?.toString() || "0",
             address: address,
             phone: phoneNumber,
-            comment: "",
+            comment: orderData.note || "", // Include Shopify order note
             reference: orderReference,
             allow_open: 1, // Default values for bulk fulfillment
             allow_try: 0, // Changed from 1 to 0 as requested
@@ -3087,7 +3241,7 @@ export const IndexPage = () => {
             }
             
             // Log to confirm city name is being used
-            console.log(`City name for Speedaf order ${orderId}: ${cityName}`);
+            console.log(`City name for Sendit order ${orderId}: ${cityName}`);
             
             // Format the address
             const address = orderData.address || 
@@ -3133,7 +3287,7 @@ export const IndexPage = () => {
               amount: orderData.totalPrice?.toString() || "0",
               address: address,
               phone: phoneNumber,
-              comment: "",
+              comment: orderData.note || "", // Include Shopify order note
               reference: orderReference,
               allow_open: 1, // Default values for bulk fulfillment
               allow_try: 0, // Changed from 1 to 0 as requested
@@ -3513,7 +3667,7 @@ export const IndexPage = () => {
         piece: 1,
         platformSource: "Bambe",
               //prePickUpTime: new Date().toISOString().split('T')[0] + " 10:00:00",
-              remark: `Order ${orderReference}`,
+              remark: `Order ${orderReference}${orderData.note ? ` - ${orderData.note}` : ''}`, // Include Shopify order note if available
               sendAddress: "Luxus", // Updated sender address
         sendCityCode: "MAC00036",      
         sendCityName: "Luxus", // Updated sender city
@@ -4370,7 +4524,10 @@ export const IndexPage = () => {
                         Confirmed Orders Ready for Fulfillment
                       </Text>
                       <Button 
-                        onClick={fetchOrders}
+                        onClick={() => {
+                          fetchOrders();
+                          fetchBlacklistedPhones();
+                        }}
                         disabled={ordersFetching}
                         icon={ordersFetching ? undefined : RefreshIcon}
                         variant="primary"
@@ -4589,7 +4746,10 @@ export const IndexPage = () => {
                         Orders to Write to Google Sheets
                       </Text>
                       <Button
-                        onClick={fetchSheetOrders}
+                        onClick={() => {
+                          fetchSheetOrders();
+                          fetchBlacklistedPhones();
+                        }}
                         disabled={sheetOrdersFetching}
                         icon={sheetOrdersFetching ? undefined : RefreshIcon}
                         variant="primary"

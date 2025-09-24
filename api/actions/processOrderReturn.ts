@@ -202,31 +202,68 @@ async function updateReturnInSheet(
         const returnedItemSKU = returnedItem.sku; // This comes from calculateRefund.ts
 
         // Check if this row matches our order and SKU
-        const rowMatches = rowOrderName === orderName &&
-                          returnedQuantity > 0 &&
-                          rowSKU === returnedItemSKU;
+        // If SKU is empty, fall back to matching by order name and line item position/count
+        let rowMatches = false;
+        
+        if (returnedItemSKU && returnedItemSKU.trim()) {
+          // Standard SKU matching when we have SKU information
+          rowMatches = rowOrderName === orderName &&
+                      returnedQuantity > 0 &&
+                      rowSKU === returnedItemSKU;
+        } else {
+          // Fallback matching for cases where SKU is not available (zero-refund scenarios)
+          // Match by order name only - this handles cases where SKU retrieval failed
+          rowMatches = rowOrderName === orderName &&
+                      returnedQuantity > 0 &&
+                      rowStatus !== "On Stock"; // Only update rows that aren't already marked
+          
+          logger.info(`Using fallback matching (no SKU) for row ${i + 1}`, {
+            orderName,
+            rowOrderName,
+            rowSKU,
+            returnedItemSKU,
+            returnedQuantity
+          });
+        }
 
         if (rowMatches) {
           // Always mark returned items as "On Stock" regardless of current status
           // This ensures it stays "On Stock" even if something else tries to change it
           if (rowStatus !== "On Stock") {
-            updates.push({
-              range: `${sheetName}!L${i + 1}`, // Column L, 1-indexed row
-              values: [["On Stock"]]
-            });
+              // Update column L to "On Stock"
+              updates.push({
+                range: `${sheetName}!L${i + 1}`,
+                values: [["On Stock"]]
+              });
 
-            returnedQuantity--;
+              // Update column C (index 2) to add C- prefix if not already present
+              const currentTracking = row[2] || "";
+              if (!currentTracking.startsWith("C-")) {
+                updates.push({
+                  range: `${sheetName}!C${i + 1}`,
+                  values: [[`C-${currentTracking}`]]
+                });
+                logger.info(`Updated tracking code in column C for row ${i + 1}`, {
+                  previousTracking: currentTracking,
+                  newTracking: `C-${currentTracking}`,
+                  orderName,
+                  sku: rowSKU
+                });
+              }
 
-            logger.info(`Setting item status to "On Stock" for row ${i + 1}`, {
-              orderName,
-              sku: rowSKU,
-              matchedWith: returnedItemSKU,
-              remainingQuantity: returnedQuantity,
-              previousStatus: rowStatus,
-              newStatus: "On Stock",
-              timestamp: new Date().toISOString(),
-              action: "processOrderReturn"
-            });
+              returnedQuantity--;
+
+              logger.info(`Setting item status to "On Stock" for row ${i + 1}`, {
+                orderName,
+                sku: rowSKU,
+                matchedWith: returnedItemSKU || "(fallback - no SKU)",
+                matchType: returnedItemSKU && returnedItemSKU.trim() ? "SKU" : "fallback",
+                remainingQuantity: returnedQuantity,
+                previousStatus: rowStatus,
+                newStatus: "On Stock",
+                timestamp: new Date().toISOString(),
+                action: "processOrderReturn"
+              });
           } else {
             logger.info(`Row ${i + 1} already marked as "On Stock"`, {
               orderName,
@@ -984,13 +1021,73 @@ export const run = async ({ params, api, logger, connections }: ActionContext) =
 
         orderName = order?.name || `Order ${orderId}`;
         
-        // Create basic line items for sheets update
-        returnLineItems = lineItems.map(refundItem => ({
-          lineItemId: refundItem.lineItemId,
-          name: 'Item', // Basic name since we don't have detailed info
-          quantity: refundItem.quantity,
-          sku: '' // We don't have SKU info without calculation
-        }));
+        // For proper Google Sheets update, we need to get SKU information from Shopify
+        try {
+          const shopifyApi = await connections.shopify.forShopId(shopId);
+
+          const orderQuery = `
+            query GetOrderLineItems($id: ID!) {
+              order(id: $id) {
+                lineItems(first: 50) {
+                  edges {
+                    node {
+                      id
+                      name
+                      sku
+                      variant {
+                        id
+                        sku
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          `;
+
+          const result = await shopifyApi.graphql(orderQuery, {
+            id: `gid://shopify/Order/${orderId}`
+          });
+
+          const orderData = result.data?.order || result.body?.data?.order;
+          const shopifyLineItems = orderData?.lineItems?.edges?.map((edge: any) => edge.node) || [];
+          
+          // Create line items with proper SKU information for sheets update
+          returnLineItems = lineItems.map(refundItem => {
+            const shopifyItem = shopifyLineItems.find((sItem: any) => 
+              sItem.id === refundItem.lineItemId || 
+              sItem.id === `gid://shopify/LineItem/${refundItem.lineItemId}` ||
+              sItem.id.endsWith(refundItem.lineItemId)
+            );
+            
+            return {
+              lineItemId: refundItem.lineItemId,
+              name: shopifyItem?.name || 'Item',
+              quantity: refundItem.quantity,
+              sku: shopifyItem?.sku || shopifyItem?.variant?.sku || ''
+            };
+          });
+
+          logger.info('Successfully retrieved SKU information for zero-refund return', {
+            orderId,
+            lineItemsCount: returnLineItems.length,
+            itemsWithSKU: returnLineItems.filter((item: any) => item.sku).length
+          });
+
+        } catch (error) {
+          logger.warn('Failed to get SKU information from Shopify for zero-refund return, using fallback', {
+            orderId,
+            error: error instanceof Error ? error.message : String(error)
+          });
+          
+          // Create fallback line items from the original request
+          returnLineItems = lineItems.map(refundItem => ({
+            lineItemId: refundItem.lineItemId,
+            name: 'Item',
+            quantity: refundItem.quantity,
+            sku: '' // Fallback when SKU retrieval fails
+          }));
+        }
       }
 
       logger.info('Starting Google Sheets update with "On Stock" status', {

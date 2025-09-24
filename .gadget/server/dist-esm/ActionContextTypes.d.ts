@@ -94,6 +94,12 @@ import { UpdateDeliveryChargesActionContext } from "./models/DeliveryCharges.js"
 
 import { DeleteDeliveryChargesActionContext } from "./models/DeliveryCharges.js";
 
+import { CreateBlacklistedPhoneActionContext } from "./models/BlacklistedPhone.js";
+
+import { DeleteBlacklistedPhoneActionContext } from "./models/BlacklistedPhone.js";
+
+import { ApplyDiscountsAndShippingGlobalActionContext } from "./global-actions.js";
+
 import { ApplyShippingCostAbsorptionGlobalActionContext } from "./global-actions.js";
 
 import { CalculateRefundGlobalActionContext } from "./global-actions.js";
@@ -101,6 +107,10 @@ import { CalculateRefundGlobalActionContext } from "./global-actions.js";
 import { CreateSenditOrderGlobalActionContext } from "./global-actions.js";
 
 import { DebugOrderShippingGlobalActionContext } from "./global-actions.js";
+
+import { DeleteSenditRecordGlobalActionContext } from "./global-actions.js";
+
+import { DeleteSheetRowsByTrackingNumberGlobalActionContext } from "./global-actions.js";
 
 import { DirectOrderTestGlobalActionContext } from "./global-actions.js";
 
@@ -113,6 +123,8 @@ import { GetDeliveryChargesGlobalActionContext } from "./global-actions.js";
 import { GetSenditDistrictIdGlobalActionContext } from "./global-actions.js";
 
 import { GetShippingCostGlobalActionContext } from "./global-actions.js";
+
+import { ListRecentOrdersGlobalActionContext } from "./global-actions.js";
 
 import { ProcessBulkReturnsGlobalActionContext } from "./global-actions.js";
 
@@ -136,6 +148,8 @@ import { TestLocationQueryGlobalActionContext } from "./global-actions.js";
 
 import { TestSenditConnectionGlobalActionContext } from "./global-actions.js";
 
+import { TestSenditDeletionGlobalActionContext } from "./global-actions.js";
+
 import { TestTrackingDetectionGlobalActionContext } from "./global-actions.js";
 
 import { TestWriteToSheetGlobalActionContext } from "./global-actions.js";
@@ -151,10 +165,6 @@ import { WriteBatchOrdersToSheetsGlobalActionContext } from "./global-actions.js
 import { WriteSpeedafDataToSheetsGlobalActionContext } from "./global-actions.js";
 
 import { WriteToShopifyGlobalActionContext } from "./global-actions.js";
-
-import { ListRecentOrdersGlobalActionContext } from "./global-actions.js";
-
-import { ApplyDiscountsAndShippingGlobalActionContext } from "./global-actions.js";
 
 
 
@@ -441,6 +451,24 @@ declare module "../../../api/models/deliveryCharges/actions/delete" {
 }
 
 
+declare module "../../../api/models/blacklistedPhone/actions/create" {
+  export type ActionRun = (params: CreateBlacklistedPhoneActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: CreateBlacklistedPhoneActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/models/blacklistedPhone/actions/delete" {
+  export type ActionRun = (params: DeleteBlacklistedPhoneActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: DeleteBlacklistedPhoneActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/actions/applyDiscountsAndShipping" {
+  export type ActionRun = (params: ApplyDiscountsAndShippingGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: ApplyDiscountsAndShippingGlobalActionContext) => Promise<any>;
+}
+
+
 declare module "../../../api/actions/applyShippingCostAbsorption" {
   export type ActionRun = (params: ApplyShippingCostAbsorptionGlobalActionContext) => Promise<any>;
   export type ActionOnSuccess = (params: ApplyShippingCostAbsorptionGlobalActionContext) => Promise<any>;
@@ -462,6 +490,18 @@ declare module "../../../api/actions/createSenditOrder" {
 declare module "../../../api/actions/debugOrderShipping" {
   export type ActionRun = (params: DebugOrderShippingGlobalActionContext) => Promise<any>;
   export type ActionOnSuccess = (params: DebugOrderShippingGlobalActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/actions/deleteSenditRecord" {
+  export type ActionRun = (params: DeleteSenditRecordGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: DeleteSenditRecordGlobalActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/actions/deleteSheetRowsByTrackingNumber" {
+  export type ActionRun = (params: DeleteSheetRowsByTrackingNumberGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: DeleteSheetRowsByTrackingNumberGlobalActionContext) => Promise<any>;
 }
 
 
@@ -498,6 +538,12 @@ declare module "../../../api/actions/getSenditDistrictId" {
 declare module "../../../api/actions/getShippingCost" {
   export type ActionRun = (params: GetShippingCostGlobalActionContext) => Promise<any>;
   export type ActionOnSuccess = (params: GetShippingCostGlobalActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/actions/listRecentOrders" {
+  export type ActionRun = (params: ListRecentOrdersGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: ListRecentOrdersGlobalActionContext) => Promise<any>;
 }
 
 
@@ -567,6 +613,12 @@ declare module "../../../api/actions/testSenditConnection" {
 }
 
 
+declare module "../../../api/actions/testSenditDeletion" {
+  export type ActionRun = (params: TestSenditDeletionGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: TestSenditDeletionGlobalActionContext) => Promise<any>;
+}
+
+
 declare module "../../../api/actions/testTrackingDetection" {
   export type ActionRun = (params: TestTrackingDetectionGlobalActionContext) => Promise<any>;
   export type ActionOnSuccess = (params: TestTrackingDetectionGlobalActionContext) => Promise<any>;
@@ -612,17 +664,5 @@ declare module "../../../api/actions/writeSpeedafDataToSheets" {
 declare module "../../../api/actions/writeToShopify" {
   export type ActionRun = (params: WriteToShopifyGlobalActionContext) => Promise<any>;
   export type ActionOnSuccess = (params: WriteToShopifyGlobalActionContext) => Promise<any>;
-}
-
-
-declare module "../../../api/actions/listRecentOrders" {
-  export type ActionRun = (params: ListRecentOrdersGlobalActionContext) => Promise<any>;
-  export type ActionOnSuccess = (params: ListRecentOrdersGlobalActionContext) => Promise<any>;
-}
-
-
-declare module "../../../api/actions/applyDiscountsAndShipping" {
-  export type ActionRun = (params: ApplyDiscountsAndShippingGlobalActionContext) => Promise<any>;
-  export type ActionOnSuccess = (params: ApplyDiscountsAndShippingGlobalActionContext) => Promise<any>;
 }
 

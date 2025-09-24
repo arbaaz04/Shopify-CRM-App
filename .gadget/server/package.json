@@ -2,7 +2,7 @@
   "dependencies": {
     "@fastify/request-context": "^5.0.0",
     "@gadget-client/bambe-crm-app": "link:../client",
-    "@gadgetinc/api-client-core": "0.15.45",
+    "@gadgetinc/api-client-core": "0.15.46",
     "@types/node": "^20.17.7",
     "fastify": "^4.24.2"
   },
@@ -50,7 +50,7 @@
   "gadget": {
     "applicationName": "bambe-crm-app",
     "environmentName": "Development",
-    "environmentVersion": "2497"
+    "environmentVersion": "2613"
   },
   "main": "./dist-cjs/index.js",
   "module": "./dist-esm/index.js",
@@ -87,5 +87,5 @@
       ]
     }
   },
-  "version": "1.116.0-development.2497"
+  "version": "1.116.0-development.2613"
 }

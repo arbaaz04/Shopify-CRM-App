@@ -71,7 +71,8 @@ export const run = async ({ params, api, logger, connections }) => {
         shouldApplyShippingAbsorption 
       });
     } catch (error) {
-      logger.warn('Failed to get shipping cost from getShippingCost method', { error: error.message });
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      logger.warn('Failed to get shipping cost from getShippingCost method', { error: errorMessage });
       // Continue without shipping absorption if method fails
       shouldApplyShippingAbsorption = false;
     }
@@ -81,7 +82,8 @@ export const run = async ({ params, api, logger, connections }) => {
     try {
       shopifyClient = await connections.shopify.forShopId(order.shopId);
     } catch (error) {
-      logger.error('Failed to get Shopify client', { shopId: order.shopId, error: error.message });
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      logger.error('Failed to get Shopify client', { shopId: order.shopId, error: errorMessage });
       throw new Error(`Cannot connect to Shopify for shop ${order.shopId}`);
     }
 
@@ -164,8 +166,9 @@ export const run = async ({ params, api, logger, connections }) => {
         orderData = shopifyResult.body?.data?.order || shopifyResult.order;
       }
     } catch (error) {
-      logger.error('Failed to fetch order from Shopify', { orderId, error: error.message });
-      throw new Error(`Failed to fetch order details from Shopify: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      logger.error('Failed to fetch order from Shopify', { orderId, error: errorMessage });
+      throw new Error(`Failed to fetch order details from Shopify: ${errorMessage}`);
     }
     
     if (!orderData) {
@@ -184,7 +187,17 @@ export const run = async ({ params, api, logger, connections }) => {
     const totalDiscounts = parseFloat(orderData.totalDiscountsSet?.shopMoney?.amount || '0');
 
     // Extract line items from Shopify response
-    const lineItems = [];
+    const lineItems: Array<{
+      id: string;
+      name: string;
+      quantity: number;
+      originalQuantity: number;
+      sku: string;
+      originalPrice: number;
+      discountedPrice: number;
+      itemDiscount: number;
+      product: any;
+    }> = [];
     let lineItemSubtotal = 0;
     if (orderData.lineItems?.edges) {
       for (const edge of orderData.lineItems.edges) {
@@ -277,6 +290,21 @@ export const run = async ({ params, api, logger, connections }) => {
     // STEP 6: Calculate absorption distribution
     const totalQuantity = lineItems.reduce((sum, item) => sum + item.quantity, 0);
     
+    // Detect if this is an order-level discount (all items have same discount percentage)
+    const hasOrderLevelDiscount = totalDiscounts > 0 && lineItems.length > 0 && lineItems.every(item => {
+      const firstItemDiscountPercent = lineItems[0].originalPrice > 0 ? (lineItems[0].originalPrice - lineItems[0].discountedPrice) / lineItems[0].originalPrice : 0;
+      const itemDiscountPercent = item.originalPrice > 0 ? (item.originalPrice - item.discountedPrice) / item.originalPrice : 0;
+      return Math.abs(itemDiscountPercent - firstItemDiscountPercent) < 0.01; // Same discount % across all items
+    });
+    
+    logger.info('Discount analysis', {
+      totalDiscounts,
+      hasOrderLevelDiscount,
+      lineItemCount: lineItems.length,
+      firstItemOriginal: lineItems[0]?.originalPrice,
+      firstItemDiscounted: lineItems[0]?.discountedPrice
+    });
+    
     // Shipping absorption: only if getShippingCost returned 0 AND tracking exists AND delivery charges exist
     const willAbsorbShipping = shouldApplyShippingAbsorption && trackingNumber && shippingCostToAbsorb > 0;
     const shippingCostPerItem = willAbsorbShipping && totalQuantity > 0 ? shippingCostToAbsorb / totalQuantity : 0;
@@ -295,8 +323,28 @@ export const run = async ({ params, api, logger, connections }) => {
       const discountAbsorptionForItem = discountPerItem * item.quantity;
       const totalAbsorptionForItem = shippingAbsorptionForItem + discountAbsorptionForItem;
       
-      // Calculate new prices after absorption
-      const newItemPrice = item.discountedPrice - shippingCostPerItem - discountPerItem;
+      // Calculate new prices based on scenarios:
+      // For order-level discounts (where all items have same discount %), use original prices
+      // For item-level discounts, use discounted prices
+      let basePrice;
+      if (hasOrderLevelDiscount) {
+        // Order-level discount: use original price for Column J (Scenarios 3 & 4)
+        basePrice = item.originalPrice;
+      } else {
+        // Item-level discount: use discounted price for Column J (Scenarios 1 & 2)
+        basePrice = item.discountedPrice;
+      }
+      
+      // Apply shipping absorption if delivery was free
+      let newItemPrice;
+      if (willAbsorbShipping) {
+        // Free delivery: subtract shipping cost from base price (Scenarios 2 & 4)
+        newItemPrice = basePrice - shippingCostPerItem;
+      } else {
+        // Paid delivery: use base price as-is (Scenarios 1 & 3) 
+        newItemPrice = basePrice;
+      }
+      
       const newItemTotal = newItemPrice * item.quantity;
 
       return {
@@ -324,8 +372,10 @@ export const run = async ({ params, api, logger, connections }) => {
     const totalDiscountAbsorbed = willAbsorbDiscounts ? totalDiscounts : 0;
     const totalAbsorbed = totalShippingAbsorbed + totalDiscountAbsorbed;
     
-    // Only subtract shipping absorption from order total (discounts already reflected in total)
-    const newOrderTotal = actualOrderTotal - totalShippingAbsorbed;
+    // For Column K (brut amount): 
+    // - Always use the actual order total (what customer actually paid)
+    // - This already includes any discounts and shipping charges applied by Shopify
+    const newOrderTotal = actualOrderTotal;
 
     const wouldAbsorb = willAbsorbShipping || willAbsorbDiscounts;
 
@@ -402,14 +452,16 @@ export const run = async ({ params, api, logger, connections }) => {
     };
 
   } catch (error) {
-    logger.error('Test failed', { error: error.message, stack: error.stack });
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    const errorStack = error instanceof Error ? error.stack : undefined;
+    logger.error('Test failed', { error: errorMessage, stack: errorStack });
     return {
       success: false,
-      error: error.message
+      error: errorMessage
     };
   }
 };
 
 export const options: ActionOptions = {
-  actionType: "global"
+  actionType: "custom"
 };

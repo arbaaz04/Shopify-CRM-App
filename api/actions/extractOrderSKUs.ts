@@ -671,6 +671,7 @@ export const run: ActionRun = async ({ params, api, logger, connections }) => {
         fulfillmentStatus: orderData.displayFulfillmentStatus || "",
         createdAt: orderData.createdAt,
         tags: orderData.tags,
+        note: orderData.note || "", // Include Shopify order note
         confirmationTag,
         trackingNumber: orderData.trackingNumber || "",
         refundInfo,

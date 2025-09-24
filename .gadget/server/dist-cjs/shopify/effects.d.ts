@@ -69,6 +69,9 @@ export declare function validShopsFilter(shopModelFiles: {
 *
 * @param params - list of Shopify app credentials to sync data from
 * @param syncSince - starting point for data sync (default: all time)
+* @param syncSinceBy - field name to use for the syncSince timestamp filter ("created_at" or "updated_at")
+* @param syncLast - syncs the last N records
+* @param syncLastBy - field name to use for the syncLast timestamp filter ("created_at" or "updated_at")
 * @param models - list of model names to sync data from
 * @param force - enforces syncswithout checking if they're up to date
 * @param startReason - a string reason stored on the created 'shopifySync' records
@@ -78,6 +81,9 @@ export declare function globalShopifySync(params: {
 	syncSince: string | Date
 	models: string[]
 	force?: boolean
+	syncSinceBy?: string
+	syncLast?: number
+	syncLastBy?: string
 	startReason?: string
 }): Promise<void>;
 /**

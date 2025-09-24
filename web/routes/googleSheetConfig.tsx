@@ -174,6 +174,19 @@ export const GoogleSheetConfigPage = () => {
   const [bulkCourierType, setBulkCourierType] = useState("sendit");
   const [bulkImportLoading, setBulkImportLoading] = useState(false);
 
+  // Blacklisted phones management state
+  const [blacklistedPhones, setBlacklistedPhones] = useState<any[]>([]);
+  const [phonesLoading, setPhonesLoading] = useState(false);
+  const [phoneError, setPhoneError] = useState("");
+  const [phoneSuccess, setPhoneSuccess] = useState("");
+  const [phoneSearchValue, setPhoneSearchValue] = useState("");
+  const [phonesCurrentPage, setPhonesCurrentPage] = useState(1);
+  const [phonesPageSize] = useState(10);
+  const [bulkPhoneImportLoading, setBulkPhoneImportLoading] = useState(false);
+  const [newPhoneNumber, setNewPhoneNumber] = useState("");
+  const [showBulkPhoneImport, setShowBulkPhoneImport] = useState(false);
+  const [bulkPhoneText, setBulkPhoneText] = useState("");
+
   // Speedaf API configuration
   const [speedafConfig, setSpeedafConfig] = useState({
     appCode: "",
@@ -977,6 +990,12 @@ export const GoogleSheetConfigPage = () => {
       accessibilityLabel: 'City Management',
       panelID: 'city-list-panel',
     },
+    {
+      id: 'blacklisted-phones',
+      content: 'Blacklisted Phones',
+      accessibilityLabel: 'Blacklisted Phone Management',
+      panelID: 'blacklisted-phones-panel',
+    },
   ];
 
   const handleTabChange = (selectedTabIndex: number) => {
@@ -1132,6 +1151,338 @@ export const GoogleSheetConfigPage = () => {
       setBulkImportLoading(false);
     }
   }, [shop?.id, bulkCityText, bulkCourierType, loadCustomCities, checkCityExistsInCustomList, checkCityExistsInLegacyList]);
+
+  // Blacklisted phones management functions
+  const loadBlacklistedPhones = useCallback(async () => {
+    if (!shop?.id) return;
+
+    setPhonesLoading(true);
+    setPhoneError("");
+
+    try {
+      // @ts-ignore - API type not available yet but works at runtime
+      const phones = await api.blacklistedPhone.findMany({
+        filter: { shop: { id: { equals: shop.id } } },
+        sort: [{ createdAt: "Descending" }]
+      });
+
+      setBlacklistedPhones(phones || []);
+    } catch (error: any) {
+      console.error("Error loading blacklisted phones:", error);
+      setPhoneError(`Error loading blacklisted phones: ${error.message || "Unknown error"}`);
+    } finally {
+      setPhonesLoading(false);
+    }
+  }, [shop?.id]);
+
+  // Load blacklisted phones when shop changes
+  useEffect(() => {
+    loadBlacklistedPhones();
+  }, [loadBlacklistedPhones]);
+
+  // Handle bulk phone import
+  const handleBulkPhoneImport = useCallback(async (phoneNumbers: string[]) => {
+    if (!shop?.id) {
+      setPhoneError('Shop information not available');
+      return;
+    }
+
+    setBulkPhoneImportLoading(true);
+    setPhoneError("");
+    setPhoneSuccess("");
+
+    try {
+      // Clean all phone numbers using our Moroccan cleaning function
+      const cleanedPhoneNumbers: string[] = [];
+      
+      for (const phone of phoneNumbers) {
+        try {
+          const cleaned = cleanMoroccanPhoneNumber(phone);
+          cleanedPhoneNumbers.push(cleaned);
+        } catch (error) {
+          console.warn(`Skipping invalid phone number: ${phone}`, error);
+        }
+      }
+
+      if (cleanedPhoneNumbers.length === 0) {
+        setPhoneError("No valid Moroccan phone numbers found");
+        return;
+      }
+
+      console.log(`Attempting to create ${cleanedPhoneNumbers.length} blacklisted phone numbers`);
+
+      const results: string[] = [];
+      const failed: Array<{ phone: string; error: string }> = [];
+      const skipped: Array<{ phone: string; reason: string }> = [];
+
+      // Pre-filter phone numbers to check for duplicates
+      const newPhones = [];
+      for (const phoneNumber of cleanedPhoneNumbers) {
+        // Check if phone already exists in blacklisted phones
+        const existingPhone = blacklistedPhones.find(p => p.phone === phoneNumber);
+        if (existingPhone) {
+          skipped.push({ phone: phoneNumber, reason: "Already blacklisted" });
+          continue;
+        }
+
+        // If we reach here, phone is new and can be added
+        newPhones.push(phoneNumber);
+      }
+
+      console.log(`📊 Pre-filtering results: ${newPhones.length} new, ${skipped.length} skipped`);
+
+      // Process new phones in parallel batches for maximum performance
+      const BATCH_SIZE = 10; // Process 10 phones at once
+      for (let i = 0; i < newPhones.length; i += BATCH_SIZE) {
+        const batch = newPhones.slice(i, i + BATCH_SIZE);
+        
+        // Process batch in parallel
+        const batchPromises = batch.map(async (phoneNumber) => {
+          try {
+            // @ts-ignore - API type not available but works at runtime
+            const result = await api.blacklistedPhone.create({
+              phone: phoneNumber,
+              shop: { _link: shop.id }
+            });
+
+            if (result && result.id) {
+              return { success: true, phoneNumber };
+            } else {
+              return { success: false, phoneNumber, error: "Unexpected response format" };
+            }
+          } catch (error: any) {
+            console.error(`Error adding phone "${phoneNumber}":`, error);
+            return { 
+              success: false, 
+              phoneNumber, 
+              error: error.message || error.toString() || "Unknown error" 
+            };
+          }
+        });
+
+        // Wait for batch to complete
+        const batchResults = await Promise.all(batchPromises);
+        
+        // Process batch results
+        batchResults.forEach(result => {
+          if (result.success) {
+            results.push(result.phoneNumber);
+          } else {
+            failed.push({ phone: result.phoneNumber, error: result.error });
+          }
+        });
+
+        // Optional: small delay between batches to be gentle on the API
+        if (i + BATCH_SIZE < newPhones.length) {
+          await new Promise(resolve => setTimeout(resolve, 50));
+        }
+      }
+
+      // Generate success/error messages
+      let successMessage = "";
+      let errorMessage = "";
+
+      if (results.length > 0) {
+        successMessage = `Successfully added ${results.length} phone numbers`;
+      }
+
+      if (failed.length > 0) {
+        errorMessage = `Failed to add ${failed.length} phone numbers`;
+        console.error('Failed phones:', failed);
+      }
+
+      if (skipped.length > 0) {
+        const skipMessage = ` (${skipped.length} skipped - already exist)`;
+        if (successMessage) {
+          successMessage += skipMessage;
+        } else if (errorMessage) {
+          errorMessage += skipMessage;
+        } else {
+          setPhoneError(`All phone numbers were skipped - they already exist in the blacklist`);
+        }
+      }
+
+      if (successMessage) {
+        setPhoneSuccess(successMessage);
+      }
+
+      if (errorMessage) {
+        if (results.length > 0) {
+          setPhoneError(`Partial success - ${errorMessage}`);
+        } else {
+          setPhoneError(errorMessage);
+        }
+      }
+
+      // Reload phones list and reset form
+      await loadBlacklistedPhones();
+      setPhonesCurrentPage(1);
+      setShowBulkPhoneImport(false);
+      setBulkPhoneText("");
+
+    } catch (error: any) {
+      console.error("Error in bulk phone import:", error);
+      setPhoneError(`Error importing phone numbers: ${error.message || "Unknown error"}`);
+    } finally {
+      setBulkPhoneImportLoading(false);
+    }
+  }, [shop?.id, blacklistedPhones, loadBlacklistedPhones]);
+
+  // Handle individual phone deletion
+  const handleDeletePhone = useCallback(async (phoneId: string) => {
+    if (!shop?.id) return;
+
+    try {
+      // @ts-ignore - API type not available yet but works at runtime
+      await api.blacklistedPhone.delete(phoneId);
+      
+      setPhoneSuccess("Phone number removed successfully");
+      await loadBlacklistedPhones();
+    } catch (error: any) {
+      console.error("Error deleting phone:", error);
+      setPhoneError(`Error deleting phone: ${error.message || "Unknown error"}`);
+    }
+  }, [shop?.id, loadBlacklistedPhones]);
+
+  // Get filtered and paginated phones
+  const getFilteredAndPaginatedPhones = useCallback(() => {
+    let filtered = [...blacklistedPhones];
+    
+    // Apply search filter
+    if (phoneSearchValue.trim()) {
+      const searchTerm = phoneSearchValue.toLowerCase();
+      filtered = filtered.filter(phone => 
+        phone.phone.toLowerCase().includes(searchTerm)
+      );
+    }
+    
+    // Calculate pagination
+    const startIndex = (phonesCurrentPage - 1) * phonesPageSize;
+    const endIndex = startIndex + phonesPageSize;
+    const paginatedPhones = filtered.slice(startIndex, endIndex);
+    
+    return {
+      phones: paginatedPhones,
+      totalCount: filtered.length,
+      totalPages: Math.ceil(filtered.length / phonesPageSize)
+    };
+  }, [blacklistedPhones, phoneSearchValue, phonesCurrentPage, phonesPageSize]);
+
+  // Clean Moroccan phone number to standard format (0XXXXXXXXX)
+  const cleanMoroccanPhoneNumber = (phone: string): string => {
+    // Remove all non-digit characters
+    let cleaned = phone.replace(/[^\d]/g, '');
+    
+    // Remove country code if present (+212 or 212)
+    if (cleaned.startsWith('212')) {
+      cleaned = cleaned.substring(3);
+    }
+    
+    // Ensure it starts with 0
+    if (!cleaned.startsWith('0')) {
+      cleaned = '0' + cleaned;
+    }
+    
+    // Validate length (should be 10 digits for Moroccan numbers)
+    if (cleaned.length !== 10) {
+      throw new Error('Invalid Moroccan phone number format');
+    }
+    
+    return cleaned;
+  };
+
+  // Add single blacklisted phone
+  const addBlacklistedPhone = useCallback(async () => {
+    if (!shop?.id) {
+      setPhoneError('Shop information not available');
+      return;
+    }
+
+    if (!newPhoneNumber.trim()) {
+      setPhoneError('Phone number is required');
+      return;
+    }
+
+    try {
+      setPhoneError("");
+      setPhoneSuccess("");
+
+      // Clean the phone number
+      const cleanedPhone = cleanMoroccanPhoneNumber(newPhoneNumber.trim());
+
+      // @ts-ignore - API type not available yet but works at runtime
+      await api.blacklistedPhone.create({
+        phone: cleanedPhone,
+        shop: { _link: shop.id }
+      });
+
+      setPhoneSuccess("Phone number added successfully");
+      setNewPhoneNumber("");
+      await loadBlacklistedPhones();
+    } catch (error: any) {
+      console.error("Error adding phone:", error);
+      setPhoneError(`Error adding phone: ${error.message || "Unknown error"}`);
+    }
+  }, [shop?.id, newPhoneNumber, loadBlacklistedPhones]);
+
+  // Remove blacklisted phone
+  const removeBlacklistedPhone = useCallback(async (phoneId: string, phoneNumber: string) => {
+    try {
+      setPhoneError("");
+      setPhoneSuccess("");
+
+      // @ts-ignore - API type not available yet but works at runtime
+      await api.blacklistedPhone.delete(phoneId);
+      
+      setPhoneSuccess(`Phone number ${phoneNumber} removed successfully`);
+      await loadBlacklistedPhones();
+    } catch (error: any) {
+      console.error("Error deleting phone:", error);
+      setPhoneError(`Error removing phone: ${error.message || "Unknown error"}`);
+    }
+  }, [loadBlacklistedPhones]);
+
+  // Delete all blacklisted phones
+  const deleteAllBlacklistedPhones = useCallback(async () => {
+    if (!shop?.id) {
+      setPhoneError('Shop information not available');
+      return;
+    }
+
+    if (blacklistedPhones.length === 0) {
+      setPhoneError('No phone numbers to delete');
+      return;
+    }
+
+    if (!confirm(`Are you sure you want to delete all ${blacklistedPhones.length} blacklisted phone numbers? This action cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      setPhoneError("");
+      setPhoneSuccess("");
+
+      // Delete all phones one by one
+      for (const phone of blacklistedPhones) {
+        // @ts-ignore - API type not available yet but works at runtime
+        await api.blacklistedPhone.delete(phone.id);
+      }
+
+      setPhoneSuccess(`Successfully deleted all ${blacklistedPhones.length} phone numbers`);
+      await loadBlacklistedPhones();
+    } catch (error: any) {
+      console.error("Error deleting all phones:", error);
+      setPhoneError(error.message || "Failed to delete all phone numbers");
+    }
+  }, [shop?.id, blacklistedPhones, loadBlacklistedPhones]);
+
+  // Handle phone pagination
+  const handlePhonePageChange = useCallback((newPage: number) => {
+    setPhonesCurrentPage(newPage);
+  }, []);
+
+  // Alias for compatibility with UI
+  const getPaginatedPhones = getFilteredAndPaginatedPhones;
 
   return (
     <Page title="Configuration">
@@ -1815,6 +2166,272 @@ Tangier"
                                     hasNext={citiesCurrentPage < totalPages}
                                     onNext={() => handleCityPageChange(citiesCurrentPage + 1)}
                                     label={`Page ${citiesCurrentPage} of ${totalPages}`}
+                                  />
+                                </div>
+                              )}
+                            </BlockStack>
+                          );
+                        })()}
+                      </BlockStack>
+                    </div>
+                  </BlockStack>
+                </div>
+              )}
+
+              {selectedTab === 3 && (
+                <div style={{ padding: '24px' }}>
+                  <BlockStack gap="500">
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Text as="h2" variant="headingMd" alignment="start">
+                        Blacklisted Phone Numbers
+                      </Text>
+                      <Badge tone="critical">{`${blacklistedPhones.length} phones`}</Badge>
+                    </div>
+
+                    <Text as="p" variant="bodySm">
+                      Manage phone numbers that should be marked as blacklisted in the app.
+                    </Text>
+
+                    {phoneError && (
+                      <Banner tone="critical">
+                        <p>{phoneError}</p>
+                      </Banner>
+                    )}
+
+                    {phoneSuccess && (
+                      <Banner tone="success">
+                        <p>{phoneSuccess}</p>
+                      </Banner>
+                    )}
+
+                    {/* Add Single Phone Form */}
+                    <Card>
+                      <div style={{ padding: '16px' }}>
+                        <BlockStack gap="400">
+                          <Text as="h3" variant="headingSm">
+                            Add Single Phone Number
+                          </Text>
+
+                          <FormLayout>
+                            <TextField
+                              label="Phone Number"
+                              value={newPhoneNumber}
+                              onChange={setNewPhoneNumber}
+                              placeholder="Enter phone number..."
+                              autoComplete="off"
+                              helpText="Enter phone number in any format (e.g., +212123456789, 0612345678, etc.)"
+                            />
+
+                            <Button
+                              variant="primary"
+                              onClick={addBlacklistedPhone}
+                              disabled={!newPhoneNumber.trim()}
+                            >
+                              Add Phone Number
+                            </Button>
+                          </FormLayout>
+                        </BlockStack>
+                      </div>
+                    </Card>
+
+                    {/* Bulk Phone Import */}
+                    <Card>
+                      <div style={{ padding: '16px' }}>
+                        <BlockStack gap="400">
+                          <Text as="h3" variant="headingSm">
+                            Bulk Phone Import
+                          </Text>
+
+                          <Text as="p" variant="bodySm">
+                            Add multiple phone numbers at once by entering them separated by new lines. The system will automatically clean and validate phone numbers, skipping any that are already blacklisted.
+                          </Text>
+
+                          {showBulkPhoneImport ? (
+                            <BlockStack gap="400">
+                              <TextField
+                                label="Phone Numbers (one per line)"
+                                value={bulkPhoneText}
+                                onChange={setBulkPhoneText}
+                                placeholder="Enter phone numbers, one per line:
++212656884023
+0656884023
+212656884023
+06 56 88 40 23"
+                                autoComplete="off"
+                                multiline={6}
+                                helpText="Enter each phone number on a new line. Supports various formats - the system will clean them automatically."
+                              />
+
+                              {bulkPhoneText.trim() && (
+                                <Text as="p" variant="bodySm" tone="subdued">
+                                  {(() => {
+                                    const phoneLines = bulkPhoneText
+                                      .split('\n')
+                                      .map(line => line.trim())
+                                      .filter(line => line.length > 0);
+                                    return `Ready to import ${phoneLines.length} phone numbers`;
+                                  })()}
+                                </Text>
+                              )}
+
+                              <InlineStack gap="200">
+                                <Button
+                                  variant="primary"
+                                  onClick={() => {
+                                    // Parse phones from the bulk text and call import
+                                    const phoneLines = bulkPhoneText
+                                      .split('\n')
+                                      .map(line => line.trim())
+                                      .filter(line => line.length > 0);
+                                    
+                                    // Just pass the phone numbers as strings
+                                    handleBulkPhoneImport(phoneLines);
+                                  }}
+                                  loading={bulkPhoneImportLoading}
+                                  disabled={!bulkPhoneText.trim()}
+                                >
+                                  {bulkPhoneImportLoading ? "Importing..." : "Import Phone Numbers"}
+                                </Button>
+
+                                <Button
+                                  onClick={() => {
+                                    setShowBulkPhoneImport(false);
+                                    setBulkPhoneText("");
+                                  }}
+                                  disabled={bulkPhoneImportLoading}
+                                >
+                                  Cancel
+                                </Button>
+                              </InlineStack>
+                            </BlockStack>
+                          ) : (
+                            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                              <Button
+                                variant="primary"
+                                onClick={() => setShowBulkPhoneImport(true)}
+                                icon={PlusIcon}
+                              >
+                                Import Phone Numbers in Bulk
+                              </Button>
+                            </div>
+                          )}
+                        </BlockStack>
+                      </div>
+                    </Card>
+
+                    {/* Blacklisted Phones List */}
+                    <div>
+                      <BlockStack gap="400">
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <Text as="h3" variant="headingSm">
+                            Blacklisted Phone Numbers ({blacklistedPhones.length})
+                          </Text>
+                          {blacklistedPhones.length > 0 && (
+                            <Button
+                              size="micro"
+                              tone="critical"
+                              onClick={deleteAllBlacklistedPhones}
+                            >
+                              Delete All
+                            </Button>
+                          )}
+                        </div>
+
+                        {phonesLoading ? (
+                          <div style={{ padding: '20px', textAlign: 'center' }}>
+                            <Spinner size="small" />
+                          </div>
+                        ) : (() => {
+                          const { phones, totalCount, totalPages } = getPaginatedPhones();
+                          
+                          if (totalCount === 0) {
+                            return (
+                              <div style={{ padding: '40px', textAlign: 'center' }}>
+                                <Text as="p" variant="bodySm" tone="subdued">
+                                  {phoneSearchValue.trim() 
+                                    ? 'No phone numbers match your search criteria. Try adjusting your search.'
+                                    : 'No phone numbers blacklisted yet. Add phone numbers above to start blocking them.'
+                                  }
+                                </Text>
+                                {phoneSearchValue.trim() && (
+                                  <div style={{ marginTop: '10px' }}>
+                                    <Button
+                                      onClick={() => {
+                                        setPhoneSearchValue('');
+                                        setPhonesCurrentPage(1);
+                                      }}
+                                      size="micro"
+                                    >
+                                      Clear search
+                                    </Button>
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          }
+
+                          return (
+                            <BlockStack gap="300">
+                              {/* Search and Filter Controls */}
+                              {blacklistedPhones.length > 10 && (
+                                <div>
+                                  <TextField
+                                    label="Search phone numbers"
+                                    value={phoneSearchValue}
+                                    onChange={setPhoneSearchValue}
+                                    placeholder="Search by phone number..."
+                                    clearButton
+                                    onClearButtonClick={() => setPhoneSearchValue('')}
+                                    autoComplete="off"
+                                  />
+                                </div>
+                              )}
+
+                              {/* Results Summary */}
+                              {phoneSearchValue.trim() && (
+                                <div style={{ padding: '8px 0' }}>
+                                  <Text as="p" variant="bodySm" tone="subdued">
+                                    Showing {phones.length} of {totalCount} phone numbers
+                                    {totalCount !== blacklistedPhones.length && ` (filtered from ${blacklistedPhones.length} total)`}
+                                  </Text>
+                                </div>
+                              )}
+
+                              {/* Phone Numbers List */}
+                              <ResourceList
+                                resourceName={{ singular: 'phone number', plural: 'phone numbers' }}
+                                items={phones}
+                                renderItem={(phone) => {
+                                  const { id, phone: phoneNumber, createdAt } = phone;
+                                  return (
+                                    <ResourceItem id={id} onClick={() => {}}>
+                                      <InlineStack align="space-between">
+                                        <Text as="span" variant="bodyMd" fontWeight="semibold">
+                                          {phoneNumber}
+                                        </Text>
+
+                                        <Button
+                                          size="micro"
+                                          tone="critical"
+                                          onClick={() => removeBlacklistedPhone(id, phoneNumber)}
+                                          icon={DeleteIcon}
+                                          accessibilityLabel={`Remove ${phoneNumber}`}
+                                        />
+                                      </InlineStack>
+                                    </ResourceItem>
+                                  );
+                                }}
+                              />
+
+                              {/* Pagination */}
+                              {totalPages > 1 && (
+                                <div style={{ display: 'flex', justifyContent: 'center', padding: '16px 0' }}>
+                                  <Pagination
+                                    hasPrevious={phonesCurrentPage > 1}
+                                    onPrevious={() => handlePhonePageChange(phonesCurrentPage - 1)}
+                                    hasNext={phonesCurrentPage < totalPages}
+                                    onNext={() => handlePhonePageChange(phonesCurrentPage + 1)}
+                                    label={`Page ${phonesCurrentPage} of ${totalPages}`}
                                   />
                                 </div>
                               )}

@@ -106,9 +106,12 @@ async function shopifySync(params, record) {
     if (syncRecord.syncSinceBy && syncRecord.syncSinceBy !== "created_at" && syncRecord.syncSinceBy !== "updated_at") {
         throw new _errors.InvalidActionInputError("syncSinceBy must be either 'created_at' or 'updated_at'");
     }
+    if (syncRecord.syncLastBy && syncRecord.syncLastBy !== "created_at" && syncRecord.syncLastBy !== "updated_at") {
+        throw new _errors.InvalidActionInputError("syncLastBy must be either 'created_at' or 'updated_at'");
+    }
     if (!syncRecord.models || Array.isArray(syncRecord.models) && syncRecord.models.every((m)=>typeof m == "string")) {
         try {
-            await effectAPIs.sync(syncRecord.id.toString(), shopId, syncRecord.syncSince, syncRecord.models, syncRecord.force, params.startReason, syncRecord.syncSinceBy);
+            await effectAPIs.sync(syncRecord.id.toString(), shopId, syncRecord.syncSince, syncRecord.models, syncRecord.force, params.startReason, syncRecord.syncSinceBy, syncRecord.syncLast, syncRecord.syncLastBy);
         } catch (error) {
             context.logger.error({
                 error,
@@ -251,7 +254,7 @@ async function globalShopifySync(params) {
     const context = (0, _effects.getCurrentContext)();
     const effectAPIs = (0, _utils.assert)(context.effectAPIs, "effect apis is missing from the current context");
     const api = (0, _utils.assert)(context.api, "api client is missing from the current context");
-    const { apiKeys, syncSince, models, force, startReason } = params;
+    const { apiKeys, syncSince, models, force, syncSinceBy, syncLast, syncLastBy, startReason } = params;
     if (!apiKeys || apiKeys.length === 0) {
         throw new _errors.InvalidActionInputError("missing at least 1 api key");
     }
@@ -317,7 +320,10 @@ async function globalShopifySync(params) {
                     },
                     domain,
                     syncSince,
+                    syncSinceBy,
                     models,
+                    syncLast,
+                    syncLastBy,
                     ...forceFieldIdentifier ? {
                         force
                     } : undefined

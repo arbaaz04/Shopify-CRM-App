@@ -50,8 +50,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 		} | {
 			/** The stored datatype of the field. string fields store strings of UTF-8 characters. */
 			type: "string"
@@ -93,8 +91,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 		} | {
 			/** The stored datatype of the field. richText fields store markdown content for human consumption. */
 			type: "richText"
@@ -138,8 +134,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 		} | {
 			/** The stored datatype of the field. email fields store one well-formatted email address as a string. */
 			type: "email"
@@ -181,8 +175,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 		} | {
 			/** The stored datatype of the field. url fields store a well-formatted URL as a string. */
 			type: "url"
@@ -224,8 +216,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 		} | {
 			/** The stored datatype of the field. color fields store a well-formatted hex color as a string. */
 			type: "color"
@@ -264,8 +254,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 		} | {
 			/** The stored datatype of the field. json fields store arbitrary JSON, including objects, arrays, and primitive values. The value must be valid JSON. */
 			type: "json"
@@ -298,8 +286,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 		} | {
 			/** The stored datatype of the field. enum fields store a single string or an array of strings constrained to a list of valid options (unless the `acceptUnlistedOptions` flag is set). */
 			type: "enum"
@@ -337,8 +323,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 		} | {
 			/** The stored datatype of the field. boolean fields store one true or false value */
 			type: "boolean"
@@ -366,8 +350,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 		} | {
 			/** The stored datatype of the field. dateTime fields store one timestamp with millisecond precision in the UTC timezone, or a date with day precision and no timezone if `includeTime` is off. */
 			type: "dateTime"
@@ -401,8 +383,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 		} | {
 			/** The stored datatype of the field. vector fields store a list of floats suitable for vector similarity operations. */
 			type: "vector"
@@ -417,8 +397,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 		} | {
 			/** The stored datatype of the field. file fields store a reference to a single file uploaded to cloud storage. */
 			type: "file"
@@ -443,8 +421,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 		} | {
 			/** The datatype of the field. computed fields store a value that is computed using a Gelly expression. */
 			type: "computed"
@@ -452,8 +428,6 @@ type GadgetModel = {
 			sourceFile?: (string | null) | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 		} | {
 			/** The stored datatype of the field. belongsTo fields store an ID pointing to a record of the parent model. */
 			type: "belongsTo"
@@ -487,8 +461,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 		} | {
 			/** The stored datatype of the field. hasOne fields fetch a single record from a child model, powered by a belongsTo field on the child model. */
 			type: "hasOne"
@@ -501,8 +473,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 		} | {
 			/** The stored datatype of the field. hasMany fields fetch a list of records from a child model, powered by a belongsTo field on the child model. */
 			type: "hasMany"
@@ -514,8 +484,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 		} | {
 			/** The stored datatype of the field. hasManyThrough fields fetch a list of sibling records, powered by an intermediate model with two belongsTos pointing at this model and the sibling model. */
 			type: "hasManyThrough"
@@ -537,8 +505,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 		} | {
 			/** The stored datatype of the field. encryptedString fields store a string that is encrypted at rest. */
 			type: "encryptedString"
@@ -551,8 +517,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 		} | {
 			/** The stored datatype of the field. password fields store a hashed and salted bcrypt string. */
 			type: "password"
@@ -565,8 +529,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 		} | {
 			/** The stored datatype of the field. roleAssignments fields store a list of role names from the app's role list. */
 			type: "roleList"
@@ -581,8 +543,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 		} | {
 			/** @deprecated This field type is deprecated. */
 			type: "money"
@@ -592,15 +552,11 @@ type GadgetModel = {
 			currency?: string | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 		} | {
 			/** @deprecated This field type is deprecated. */
 			type: "recordState"
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 		}
 	}
 	/** Configuration for this model's connection to Shopify */
@@ -656,8 +612,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 			/** Whether sorting and filtering are enabled for this field */
 			enableSortingAndFiltering?: boolean | undefined
 			/** Whether this field can be searched by full text search queries */
@@ -703,8 +657,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 			/** Whether sorting and filtering are enabled for this field */
 			enableSortingAndFiltering?: boolean | undefined
 			/** Whether this field can be searched by full text search queries */
@@ -752,8 +704,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 			/** Whether sorting and filtering are enabled for this field */
 			enableSortingAndFiltering?: boolean | undefined
 			/** Whether this field can be searched by full text search queries */
@@ -799,8 +749,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 			/** Whether sorting and filtering are enabled for this field */
 			enableSortingAndFiltering?: boolean | undefined
 			/** Whether this field can be searched by full text search queries */
@@ -846,8 +794,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 			/** Whether sorting and filtering are enabled for this field */
 			enableSortingAndFiltering?: boolean | undefined
 			/** Whether this field can be searched by full text search queries */
@@ -890,8 +836,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 			/** Whether sorting and filtering are enabled for this field */
 			enableSortingAndFiltering?: boolean | undefined
 			/** Whether this field can be searched by full text search queries */
@@ -928,8 +872,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 			/** Whether sorting and filtering are enabled for this field */
 			enableSortingAndFiltering?: boolean | undefined
 			/** Whether this field can be searched by full text search queries */
@@ -971,8 +913,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 			/** Whether sorting and filtering are enabled for this field */
 			enableSortingAndFiltering?: boolean | undefined
 			/** Whether this field can be searched by full text search queries */
@@ -1004,8 +944,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 			/** Whether sorting and filtering are enabled for this field */
 			enableSortingAndFiltering?: boolean | undefined
 			/** Whether this field can be searched by full text search queries */
@@ -1043,8 +981,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 			/** Whether sorting and filtering are enabled for this field */
 			enableSortingAndFiltering?: boolean | undefined
 			/** Whether this field can be searched by full text search queries */
@@ -1063,8 +999,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 			/** Whether sorting and filtering are enabled for this field */
 			enableSortingAndFiltering?: boolean | undefined
 			/** Whether this field can be searched by full text search queries */
@@ -1093,8 +1027,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 		} | {
 			/** The datatype of the field. computed fields store a value that is computed using a Gelly expression. */
 			type: "computed"
@@ -1102,8 +1034,6 @@ type GadgetModel = {
 			sourceFile?: (string | null) | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 		} | {
 			/** The stored datatype of the field. belongsTo fields store an ID pointing to a record of the parent model. */
 			type: "belongsTo"
@@ -1137,8 +1067,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 		} | {
 			/** The stored datatype of the field. hasOne fields fetch a single record from a child model, powered by a belongsTo field on the child model. */
 			type: "hasOne"
@@ -1151,8 +1079,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 		} | {
 			/** The stored datatype of the field. hasMany fields fetch a list of records from a child model, powered by a belongsTo field on the child model. */
 			type: "hasMany"
@@ -1164,8 +1090,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 		} | {
 			/** The stored datatype of the field. hasManyThrough fields fetch a list of sibling records, powered by an intermediate model with two belongsTos pointing at this model and the sibling model. */
 			type: "hasManyThrough"
@@ -1187,8 +1111,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 		} | {
 			/** The stored datatype of the field. encryptedString fields store a string that is encrypted at rest. */
 			type: "encryptedString"
@@ -1201,8 +1123,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 		} | {
 			/** The stored datatype of the field. password fields store a hashed and salted bcrypt string. */
 			type: "password"
@@ -1215,8 +1135,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 		} | {
 			/** The stored datatype of the field. roleAssignments fields store a list of role names from the app's role list. */
 			type: "roleList"
@@ -1231,8 +1149,6 @@ type GadgetModel = {
 			} | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 		} | {
 			/** @deprecated This field type is deprecated. */
 			type: "money"
@@ -1242,8 +1158,6 @@ type GadgetModel = {
 			currency?: string | undefined
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 			/** Whether sorting and filtering are enabled for this field */
 			enableSortingAndFiltering?: boolean | undefined
 			/** Whether this field can be searched by full text search queries */
@@ -1253,8 +1167,6 @@ type GadgetModel = {
 			type: "recordState"
 			/** The storage key addressing this field's data in the database */
 			storageKey: string
-			/** A comment describing this field to other developers */
-			comment?: string | undefined
 			/** Whether sorting and filtering are enabled for this field */
 			enableSortingAndFiltering?: boolean | undefined
 			/** Whether this field can be searched by full text search queries */
@@ -1266,8 +1178,6 @@ type GadgetModel = {
 		/** The list of fields to retrieve from Shopify. Use `true` to use the default configuration for each field, or an object to configure the field further. */
 		fields?: {
 			[x: string]: true | {
-				/** A comment describing this field to other developers */
-				comment?: string | undefined
 				/** Whether sorting and filtering are enabled for this field */
 				enableSortingAndFiltering?: boolean | undefined
 				/** Whether this field can be searched by full text search queries */

@@ -1,4 +1,13 @@
-/** Context of the `applyShippingCostAbsorption` action. */ /**
+/** Context of the `applyDiscountsAndShipping` action. */ /**
+  * @deprecated Use 'returnType' instead.
+  * Useful for returning data from this action by setting `scope.result`.
+  */ /**
+  * An object specifying the trigger to this action (e.g. API call, custom params).
+  */ /**
+  * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+  */ /**
+  * @private The context of this action.
+  */ /** Context of the `applyShippingCostAbsorption` action. */ /**
   * @deprecated Use 'returnType' instead.
   * Useful for returning data from this action by setting `scope.result`.
   */ /**
@@ -26,6 +35,24 @@
   */ /**
   * @private The context of this action.
   */ /** Context of the `debugOrderShipping` action. */ /**
+  * @deprecated Use 'returnType' instead.
+  * Useful for returning data from this action by setting `scope.result`.
+  */ /**
+  * An object specifying the trigger to this action (e.g. API call, custom params).
+  */ /**
+  * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+  */ /**
+  * @private The context of this action.
+  */ /** Context of the `deleteSenditRecord` action. */ /**
+  * @deprecated Use 'returnType' instead.
+  * Useful for returning data from this action by setting `scope.result`.
+  */ /**
+  * An object specifying the trigger to this action (e.g. API call, custom params).
+  */ /**
+  * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+  */ /**
+  * @private The context of this action.
+  */ /** Context of the `deleteSheetRowsByTrackingNumber` action. */ /**
   * @deprecated Use 'returnType' instead.
   * Useful for returning data from this action by setting `scope.result`.
   */ /**
@@ -80,6 +107,15 @@
   */ /**
   * @private The context of this action.
   */ /** Context of the `getShippingCost` action. */ /**
+  * @deprecated Use 'returnType' instead.
+  * Useful for returning data from this action by setting `scope.result`.
+  */ /**
+  * An object specifying the trigger to this action (e.g. API call, custom params).
+  */ /**
+  * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+  */ /**
+  * @private The context of this action.
+  */ /** Context of the `listRecentOrders` action. */ /**
   * @deprecated Use 'returnType' instead.
   * Useful for returning data from this action by setting `scope.result`.
   */ /**
@@ -187,6 +223,15 @@
   * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
   */ /**
   * @private The context of this action.
+  */ /** Context of the `testSenditDeletion` action. */ /**
+  * @deprecated Use 'returnType' instead.
+  * Useful for returning data from this action by setting `scope.result`.
+  */ /**
+  * An object specifying the trigger to this action (e.g. API call, custom params).
+  */ /**
+  * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+  */ /**
+  * @private The context of this action.
   */ /** Context of the `testTrackingDetection` action. */ /**
   * @deprecated Use 'returnType' instead.
   * Useful for returning data from this action by setting `scope.result`.
@@ -250,25 +295,7 @@
   * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
   */ /**
   * @private The context of this action.
-  */ /** Context of the `writeToShopify` action. */ /**
-  * @deprecated Use 'returnType' instead.
-  * Useful for returning data from this action by setting `scope.result`.
-  */ /**
-  * An object specifying the trigger to this action (e.g. API call, custom params).
-  */ /**
-  * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
-  */ /**
-  * @private The context of this action.
-  */ /** Context of the `listRecentOrders` action. */ /**
-  * @deprecated Use 'returnType' instead.
-  * Useful for returning data from this action by setting `scope.result`.
-  */ /**
-  * An object specifying the trigger to this action (e.g. API call, custom params).
-  */ /**
-  * An object specifying the trigger to this action (e.g. api call, scheduler etc.)
-  */ /**
-  * @private The context of this action.
-  */ /** Context of the `applyDiscountsAndShipping` action. */ export { }; /**
+  */ /** Context of the `writeToShopify` action. */ export { }; /**
   * @deprecated Use 'returnType' instead.
   * Useful for returning data from this action by setting `scope.result`.
   */  /**

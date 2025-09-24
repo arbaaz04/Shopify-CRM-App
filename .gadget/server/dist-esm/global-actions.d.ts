@@ -2,6 +2,29 @@
 import type { AmbientContext } from "./AmbientContext.js";
 import type { TriggerWithType, ActionExecutionScope } from "./types.js";
 import type { Scalars } from "@gadget-client/bambe-crm-app";
+/** Context of the `applyDiscountsAndShipping` action. */
+export interface ApplyDiscountsAndShippingGlobalActionContext extends AmbientContext {
+	/**
+	* @deprecated Use 'returnType' instead.
+	* Useful for returning data from this action by setting `scope.result`.
+	*/
+	scope: ActionExecutionScope;
+	/**
+	* An object specifying the trigger to this action (e.g. API call, custom params).
+	*/
+	params: {
+		orderId?: string
+		testMode?: boolean
+	};
+	/**
+	* An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+	*/
+	trigger: TriggerWithType<"api"> | TriggerWithType<"background-action">;
+	/**
+	* @private The context of this action.
+	*/
+	context: ApplyDiscountsAndShippingGlobalActionContext;
+}
 /** Context of the `applyShippingCostAbsorption` action. */
 export interface ApplyShippingCostAbsorptionGlobalActionContext extends AmbientContext {
 	/**
@@ -91,6 +114,49 @@ export interface DebugOrderShippingGlobalActionContext extends AmbientContext {
 	* @private The context of this action.
 	*/
 	context: DebugOrderShippingGlobalActionContext;
+}
+/** Context of the `deleteSenditRecord` action. */
+export interface DeleteSenditRecordGlobalActionContext extends AmbientContext {
+	/**
+	* @deprecated Use 'returnType' instead.
+	* Useful for returning data from this action by setting `scope.result`.
+	*/
+	scope: ActionExecutionScope;
+	/**
+	* An object specifying the trigger to this action (e.g. API call, custom params).
+	*/
+	params: {};
+	/**
+	* An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+	*/
+	trigger: TriggerWithType<"api"> | TriggerWithType<"background-action">;
+	/**
+	* @private The context of this action.
+	*/
+	context: DeleteSenditRecordGlobalActionContext;
+}
+/** Context of the `deleteSheetRowsByTrackingNumber` action. */
+export interface DeleteSheetRowsByTrackingNumberGlobalActionContext extends AmbientContext {
+	/**
+	* @deprecated Use 'returnType' instead.
+	* Useful for returning data from this action by setting `scope.result`.
+	*/
+	scope: ActionExecutionScope;
+	/**
+	* An object specifying the trigger to this action (e.g. API call, custom params).
+	*/
+	params: {
+		trackingNumbers?: string
+		shopId?: string
+	};
+	/**
+	* An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+	*/
+	trigger: TriggerWithType<"api"> | TriggerWithType<"background-action">;
+	/**
+	* @private The context of this action.
+	*/
+	context: DeleteSheetRowsByTrackingNumberGlobalActionContext;
 }
 /** Context of the `directOrderTest` action. */
 export interface DirectOrderTestGlobalActionContext extends AmbientContext {
@@ -221,6 +287,26 @@ export interface GetShippingCostGlobalActionContext extends AmbientContext {
 	* @private The context of this action.
 	*/
 	context: GetShippingCostGlobalActionContext;
+}
+/** Context of the `listRecentOrders` action. */
+export interface ListRecentOrdersGlobalActionContext extends AmbientContext {
+	/**
+	* @deprecated Use 'returnType' instead.
+	* Useful for returning data from this action by setting `scope.result`.
+	*/
+	scope: ActionExecutionScope;
+	/**
+	* An object specifying the trigger to this action (e.g. API call, custom params).
+	*/
+	params: {};
+	/**
+	* An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+	*/
+	trigger: TriggerWithType<"api"> | TriggerWithType<"background-action">;
+	/**
+	* @private The context of this action.
+	*/
+	context: ListRecentOrdersGlobalActionContext;
 }
 /** Context of the `processBulkReturns` action. */
 export interface ProcessBulkReturnsGlobalActionContext extends AmbientContext {
@@ -512,6 +598,26 @@ export interface TestSenditConnectionGlobalActionContext extends AmbientContext 
 	*/
 	context: TestSenditConnectionGlobalActionContext;
 }
+/** Context of the `testSenditDeletion` action. */
+export interface TestSenditDeletionGlobalActionContext extends AmbientContext {
+	/**
+	* @deprecated Use 'returnType' instead.
+	* Useful for returning data from this action by setting `scope.result`.
+	*/
+	scope: ActionExecutionScope;
+	/**
+	* An object specifying the trigger to this action (e.g. API call, custom params).
+	*/
+	params: {};
+	/**
+	* An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+	*/
+	trigger: TriggerWithType<"api"> | TriggerWithType<"background-action">;
+	/**
+	* @private The context of this action.
+	*/
+	context: TestSenditDeletionGlobalActionContext;
+}
 /** Context of the `testTrackingDetection` action. */
 export interface TestTrackingDetectionGlobalActionContext extends AmbientContext {
 	/**
@@ -699,47 +805,4 @@ export interface WriteToShopifyGlobalActionContext extends AmbientContext {
 	* @private The context of this action.
 	*/
 	context: WriteToShopifyGlobalActionContext;
-}
-/** Context of the `listRecentOrders` action. */
-export interface ListRecentOrdersGlobalActionContext extends AmbientContext {
-	/**
-	* @deprecated Use 'returnType' instead.
-	* Useful for returning data from this action by setting `scope.result`.
-	*/
-	scope: ActionExecutionScope;
-	/**
-	* An object specifying the trigger to this action (e.g. API call, custom params).
-	*/
-	params: {};
-	/**
-	* An object specifying the trigger to this action (e.g. api call, scheduler etc.)
-	*/
-	trigger: TriggerWithType<"api"> | TriggerWithType<"background-action">;
-	/**
-	* @private The context of this action.
-	*/
-	context: ListRecentOrdersGlobalActionContext;
-}
-/** Context of the `applyDiscountsAndShipping` action. */
-export interface ApplyDiscountsAndShippingGlobalActionContext extends AmbientContext {
-	/**
-	* @deprecated Use 'returnType' instead.
-	* Useful for returning data from this action by setting `scope.result`.
-	*/
-	scope: ActionExecutionScope;
-	/**
-	* An object specifying the trigger to this action (e.g. API call, custom params).
-	*/
-	params: {
-		orderId?: string
-		testMode?: boolean
-	};
-	/**
-	* An object specifying the trigger to this action (e.g. api call, scheduler etc.)
-	*/
-	trigger: TriggerWithType<"api"> | TriggerWithType<"background-action">;
-	/**
-	* @private The context of this action.
-	*/
-	context: ApplyDiscountsAndShippingGlobalActionContext;
 }

@@ -2,7 +2,7 @@ import type { OperationContext } from "@urql/core";
 import { GadgetConnection, GadgetTransaction, InternalModelManager, ActionFunctionMetadata, GlobalActionFunction, BackgroundActionHandle } from "@gadgetinc/api-client-core";
 import type { ClientOptions as ApiClientOptions, AnyClient, AuthenticationModeOptions, EnqueueBackgroundActionOptions, AnyActionFunction } from '@gadgetinc/api-client-core';
 import type { DocumentNode } from 'graphql';
-import { CalculateRefundLineItemsElementTypeInput, Scalars, ProcessBulkReturnsOrderSelectionsElementTypeInput, ProcessOrderReturnLineItemsElementTypeInput, SyncOrdersOrdersElementTypeInput, WriteSpeedafDataToSheetsTrackingDataElementTypeInput } from "./types.js";
+import { Scalars, CalculateRefundLineItemsElementTypeInput, ProcessBulkReturnsOrderSelectionsElementTypeInput, ProcessOrderReturnLineItemsElementTypeInput, SyncOrdersOrdersElementTypeInput, WriteSpeedafDataToSheetsTrackingDataElementTypeInput } from "./types.js";
 import { ShopifyCustomerManager } from "./models/ShopifyCustomer.js";
 import { ShopifyGdprRequestManager } from "./models/ShopifyGdprRequest.js";
 import { ShopifyOrderManager } from "./models/ShopifyOrder.js";
@@ -20,6 +20,7 @@ import { SenditConfigManager } from "./models/SenditConfig.js";
 import { SpeedafConfigManager } from "./models/SpeedafConfig.js";
 import { CustomCityManager } from "./models/CustomCity.js";
 import { DeliveryChargesManager } from "./models/DeliveryCharges.js";
+import { BlacklistedPhoneManager } from "./models/BlacklistedPhone.js";
 export { DefaultShopifyCustomerSelection, type ShopifyCustomerRecord } from "./models/ShopifyCustomer.js";
 export { DefaultShopifyGdprRequestSelection, type ShopifyGdprRequestRecord } from "./models/ShopifyGdprRequest.js";
 export { DefaultShopifyOrderSelection, type ShopifyOrderRecord } from "./models/ShopifyOrder.js";
@@ -36,6 +37,7 @@ export { DefaultSenditConfigSelection, type SenditConfigRecord } from "./models/
 export { DefaultSpeedafConfigSelection, type SpeedafConfigRecord } from "./models/SpeedafConfig.js";
 export { DefaultCustomCitySelection, type CustomCityRecord } from "./models/CustomCity.js";
 export { DefaultDeliveryChargesSelection, type DeliveryChargesRecord } from "./models/DeliveryCharges.js";
+export { DefaultBlacklistedPhoneSelection, type BlacklistedPhoneRecord } from "./models/BlacklistedPhone.js";
 type BaseClientOptions = Omit<ApiClientOptions, "authenticationMode">;
 export type ClientOptions = BaseClientOptions & ({
     /**
@@ -82,6 +84,8 @@ export type InternalModelManagers = {
     customCity: InternalModelManager;
     /** The internal API model manager for the deliveryCharges model */
     deliveryCharges: InternalModelManager;
+    /** The internal API model manager for the blacklistedPhone model */
+    blacklistedPhone: InternalModelManager;
 };
 export declare const maybeGetAuthenticationModeOptionsFromClientOptions: (options: ClientOptions) => AuthenticationModeOptions | undefined;
 /**
@@ -92,6 +96,32 @@ Note: When declaring authentication modes, you can only declare authentication m
 export declare class BambeCrmAppClient implements AnyClient {
     connection: GadgetConnection;
     readonly options: ClientOptions | undefined;
+    /** Executes the applyDiscountsAndShipping global action. */
+    applyDiscountsAndShipping: {
+        (variables?: {
+            orderId?: (Scalars["String"] | null) | null;
+            testMode?: (Scalars["Boolean"] | null) | null;
+        } | null): Promise<any>;
+        type: "globalAction";
+        operationName: "applyDiscountsAndShipping";
+        operationReturnType: "ApplyDiscountsAndShipping";
+        namespace: null;
+        typesImports: ["Scalars"];
+        variables: {
+            orderId: {
+                required: false;
+                type: "String";
+            };
+            testMode: {
+                required: false;
+                type: "Boolean";
+            };
+        };
+        variablesType: {
+            orderId?: (Scalars["String"] | null) | null;
+            testMode?: (Scalars["Boolean"] | null) | null;
+        } | null | undefined;
+    };
     /** Executes the applyShippingCostAbsorption global action. */
     applyShippingCostAbsorption: {
         (): Promise<any>;
@@ -168,6 +198,43 @@ export declare class BambeCrmAppClient implements AnyClient {
         typesImports: [];
         variables: {};
         variablesType: Record<string, never>;
+    };
+    /** Executes the deleteSenditRecord global action. */
+    deleteSenditRecord: {
+        (): Promise<any>;
+        type: "globalAction";
+        operationName: "deleteSenditRecord";
+        operationReturnType: "DeleteSenditRecord";
+        namespace: null;
+        typesImports: [];
+        variables: {};
+        variablesType: Record<string, never>;
+    };
+    /** Executes the deleteSheetRowsByTrackingNumber global action. */
+    deleteSheetRowsByTrackingNumber: {
+        (variables?: {
+            trackingNumbers?: (Scalars["String"] | null) | null;
+            shopId?: (Scalars["String"] | null) | null;
+        } | null): Promise<any>;
+        type: "globalAction";
+        operationName: "deleteSheetRowsByTrackingNumber";
+        operationReturnType: "DeleteSheetRowsByTrackingNumber";
+        namespace: null;
+        typesImports: ["Scalars"];
+        variables: {
+            trackingNumbers: {
+                required: false;
+                type: "String";
+            };
+            shopId: {
+                required: false;
+                type: "String";
+            };
+        };
+        variablesType: {
+            trackingNumbers?: (Scalars["String"] | null) | null;
+            shopId?: (Scalars["String"] | null) | null;
+        } | null | undefined;
     };
     /** Executes the directOrderTest global action. */
     directOrderTest: {
@@ -282,6 +349,17 @@ export declare class BambeCrmAppClient implements AnyClient {
         variablesType: {
             orderId?: (Scalars["String"] | null) | null;
         } | null | undefined;
+    };
+    /** Executes the listRecentOrders global action. */
+    listRecentOrders: {
+        (): Promise<any>;
+        type: "globalAction";
+        operationName: "listRecentOrders";
+        operationReturnType: "ListRecentOrders";
+        namespace: null;
+        typesImports: [];
+        variables: {};
+        variablesType: Record<string, never>;
     };
     /** Executes the processBulkReturns global action. */
     processBulkReturns: {
@@ -602,6 +680,17 @@ export declare class BambeCrmAppClient implements AnyClient {
             saveToPersistent?: (Scalars["Boolean"] | null) | null;
         } | null | undefined;
     };
+    /** Executes the testSenditDeletion global action. */
+    testSenditDeletion: {
+        (): Promise<any>;
+        type: "globalAction";
+        operationName: "testSenditDeletion";
+        operationReturnType: "TestSenditDeletion";
+        namespace: null;
+        typesImports: [];
+        variables: {};
+        variablesType: Record<string, never>;
+    };
     /** Executes the testTrackingDetection global action. */
     testTrackingDetection: {
         (): Promise<any>;
@@ -819,43 +908,6 @@ export declare class BambeCrmAppClient implements AnyClient {
             variables?: (Scalars["JSONObject"] | null) | null;
         } | null | undefined;
     };
-    /** Executes the listRecentOrders global action. */
-    listRecentOrders: {
-        (): Promise<any>;
-        type: "globalAction";
-        operationName: "listRecentOrders";
-        operationReturnType: "ListRecentOrders";
-        namespace: null;
-        typesImports: [];
-        variables: {};
-        variablesType: Record<string, never>;
-    };
-    /** Executes the applyDiscountsAndShipping global action. */
-    applyDiscountsAndShipping: {
-        (variables?: {
-            orderId?: (Scalars["String"] | null) | null;
-            testMode?: (Scalars["Boolean"] | null) | null;
-        } | null): Promise<any>;
-        type: "globalAction";
-        operationName: "applyDiscountsAndShipping";
-        operationReturnType: "ApplyDiscountsAndShipping";
-        namespace: null;
-        typesImports: ["Scalars"];
-        variables: {
-            orderId: {
-                required: false;
-                type: "String";
-            };
-            testMode: {
-                required: false;
-                type: "Boolean";
-            };
-        };
-        variablesType: {
-            orderId?: (Scalars["String"] | null) | null;
-            testMode?: (Scalars["Boolean"] | null) | null;
-        } | null | undefined;
-    };
     shopifyCustomer: ShopifyCustomerManager;
     shopifyGdprRequest: ShopifyGdprRequestManager;
     shopifyOrder: ShopifyOrderManager;
@@ -873,6 +925,7 @@ export declare class BambeCrmAppClient implements AnyClient {
     speedafConfig: SpeedafConfigManager;
     customCity: CustomCityManager;
     deliveryCharges: DeliveryChargesManager;
+    blacklistedPhone: BlacklistedPhoneManager;
     /**
     * Namespaced object for accessing models via the Gadget internal APIs, which provide lower level and higher privileged operations directly against the database. Useful for maintenance operations like migrations or correcting broken data, and for implementing the high level actions.
     *

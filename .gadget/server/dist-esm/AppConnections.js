@@ -22,6 +22,8 @@
         **/ /**
         * The Shopify Session token details for the current request, if present. A request must be authenticated with a Shopify Session token for this to be present, otherwise it will be undefined. Gadget validates the incoming session token against your app's client secret and won't permit invalid, expired, or incorrectly signed tokens.
         */ /**
+        * The Shopify App Proxy details for the current request, if present. A request must be made through a Shopify App Proxy for this to be present. Gadget validates the HMAC signature to ensure the request is coming from Shopify and if verifed sets the path prefix and logged in customer id if they are present.
+        */ /**
         * The ID of the shop set up as the current in-context tenant for this context. The current shop is inferred from the request context.
         */ /**
         * The domain of the shop set up as the current in-context tenant for this context. The current shop is inferred from the request context.

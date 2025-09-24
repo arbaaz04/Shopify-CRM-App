@@ -12,6 +12,13 @@ export const permissions: GadgetPermissions = {
     "shopify-app-users": {
       storageKey: "Role-Shopify-App",
       models: {
+        blacklistedPhone: {
+          read: true,
+          actions: {
+            create: true,
+            delete: true,
+          },
+        },
         customCity: {
           read: true,
           actions: {
@@ -158,6 +165,7 @@ export const permissions: GadgetPermissions = {
       },
       actions: {
         applyShippingCostAbsorption: true,
+        bulkImportBlacklistedPhones: true,
         calculateRefund: true,
         createSenditOrder: true,
         directOrderTest: true,

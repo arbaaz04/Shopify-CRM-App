@@ -26,6 +26,7 @@ import { patchOverlay } from "../core/errors/overlay.js";
                         "GADGET_ENV_ID": "447924",
                         "GADGET_PUBLIC_APP_ENV": "development",
                         "GADGET_APP_TEMPLATE_TYPE": "ShopifyApp",
+                        "GADGET_OTEL_COLLECTOR_URL": "https://traces.gadget.dev",
                         "GADGET_FLAG_ASSISTANT_ENABLED": "true"
                     },
                     productionEnvironmentVariables: {
@@ -34,7 +35,8 @@ import { patchOverlay } from "../core/errors/overlay.js";
                         "GADGET_PUBLIC_APP_SLUG": "bambe-crm-app",
                         "GADGET_ENV_ID": "447925",
                         "GADGET_PUBLIC_APP_ENV": "production",
-                        "GADGET_APP_TEMPLATE_TYPE": "ShopifyApp"
+                        "GADGET_APP_TEMPLATE_TYPE": "ShopifyApp",
+                        "GADGET_OTEL_COLLECTOR_URL": "https://traces.gadget.dev"
                     },
                     useSameDomainAssets: false
                 }

@@ -169,11 +169,14 @@ export type InternalCustomCityRecord = Scalars["JSONObject"];
 /** Represents one deliveryCharges result record in internal api calls. Returns a JSON blob of all the record's fields. */
 export type InternalDeliveryChargesRecord = Scalars["JSONObject"];
 
+/** Represents one blacklistedPhone result record in internal api calls. Returns a JSON blob of all the record's fields. */
+export type InternalBlacklistedPhoneRecord = Scalars["JSONObject"];
 
-export type BackgroundActionResult = AvailableApplyShippingCostAbsorptionResultSelection | AvailableCalculateRefundResultSelection | AvailableCreateSenditOrderResultSelection | AvailableDebugOrderShippingResultSelection | AvailableDirectOrderTestResultSelection | AvailableExtractOrderSKUsResultSelection | AvailableGetCustomCitiesResultSelection | AvailableGetDeliveryChargesResultSelection | AvailableGetSenditDistrictIdResultSelection | AvailableGetShippingCostResultSelection | AvailableProcessBulkReturnsResultSelection | AvailableProcessOrderReturnResultSelection | AvailableProcessSpeedafAPIResultSelection | AvailableRemoveOrderFromSheetsResultSelection | AvailableSearchBulkOrdersForReturnResultSelection | AvailableSearchOrderForReturnResultSelection | AvailableStandardizeMoroccanCityResultSelection | AvailableSyncOrdersResultSelection | AvailableTestGoogleAuthResultSelection | AvailableTestLocationQueryResultSelection | AvailableTestSenditConnectionResultSelection | AvailableTestTrackingDetectionResultSelection | AvailableTestWriteToSheetResultSelection | AvailableTrackSpeedafOrdersResultSelection | AvailableUpdateDeliveryChargeResultSelection | AvailableUpdateReferenceTrackingResultSelection | AvailableWriteBatchOrdersToSheetsResultSelection | AvailableWriteSpeedafDataToSheetsResultSelection | AvailableWriteToShopifyResultSelection | AvailableListRecentOrdersResultSelection | AvailableApplyDiscountsAndShippingResultSelection | AvailableUpdateShopifyOrderResultSelection | AvailableAbortShopifySyncResultSelection | AvailableCompleteShopifySyncResultSelection | AvailableErrorShopifySyncResultSelection | AvailableRunShopifySyncResultSelection | AvailableCreateGoogleSheetConfigResultSelection | AvailableUpdateGoogleSheetConfigResultSelection | AvailableDeleteGoogleSheetConfigResultSelection | AvailableCreateSenditConfigResultSelection | AvailableUpdateSenditConfigResultSelection | AvailableDeleteSenditConfigResultSelection | AvailableCreateSpeedafConfigResultSelection | AvailableUpdateSpeedafConfigResultSelection | AvailableDeleteSpeedafConfigResultSelection | AvailableFindFirstSpeedafConfigResultSelection | AvailableCreateCustomCityResultSelection | AvailableUpdateCustomCityResultSelection | AvailableDeleteCustomCityResultSelection | AvailableCreateDeliveryChargesResultSelection | AvailableUpdateDeliveryChargesResultSelection | AvailableDeleteDeliveryChargesResultSelection;
+
+export type BackgroundActionResult = AvailableApplyDiscountsAndShippingResultSelection | AvailableApplyShippingCostAbsorptionResultSelection | AvailableCalculateRefundResultSelection | AvailableCreateSenditOrderResultSelection | AvailableDebugOrderShippingResultSelection | AvailableDeleteSenditRecordResultSelection | AvailableDeleteSheetRowsByTrackingNumberResultSelection | AvailableDirectOrderTestResultSelection | AvailableExtractOrderSKUsResultSelection | AvailableGetCustomCitiesResultSelection | AvailableGetDeliveryChargesResultSelection | AvailableGetSenditDistrictIdResultSelection | AvailableGetShippingCostResultSelection | AvailableListRecentOrdersResultSelection | AvailableProcessBulkReturnsResultSelection | AvailableProcessOrderReturnResultSelection | AvailableProcessSpeedafAPIResultSelection | AvailableRemoveOrderFromSheetsResultSelection | AvailableSearchBulkOrdersForReturnResultSelection | AvailableSearchOrderForReturnResultSelection | AvailableStandardizeMoroccanCityResultSelection | AvailableSyncOrdersResultSelection | AvailableTestGoogleAuthResultSelection | AvailableTestLocationQueryResultSelection | AvailableTestSenditConnectionResultSelection | AvailableTestSenditDeletionResultSelection | AvailableTestTrackingDetectionResultSelection | AvailableTestWriteToSheetResultSelection | AvailableTrackSpeedafOrdersResultSelection | AvailableUpdateDeliveryChargeResultSelection | AvailableUpdateReferenceTrackingResultSelection | AvailableWriteBatchOrdersToSheetsResultSelection | AvailableWriteSpeedafDataToSheetsResultSelection | AvailableWriteToShopifyResultSelection | AvailableUpdateShopifyOrderResultSelection | AvailableAbortShopifySyncResultSelection | AvailableCompleteShopifySyncResultSelection | AvailableErrorShopifySyncResultSelection | AvailableRunShopifySyncResultSelection | AvailableCreateGoogleSheetConfigResultSelection | AvailableUpdateGoogleSheetConfigResultSelection | AvailableDeleteGoogleSheetConfigResultSelection | AvailableCreateSenditConfigResultSelection | AvailableUpdateSenditConfigResultSelection | AvailableDeleteSenditConfigResultSelection | AvailableCreateSpeedafConfigResultSelection | AvailableUpdateSpeedafConfigResultSelection | AvailableDeleteSpeedafConfigResultSelection | AvailableFindFirstSpeedafConfigResultSelection | AvailableCreateCustomCityResultSelection | AvailableUpdateCustomCityResultSelection | AvailableDeleteCustomCityResultSelection | AvailableCreateDeliveryChargesResultSelection | AvailableUpdateDeliveryChargesResultSelection | AvailableDeleteDeliveryChargesResultSelection | AvailableCreateBlacklistedPhoneResultSelection | AvailableDeleteBlacklistedPhoneResultSelection;
 
 
-export type AvailableBackgroundActionResultSelection = ApplyShippingCostAbsorptionResult | CalculateRefundResult | CreateSenditOrderResult | DebugOrderShippingResult | DirectOrderTestResult | ExtractOrderSKUsResult | GetCustomCitiesResult | GetDeliveryChargesResult | GetSenditDistrictIdResult | GetShippingCostResult | ProcessBulkReturnsResult | ProcessOrderReturnResult | ProcessSpeedafAPIResult | RemoveOrderFromSheetsResult | SearchBulkOrdersForReturnResult | SearchOrderForReturnResult | StandardizeMoroccanCityResult | SyncOrdersResult | TestGoogleAuthResult | TestLocationQueryResult | TestSenditConnectionResult | TestTrackingDetectionResult | TestWriteToSheetResult | TrackSpeedafOrdersResult | UpdateDeliveryChargeResult | UpdateReferenceTrackingResult | WriteBatchOrdersToSheetsResult | WriteSpeedafDataToSheetsResult | WriteToShopifyResult | ListRecentOrdersResult | ApplyDiscountsAndShippingResult | UpdateShopifyOrderResult | AbortShopifySyncResult | CompleteShopifySyncResult | ErrorShopifySyncResult | RunShopifySyncResult | CreateGoogleSheetConfigResult | UpdateGoogleSheetConfigResult | DeleteGoogleSheetConfigResult | CreateSenditConfigResult | UpdateSenditConfigResult | DeleteSenditConfigResult | CreateSpeedafConfigResult | UpdateSpeedafConfigResult | DeleteSpeedafConfigResult | FindFirstSpeedafConfigResult | CreateCustomCityResult | UpdateCustomCityResult | DeleteCustomCityResult | CreateDeliveryChargesResult | UpdateDeliveryChargesResult | DeleteDeliveryChargesResult;
+export type AvailableBackgroundActionResultSelection = ApplyDiscountsAndShippingResult | ApplyShippingCostAbsorptionResult | CalculateRefundResult | CreateSenditOrderResult | DebugOrderShippingResult | DeleteSenditRecordResult | DeleteSheetRowsByTrackingNumberResult | DirectOrderTestResult | ExtractOrderSKUsResult | GetCustomCitiesResult | GetDeliveryChargesResult | GetSenditDistrictIdResult | GetShippingCostResult | ListRecentOrdersResult | ProcessBulkReturnsResult | ProcessOrderReturnResult | ProcessSpeedafAPIResult | RemoveOrderFromSheetsResult | SearchBulkOrdersForReturnResult | SearchOrderForReturnResult | StandardizeMoroccanCityResult | SyncOrdersResult | TestGoogleAuthResult | TestLocationQueryResult | TestSenditConnectionResult | TestSenditDeletionResult | TestTrackingDetectionResult | TestWriteToSheetResult | TrackSpeedafOrdersResult | UpdateDeliveryChargeResult | UpdateReferenceTrackingResult | WriteBatchOrdersToSheetsResult | WriteSpeedafDataToSheetsResult | WriteToShopifyResult | UpdateShopifyOrderResult | AbortShopifySyncResult | CompleteShopifySyncResult | ErrorShopifySyncResult | RunShopifySyncResult | CreateGoogleSheetConfigResult | UpdateGoogleSheetConfigResult | DeleteGoogleSheetConfigResult | CreateSenditConfigResult | UpdateSenditConfigResult | DeleteSenditConfigResult | CreateSpeedafConfigResult | UpdateSpeedafConfigResult | DeleteSpeedafConfigResult | FindFirstSpeedafConfigResult | CreateCustomCityResult | UpdateCustomCityResult | DeleteCustomCityResult | CreateDeliveryChargesResult | UpdateDeliveryChargesResult | DeleteDeliveryChargesResult | CreateBlacklistedPhoneResult | DeleteBlacklistedPhoneResult;
 
 
 
@@ -2967,6 +2970,51 @@ export type DeliveryChargesFilter = {
 
 
 
+export type BlacklistedPhoneSort = {
+
+  /** Sort the results by the id field. Defaults to ascending (smallest value first). */
+  id?: SortOrder | null;
+
+  /** Sort the results by the createdAt field. Defaults to ascending (smallest value first). */
+  createdAt?: SortOrder | null;
+
+  /** Sort the results by the updatedAt field. Defaults to ascending (smallest value first). */
+  updatedAt?: SortOrder | null;
+
+  /** Sort the results by the addedAt field. Defaults to ascending (smallest value first). */
+  addedAt?: SortOrder | null;
+
+  /** Sort the results by the phone field. Defaults to ascending (smallest value first). */
+  phone?: SortOrder | null;
+};
+
+
+
+export type BlacklistedPhoneFilter = {
+
+  AND?: (BlacklistedPhoneFilter | null)[];
+
+  OR?: (BlacklistedPhoneFilter | null)[];
+
+  NOT?: (BlacklistedPhoneFilter | null)[];
+
+  id?: IDFilter | null;
+
+  createdAt?: DateTimeFilter | null;
+
+  updatedAt?: DateTimeFilter | null;
+
+  addedAt?: DateTimeFilter | null;
+
+  phone?: StringFilter | null;
+
+  shopId?: IDFilter | null;
+
+  shop?: ShopifyShopRelationshipFilter | null;
+};
+
+
+
 export type UpdateShopifyOrderInput = {
 
   id?: (Scalars['GadgetID'] | null) | null;
@@ -3645,6 +3693,24 @@ export type BulkUpsertDeliveryChargesInput = {
   on?: ((Scalars['String'] | null))[];
 
   deliveryCharges?: UpsertDeliveryChargesInput | null;
+};
+
+
+
+export type CreateBlacklistedPhoneInput = {
+
+  addedAt?: Date | Scalars['ISO8601DateString'] | null;
+
+  phone?: (Scalars['String'] | null) | null;
+
+  shop?: ShopifyShopBelongsToInput | null;
+};
+
+
+
+export type BulkCreateBlacklistedPhonesInput = {
+
+  blacklistedPhone?: CreateBlacklistedPhoneInput | null;
 };
 
 
@@ -4589,6 +4655,27 @@ export type InternalDeliveryChargesAtomicsInput = {
 
   /** Numeric atomic commands for operating on speedafCharge. */
   speedafCharge?: (NumericAtomicFieldUpdateInput)[];
+};
+
+
+
+export type InternalBlacklistedPhoneInput = {
+
+  state?: (Scalars['RecordState'] | null) | null;
+
+  stateHistory?: (Scalars['RecordState'] | null) | null;
+
+  id?: (Scalars['GadgetID'] | null) | null;
+
+  createdAt?: Date | Scalars['ISO8601DateString'] | null;
+
+  updatedAt?: Date | Scalars['ISO8601DateString'] | null;
+
+  addedAt?: Date | Scalars['ISO8601DateString'] | null;
+
+  phone?: (Scalars['String'] | null) | null;
+
+  shop?: InternalBelongsToInput | null;
 };
 
 
@@ -6213,6 +6300,10 @@ export type Query = {
 
   deliveryChargess: DeliveryChargesConnection;
 
+  blacklistedPhone: (BlacklistedPhone | null);
+
+  blacklistedPhones: BlacklistedPhoneConnection;
+
   currentSession: (Session | null);
 
   shopifyConnection: Shopify;
@@ -6289,6 +6380,10 @@ export type AvailableQuerySelection = {
   deliveryCharges?: AvailableDeliveryChargesSelection;
 
   deliveryChargess?: AvailableDeliveryChargesConnectionSelection;
+
+  blacklistedPhone?: AvailableBlacklistedPhoneSelection;
+
+  blacklistedPhones?: AvailableBlacklistedPhoneConnectionSelection;
 
   currentSession?: AvailableSessionSelection;
 
@@ -8888,6 +8983,112 @@ export type AvailableDeliveryChargesEdgeSelection = {
 };
 
 
+
+export type BlacklistedPhone = {
+
+  __typename: 'BlacklistedPhone';
+
+  /** The globally unique, unchanging identifier for this record. Assigned and managed by Gadget. */
+  id: Scalars['GadgetID'];
+
+  /** The time at which this record was first created. Set once upon record creation and never changed. Managed by Gadget. */
+  createdAt: Scalars['DateTime'];
+
+  /** The time at which this record was last changed. Set each time the record is successfully acted upon by an action. Managed by Gadget. */
+  updatedAt: Scalars['DateTime'];
+
+  addedAt: (Scalars['DateTime'] | null);
+
+  phone: Scalars['String'];
+
+  shop: (ShopifyShop | null);
+
+  shopId: (Scalars['GadgetID'] | null);
+
+  /** Get all the fields for this record. Useful for not having to list out all the fields you want to retrieve, but slower. */
+  _all: Scalars['JSONObject'];
+};
+
+
+
+export type AvailableBlacklistedPhoneSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  /** The globally unique, unchanging identifier for this record. Assigned and managed by Gadget. */
+  id?: boolean | null | undefined;
+
+  /** The time at which this record was first created. Set once upon record creation and never changed. Managed by Gadget. */
+  createdAt?: boolean | null | undefined;
+
+  /** The time at which this record was last changed. Set each time the record is successfully acted upon by an action. Managed by Gadget. */
+  updatedAt?: boolean | null | undefined;
+
+  addedAt?: boolean | null | undefined;
+
+  phone?: boolean | null | undefined;
+
+  shop?: AvailableShopifyShopSelection;
+
+  shopId?: boolean | null | undefined;
+
+  /** Get all the fields for this record. Useful for not having to list out all the fields you want to retrieve, but slower. */
+  _all?: boolean | null | undefined;
+};
+
+
+/** A connection to a list of BlacklistedPhone items. */
+export type BlacklistedPhoneConnection = {
+
+  __typename: 'BlacklistedPhoneConnection';
+
+  /** A list of edges. */
+  edges: BlacklistedPhoneEdge[];
+
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+
+
+export type AvailableBlacklistedPhoneConnectionSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  /** A list of edges. */
+  edges?: AvailableBlacklistedPhoneEdgeSelection;
+
+  /** Information to aid in pagination. */
+  pageInfo?: AvailablePageInfoSelection;
+};
+
+
+/** An edge in a BlacklistedPhone connection. */
+export type BlacklistedPhoneEdge = {
+
+  __typename: 'BlacklistedPhoneEdge';
+
+  /** The item at the end of the edge */
+  node: BlacklistedPhone;
+
+  /** A cursor for use in pagination */
+  cursor: Scalars['String'];
+};
+
+
+
+export type AvailableBlacklistedPhoneEdgeSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  /** The item at the end of the edge */
+  node?: AvailableBlacklistedPhoneSelection;
+
+  /** A cursor for use in pagination */
+  cursor?: boolean | null | undefined;
+};
+
+
 /** Represents one of the roles an identity in the system can be entitled to */
 export type GadgetRole = {
 
@@ -9143,6 +9344,10 @@ export type InternalQueries = {
   deliveryCharges: (InternalDeliveryChargesRecord | null);
 
   listDeliveryCharges: InternalDeliveryChargesRecordConnection;
+
+  blacklistedPhone: (InternalBlacklistedPhoneRecord | null);
+
+  listBlacklistedPhone: InternalBlacklistedPhoneRecordConnection;
 };
 
 
@@ -9217,6 +9422,10 @@ export type AvailableInternalQueriesSelection = {
   deliveryCharges?: boolean | null | undefined;
 
   listDeliveryCharges?: AvailableInternalDeliveryChargesRecordConnectionSelection;
+
+  blacklistedPhone?: boolean | null | undefined;
+
+  listBlacklistedPhone?: AvailableInternalBlacklistedPhoneRecordConnectionSelection;
 };
 
 
@@ -10052,6 +10261,58 @@ export type AvailableInternalDeliveryChargesRecordEdgeSelection = {
 };
 
 
+/** A connection to a list of InternalBlacklistedPhoneRecord items. */
+export type InternalBlacklistedPhoneRecordConnection = {
+
+  __typename: 'InternalBlacklistedPhoneRecordConnection';
+
+  /** A list of edges. */
+  edges: InternalBlacklistedPhoneRecordEdge[];
+
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+
+
+export type AvailableInternalBlacklistedPhoneRecordConnectionSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  /** A list of edges. */
+  edges?: AvailableInternalBlacklistedPhoneRecordEdgeSelection;
+
+  /** Information to aid in pagination. */
+  pageInfo?: AvailablePageInfoSelection;
+};
+
+
+/** An edge in a InternalBlacklistedPhoneRecord connection. */
+export type InternalBlacklistedPhoneRecordEdge = {
+
+  __typename: 'InternalBlacklistedPhoneRecordEdge';
+
+  /** The item at the end of the edge */
+  node: InternalBlacklistedPhoneRecord;
+
+  /** A cursor for use in pagination */
+  cursor: Scalars['String'];
+};
+
+
+
+export type AvailableInternalBlacklistedPhoneRecordEdgeSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  /** The item at the end of the edge */
+  node?: boolean | null | undefined;
+
+  /** A cursor for use in pagination */
+  cursor?: boolean | null | undefined;
+};
+
+
 
 export type Mutation = {
 
@@ -10165,6 +10426,16 @@ export type Mutation = {
 
   bulkUpsertDeliveryCharges: BulkUpsertDeliveryChargesResult;
 
+  createBlacklistedPhone: (CreateBlacklistedPhoneResult | null);
+
+  bulkCreateBlacklistedPhones: (BulkCreateBlacklistedPhonesResult | null);
+
+  deleteBlacklistedPhone: (DeleteBlacklistedPhoneResult | null);
+
+  bulkDeleteBlacklistedPhones: (BulkDeleteBlacklistedPhonesResult | null);
+
+  applyDiscountsAndShipping: (ApplyDiscountsAndShippingResult | null);
+
   applyShippingCostAbsorption: (ApplyShippingCostAbsorptionResult | null);
 
   calculateRefund: (CalculateRefundResult | null);
@@ -10172,6 +10443,10 @@ export type Mutation = {
   createSenditOrder: (CreateSenditOrderResult | null);
 
   debugOrderShipping: (DebugOrderShippingResult | null);
+
+  deleteSenditRecord: (DeleteSenditRecordResult | null);
+
+  deleteSheetRowsByTrackingNumber: (DeleteSheetRowsByTrackingNumberResult | null);
 
   directOrderTest: (DirectOrderTestResult | null);
 
@@ -10184,6 +10459,8 @@ export type Mutation = {
   getSenditDistrictId: (GetSenditDistrictIdResult | null);
 
   getShippingCost: (GetShippingCostResult | null);
+
+  listRecentOrders: (ListRecentOrdersResult | null);
 
   processBulkReturns: (ProcessBulkReturnsResult | null);
 
@@ -10207,6 +10484,8 @@ export type Mutation = {
 
   testSenditConnection: (TestSenditConnectionResult | null);
 
+  testSenditDeletion: (TestSenditDeletionResult | null);
+
   testTrackingDetection: (TestTrackingDetectionResult | null);
 
   testWriteToSheet: (TestWriteToSheetResult | null);
@@ -10222,10 +10501,6 @@ export type Mutation = {
   writeSpeedafDataToSheets: (WriteSpeedafDataToSheetsResult | null);
 
   writeToShopify: (WriteToShopifyResult | null);
-
-  listRecentOrders: (ListRecentOrdersResult | null);
-
-  applyDiscountsAndShipping: (ApplyDiscountsAndShippingResult | null);
 
   shopifyConnection: (ShopifyConnectionMutations | null);
 
@@ -10348,6 +10623,16 @@ export type AvailableMutationSelection = {
 
   bulkUpsertDeliveryCharges?: AvailableBulkUpsertDeliveryChargesResultSelection;
 
+  createBlacklistedPhone?: AvailableCreateBlacklistedPhoneResultSelection;
+
+  bulkCreateBlacklistedPhones?: AvailableBulkCreateBlacklistedPhonesResultSelection;
+
+  deleteBlacklistedPhone?: AvailableDeleteBlacklistedPhoneResultSelection;
+
+  bulkDeleteBlacklistedPhones?: AvailableBulkDeleteBlacklistedPhonesResultSelection;
+
+  applyDiscountsAndShipping?: AvailableApplyDiscountsAndShippingResultSelection;
+
   applyShippingCostAbsorption?: AvailableApplyShippingCostAbsorptionResultSelection;
 
   calculateRefund?: AvailableCalculateRefundResultSelection;
@@ -10355,6 +10640,10 @@ export type AvailableMutationSelection = {
   createSenditOrder?: AvailableCreateSenditOrderResultSelection;
 
   debugOrderShipping?: AvailableDebugOrderShippingResultSelection;
+
+  deleteSenditRecord?: AvailableDeleteSenditRecordResultSelection;
+
+  deleteSheetRowsByTrackingNumber?: AvailableDeleteSheetRowsByTrackingNumberResultSelection;
 
   directOrderTest?: AvailableDirectOrderTestResultSelection;
 
@@ -10367,6 +10656,8 @@ export type AvailableMutationSelection = {
   getSenditDistrictId?: AvailableGetSenditDistrictIdResultSelection;
 
   getShippingCost?: AvailableGetShippingCostResultSelection;
+
+  listRecentOrders?: AvailableListRecentOrdersResultSelection;
 
   processBulkReturns?: AvailableProcessBulkReturnsResultSelection;
 
@@ -10390,6 +10681,8 @@ export type AvailableMutationSelection = {
 
   testSenditConnection?: AvailableTestSenditConnectionResultSelection;
 
+  testSenditDeletion?: AvailableTestSenditDeletionResultSelection;
+
   testTrackingDetection?: AvailableTestTrackingDetectionResultSelection;
 
   testWriteToSheet?: AvailableTestWriteToSheetResultSelection;
@@ -10405,10 +10698,6 @@ export type AvailableMutationSelection = {
   writeSpeedafDataToSheets?: AvailableWriteSpeedafDataToSheetsResultSelection;
 
   writeToShopify?: AvailableWriteToShopifyResultSelection;
-
-  listRecentOrders?: AvailableListRecentOrdersResultSelection;
-
-  applyDiscountsAndShipping?: AvailableApplyDiscountsAndShippingResultSelection;
 
   shopifyConnection?: AvailableShopifyConnectionMutationsSelection;
 
@@ -11798,6 +12087,146 @@ export type AvailableBulkUpsertDeliveryChargesResultSelection = {
 
 
 
+export type CreateBlacklistedPhoneResult = {
+
+  __typename: 'CreateBlacklistedPhoneResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  actionRun: (Scalars['String'] | null);
+
+  blacklistedPhone: (BlacklistedPhone | null);
+};
+
+
+
+export type AvailableCreateBlacklistedPhoneResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  actionRun?: boolean | null | undefined;
+
+  blacklistedPhone?: AvailableBlacklistedPhoneSelection;
+};
+
+
+/** The output when running the create on the blacklistedPhone model in bulk. */
+export type BulkCreateBlacklistedPhonesResult = {
+
+  __typename: 'BulkCreateBlacklistedPhonesResult';
+
+  /** Boolean describing if all the bulk actions succeeded or not */
+  success: Scalars['Boolean'];
+
+  /** Aggregated list of errors that any bulk action encountered while processing */
+  errors: ExecutionError[];
+
+  /** The list of all changed blacklistedPhone records by each sent bulk action. Returned in the same order as the input bulk action params. */
+  blacklistedPhones: (BlacklistedPhone | null)[];
+};
+
+
+
+export type AvailableBulkCreateBlacklistedPhonesResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  /** Boolean describing if all the bulk actions succeeded or not */
+  success?: boolean | null | undefined;
+
+  /** Aggregated list of errors that any bulk action encountered while processing */
+  errors?: AvailableExecutionErrorSelection;
+
+  /** The list of all changed blacklistedPhone records by each sent bulk action. Returned in the same order as the input bulk action params. */
+  blacklistedPhones?: AvailableBlacklistedPhoneSelection;
+};
+
+
+
+export type DeleteBlacklistedPhoneResult = {
+
+  __typename: 'DeleteBlacklistedPhoneResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  actionRun: (Scalars['String'] | null);
+};
+
+
+
+export type AvailableDeleteBlacklistedPhoneResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  actionRun?: boolean | null | undefined;
+};
+
+
+/** The output when running the delete on the blacklistedPhone model in bulk. */
+export type BulkDeleteBlacklistedPhonesResult = {
+
+  __typename: 'BulkDeleteBlacklistedPhonesResult';
+
+  /** Boolean describing if all the bulk actions succeeded or not */
+  success: Scalars['Boolean'];
+
+  /** Aggregated list of errors that any bulk action encountered while processing */
+  errors: ExecutionError[];
+};
+
+
+
+export type AvailableBulkDeleteBlacklistedPhonesResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  /** Boolean describing if all the bulk actions succeeded or not */
+  success?: boolean | null | undefined;
+
+  /** Aggregated list of errors that any bulk action encountered while processing */
+  errors?: AvailableExecutionErrorSelection;
+};
+
+
+
+export type ApplyDiscountsAndShippingResult = {
+
+  __typename: 'ApplyDiscountsAndShippingResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  result: (Scalars['JSON'] | null);
+};
+
+
+
+export type AvailableApplyDiscountsAndShippingResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  result?: boolean | null | undefined;
+};
+
+
+
 export type ApplyShippingCostAbsorptionResult = {
 
   __typename: 'ApplyShippingCostAbsorptionResult';
@@ -11890,6 +12319,58 @@ export type DebugOrderShippingResult = {
 
 
 export type AvailableDebugOrderShippingResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  result?: boolean | null | undefined;
+};
+
+
+
+export type DeleteSenditRecordResult = {
+
+  __typename: 'DeleteSenditRecordResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  result: (Scalars['JSON'] | null);
+};
+
+
+
+export type AvailableDeleteSenditRecordResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  result?: boolean | null | undefined;
+};
+
+
+
+export type DeleteSheetRowsByTrackingNumberResult = {
+
+  __typename: 'DeleteSheetRowsByTrackingNumberResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  result: (Scalars['JSON'] | null);
+};
+
+
+
+export type AvailableDeleteSheetRowsByTrackingNumberResultSelection = {
 
   __typename?: boolean | null | undefined;
 
@@ -12046,6 +12527,32 @@ export type GetShippingCostResult = {
 
 
 export type AvailableGetShippingCostResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  result?: boolean | null | undefined;
+};
+
+
+
+export type ListRecentOrdersResult = {
+
+  __typename: 'ListRecentOrdersResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  result: (Scalars['JSON'] | null);
+};
+
+
+
+export type AvailableListRecentOrdersResultSelection = {
 
   __typename?: boolean | null | undefined;
 
@@ -12344,6 +12851,32 @@ export type AvailableTestSenditConnectionResultSelection = {
 
 
 
+export type TestSenditDeletionResult = {
+
+  __typename: 'TestSenditDeletionResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  result: (Scalars['JSON'] | null);
+};
+
+
+
+export type AvailableTestSenditDeletionResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  result?: boolean | null | undefined;
+};
+
+
+
 export type TestTrackingDetectionResult = {
 
   __typename: 'TestTrackingDetectionResult';
@@ -12552,58 +13085,6 @@ export type AvailableWriteToShopifyResultSelection = {
 
 
 
-export type ListRecentOrdersResult = {
-
-  __typename: 'ListRecentOrdersResult';
-
-  success: Scalars['Boolean'];
-
-  errors: ExecutionError[];
-
-  result: (Scalars['JSON'] | null);
-};
-
-
-
-export type AvailableListRecentOrdersResultSelection = {
-
-  __typename?: boolean | null | undefined;
-
-  success?: boolean | null | undefined;
-
-  errors?: AvailableExecutionErrorSelection;
-
-  result?: boolean | null | undefined;
-};
-
-
-
-export type ApplyDiscountsAndShippingResult = {
-
-  __typename: 'ApplyDiscountsAndShippingResult';
-
-  success: Scalars['Boolean'];
-
-  errors: ExecutionError[];
-
-  result: (Scalars['JSON'] | null);
-};
-
-
-
-export type AvailableApplyDiscountsAndShippingResultSelection = {
-
-  __typename?: boolean | null | undefined;
-
-  success?: boolean | null | undefined;
-
-  errors?: AvailableExecutionErrorSelection;
-
-  result?: boolean | null | undefined;
-};
-
-
-
 export type ShopifyConnectionMutations = {
 
   __typename: 'ShopifyConnectionMutations';
@@ -12760,6 +13241,16 @@ export type BackgroundMutations = {
 
   bulkUpsertDeliveryCharges: BulkEnqueueBackgroundActionResult;
 
+  createBlacklistedPhone: EnqueueBackgroundActionResult;
+
+  bulkCreateBlacklistedPhones: BulkEnqueueBackgroundActionResult;
+
+  deleteBlacklistedPhone: EnqueueBackgroundActionResult;
+
+  bulkDeleteBlacklistedPhones: BulkEnqueueBackgroundActionResult;
+
+  applyDiscountsAndShipping: EnqueueBackgroundActionResult;
+
   applyShippingCostAbsorption: EnqueueBackgroundActionResult;
 
   calculateRefund: EnqueueBackgroundActionResult;
@@ -12767,6 +13258,10 @@ export type BackgroundMutations = {
   createSenditOrder: EnqueueBackgroundActionResult;
 
   debugOrderShipping: EnqueueBackgroundActionResult;
+
+  deleteSenditRecord: EnqueueBackgroundActionResult;
+
+  deleteSheetRowsByTrackingNumber: EnqueueBackgroundActionResult;
 
   directOrderTest: EnqueueBackgroundActionResult;
 
@@ -12779,6 +13274,8 @@ export type BackgroundMutations = {
   getSenditDistrictId: EnqueueBackgroundActionResult;
 
   getShippingCost: EnqueueBackgroundActionResult;
+
+  listRecentOrders: EnqueueBackgroundActionResult;
 
   processBulkReturns: EnqueueBackgroundActionResult;
 
@@ -12802,6 +13299,8 @@ export type BackgroundMutations = {
 
   testSenditConnection: EnqueueBackgroundActionResult;
 
+  testSenditDeletion: EnqueueBackgroundActionResult;
+
   testTrackingDetection: EnqueueBackgroundActionResult;
 
   testWriteToSheet: EnqueueBackgroundActionResult;
@@ -12817,10 +13316,6 @@ export type BackgroundMutations = {
   writeSpeedafDataToSheets: EnqueueBackgroundActionResult;
 
   writeToShopify: EnqueueBackgroundActionResult;
-
-  listRecentOrders: EnqueueBackgroundActionResult;
-
-  applyDiscountsAndShipping: EnqueueBackgroundActionResult;
 
   cancel: BackgroundCancelBackgroundActionResult;
 
@@ -12941,6 +13436,16 @@ export type AvailableBackgroundMutationsSelection = {
 
   bulkUpsertDeliveryCharges?: AvailableBulkEnqueueBackgroundActionResultSelection;
 
+  createBlacklistedPhone?: AvailableEnqueueBackgroundActionResultSelection;
+
+  bulkCreateBlacklistedPhones?: AvailableBulkEnqueueBackgroundActionResultSelection;
+
+  deleteBlacklistedPhone?: AvailableEnqueueBackgroundActionResultSelection;
+
+  bulkDeleteBlacklistedPhones?: AvailableBulkEnqueueBackgroundActionResultSelection;
+
+  applyDiscountsAndShipping?: AvailableEnqueueBackgroundActionResultSelection;
+
   applyShippingCostAbsorption?: AvailableEnqueueBackgroundActionResultSelection;
 
   calculateRefund?: AvailableEnqueueBackgroundActionResultSelection;
@@ -12948,6 +13453,10 @@ export type AvailableBackgroundMutationsSelection = {
   createSenditOrder?: AvailableEnqueueBackgroundActionResultSelection;
 
   debugOrderShipping?: AvailableEnqueueBackgroundActionResultSelection;
+
+  deleteSenditRecord?: AvailableEnqueueBackgroundActionResultSelection;
+
+  deleteSheetRowsByTrackingNumber?: AvailableEnqueueBackgroundActionResultSelection;
 
   directOrderTest?: AvailableEnqueueBackgroundActionResultSelection;
 
@@ -12960,6 +13469,8 @@ export type AvailableBackgroundMutationsSelection = {
   getSenditDistrictId?: AvailableEnqueueBackgroundActionResultSelection;
 
   getShippingCost?: AvailableEnqueueBackgroundActionResultSelection;
+
+  listRecentOrders?: AvailableEnqueueBackgroundActionResultSelection;
 
   processBulkReturns?: AvailableEnqueueBackgroundActionResultSelection;
 
@@ -12983,6 +13494,8 @@ export type AvailableBackgroundMutationsSelection = {
 
   testSenditConnection?: AvailableEnqueueBackgroundActionResultSelection;
 
+  testSenditDeletion?: AvailableEnqueueBackgroundActionResultSelection;
+
   testTrackingDetection?: AvailableEnqueueBackgroundActionResultSelection;
 
   testWriteToSheet?: AvailableEnqueueBackgroundActionResultSelection;
@@ -12998,10 +13511,6 @@ export type AvailableBackgroundMutationsSelection = {
   writeSpeedafDataToSheets?: AvailableEnqueueBackgroundActionResultSelection;
 
   writeToShopify?: AvailableEnqueueBackgroundActionResultSelection;
-
-  listRecentOrders?: AvailableEnqueueBackgroundActionResultSelection;
-
-  applyDiscountsAndShipping?: AvailableEnqueueBackgroundActionResultSelection;
 
   cancel?: AvailableBackgroundCancelBackgroundActionResultSelection;
 
@@ -13429,6 +13938,24 @@ export type InternalMutations = {
 
   triggerDeleteDeliveryCharges: (DeleteDeliveryChargesResult | null);
 
+  createBlacklistedPhone: (InternalCreateBlacklistedPhoneResult | null);
+
+  updateBlacklistedPhone: (InternalUpdateBlacklistedPhoneResult | null);
+
+  deleteBlacklistedPhone: (InternalDeleteBlacklistedPhoneResult | null);
+
+  deleteManyBlacklistedPhone: (InternalDeleteManyBlacklistedPhoneResult | null);
+
+  bulkCreateBlacklistedPhones: (InternalBulkCreateBlacklistedPhonesResult | null);
+
+  upsertBlacklistedPhone: (InternalUpsertBlacklistedPhoneResult | null);
+
+  triggerCreateBlacklistedPhone: (CreateBlacklistedPhoneResult | null);
+
+  triggerDeleteBlacklistedPhone: (DeleteBlacklistedPhoneResult | null);
+
+  triggerApplyDiscountsAndShipping: (ApplyDiscountsAndShippingResult | null);
+
   triggerApplyShippingCostAbsorption: (ApplyShippingCostAbsorptionResult | null);
 
   triggerCalculateRefund: (CalculateRefundResult | null);
@@ -13436,6 +13963,10 @@ export type InternalMutations = {
   triggerCreateSenditOrder: (CreateSenditOrderResult | null);
 
   triggerDebugOrderShipping: (DebugOrderShippingResult | null);
+
+  triggerDeleteSenditRecord: (DeleteSenditRecordResult | null);
+
+  triggerDeleteSheetRowsByTrackingNumber: (DeleteSheetRowsByTrackingNumberResult | null);
 
   triggerDirectOrderTest: (DirectOrderTestResult | null);
 
@@ -13448,6 +13979,8 @@ export type InternalMutations = {
   triggerGetSenditDistrictId: (GetSenditDistrictIdResult | null);
 
   triggerGetShippingCost: (GetShippingCostResult | null);
+
+  triggerListRecentOrders: (ListRecentOrdersResult | null);
 
   triggerProcessBulkReturns: (ProcessBulkReturnsResult | null);
 
@@ -13471,6 +14004,8 @@ export type InternalMutations = {
 
   triggerTestSenditConnection: (TestSenditConnectionResult | null);
 
+  triggerTestSenditDeletion: (TestSenditDeletionResult | null);
+
   triggerTestTrackingDetection: (TestTrackingDetectionResult | null);
 
   triggerTestWriteToSheet: (TestWriteToSheetResult | null);
@@ -13486,10 +14021,6 @@ export type InternalMutations = {
   triggerWriteSpeedafDataToSheets: (WriteSpeedafDataToSheetsResult | null);
 
   triggerWriteToShopify: (WriteToShopifyResult | null);
-
-  triggerListRecentOrders: (ListRecentOrdersResult | null);
-
-  triggerApplyDiscountsAndShipping: (ApplyDiscountsAndShippingResult | null);
 
   /** @deprecated Use background.cancelBackgroundAction */
   cancelBackgroundAction: CancelBackgroundActionResult;
@@ -13799,6 +14330,24 @@ export type AvailableInternalMutationsSelection = {
 
   triggerDeleteDeliveryCharges?: AvailableDeleteDeliveryChargesResultSelection;
 
+  createBlacklistedPhone?: AvailableInternalCreateBlacklistedPhoneResultSelection;
+
+  updateBlacklistedPhone?: AvailableInternalUpdateBlacklistedPhoneResultSelection;
+
+  deleteBlacklistedPhone?: AvailableInternalDeleteBlacklistedPhoneResultSelection;
+
+  deleteManyBlacklistedPhone?: AvailableInternalDeleteManyBlacklistedPhoneResultSelection;
+
+  bulkCreateBlacklistedPhones?: AvailableInternalBulkCreateBlacklistedPhonesResultSelection;
+
+  upsertBlacklistedPhone?: AvailableInternalUpsertBlacklistedPhoneResultSelection;
+
+  triggerCreateBlacklistedPhone?: AvailableCreateBlacklistedPhoneResultSelection;
+
+  triggerDeleteBlacklistedPhone?: AvailableDeleteBlacklistedPhoneResultSelection;
+
+  triggerApplyDiscountsAndShipping?: AvailableApplyDiscountsAndShippingResultSelection;
+
   triggerApplyShippingCostAbsorption?: AvailableApplyShippingCostAbsorptionResultSelection;
 
   triggerCalculateRefund?: AvailableCalculateRefundResultSelection;
@@ -13806,6 +14355,10 @@ export type AvailableInternalMutationsSelection = {
   triggerCreateSenditOrder?: AvailableCreateSenditOrderResultSelection;
 
   triggerDebugOrderShipping?: AvailableDebugOrderShippingResultSelection;
+
+  triggerDeleteSenditRecord?: AvailableDeleteSenditRecordResultSelection;
+
+  triggerDeleteSheetRowsByTrackingNumber?: AvailableDeleteSheetRowsByTrackingNumberResultSelection;
 
   triggerDirectOrderTest?: AvailableDirectOrderTestResultSelection;
 
@@ -13818,6 +14371,8 @@ export type AvailableInternalMutationsSelection = {
   triggerGetSenditDistrictId?: AvailableGetSenditDistrictIdResultSelection;
 
   triggerGetShippingCost?: AvailableGetShippingCostResultSelection;
+
+  triggerListRecentOrders?: AvailableListRecentOrdersResultSelection;
 
   triggerProcessBulkReturns?: AvailableProcessBulkReturnsResultSelection;
 
@@ -13841,6 +14396,8 @@ export type AvailableInternalMutationsSelection = {
 
   triggerTestSenditConnection?: AvailableTestSenditConnectionResultSelection;
 
+  triggerTestSenditDeletion?: AvailableTestSenditDeletionResultSelection;
+
   triggerTestTrackingDetection?: AvailableTestTrackingDetectionResultSelection;
 
   triggerTestWriteToSheet?: AvailableTestWriteToSheetResultSelection;
@@ -13856,10 +14413,6 @@ export type AvailableInternalMutationsSelection = {
   triggerWriteSpeedafDataToSheets?: AvailableWriteSpeedafDataToSheetsResultSelection;
 
   triggerWriteToShopify?: AvailableWriteToShopifyResultSelection;
-
-  triggerListRecentOrders?: AvailableListRecentOrdersResultSelection;
-
-  triggerApplyDiscountsAndShipping?: AvailableApplyDiscountsAndShippingResultSelection;
 
   /** @deprecated Use background.cancelBackgroundAction */
   cancelBackgroundAction?: AvailableCancelBackgroundActionResultSelection;
@@ -17375,6 +17928,182 @@ export type AvailableInternalUpsertDeliveryChargesResultSelection = {
   created?: boolean | null | undefined;
 
   deliveryCharges?: boolean | null | undefined;
+};
+
+
+
+export type InternalCreateBlacklistedPhoneResult = {
+
+  __typename: 'InternalCreateBlacklistedPhoneResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  /** Whether the record was created by this upsert operation */
+  created: Scalars['Boolean'];
+
+  blacklistedPhone: (InternalBlacklistedPhoneRecord | null);
+};
+
+
+
+export type AvailableInternalCreateBlacklistedPhoneResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  /** Whether the record was created by this upsert operation */
+  created?: boolean | null | undefined;
+
+  blacklistedPhone?: boolean | null | undefined;
+};
+
+
+
+export type InternalUpdateBlacklistedPhoneResult = {
+
+  __typename: 'InternalUpdateBlacklistedPhoneResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  /** Whether the record was created by this upsert operation */
+  created: Scalars['Boolean'];
+
+  blacklistedPhone: (InternalBlacklistedPhoneRecord | null);
+};
+
+
+
+export type AvailableInternalUpdateBlacklistedPhoneResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  /** Whether the record was created by this upsert operation */
+  created?: boolean | null | undefined;
+
+  blacklistedPhone?: boolean | null | undefined;
+};
+
+
+
+export type InternalDeleteBlacklistedPhoneResult = {
+
+  __typename: 'InternalDeleteBlacklistedPhoneResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  /** Whether the record was created by this upsert operation */
+  created: Scalars['Boolean'];
+
+  blacklistedPhone: (InternalBlacklistedPhoneRecord | null);
+};
+
+
+
+export type AvailableInternalDeleteBlacklistedPhoneResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  /** Whether the record was created by this upsert operation */
+  created?: boolean | null | undefined;
+
+  blacklistedPhone?: boolean | null | undefined;
+};
+
+
+
+export type InternalDeleteManyBlacklistedPhoneResult = {
+
+  __typename: 'InternalDeleteManyBlacklistedPhoneResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+};
+
+
+
+export type AvailableInternalDeleteManyBlacklistedPhoneResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+};
+
+
+
+export type InternalBulkCreateBlacklistedPhonesResult = {
+
+  __typename: 'InternalBulkCreateBlacklistedPhonesResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  blacklistedPhones: (InternalBlacklistedPhoneRecord | null)[];
+};
+
+
+
+export type AvailableInternalBulkCreateBlacklistedPhonesResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  blacklistedPhones?: boolean | null | undefined;
+};
+
+
+
+export type InternalUpsertBlacklistedPhoneResult = {
+
+  __typename: 'InternalUpsertBlacklistedPhoneResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  /** Whether the record was created by this upsert operation */
+  created: Scalars['Boolean'];
+
+  blacklistedPhone: (InternalBlacklistedPhoneRecord | null);
+};
+
+
+
+export type AvailableInternalUpsertBlacklistedPhoneResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  /** Whether the record was created by this upsert operation */
+  created?: boolean | null | undefined;
+
+  blacklistedPhone?: boolean | null | undefined;
 };
 
 

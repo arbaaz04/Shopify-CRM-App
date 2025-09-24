@@ -10062,22 +10062,22 @@ _export(exports, {
                     "options": [
                         {
                             "type": "EnumOption",
-                            "key": "WWXocjXmEwX7",
-                            "createdDate": 1757363703384,
+                            "key": "-gttbJJ_rV_H",
+                            "createdDate": 1757844164084,
                             "name": "sendit",
                             "color": "#FCFCFC"
                         },
                         {
                             "type": "EnumOption",
-                            "key": "n7z90rBIeuEP",
-                            "createdDate": 1757363703384,
+                            "key": "GLjjvfTQ5ZpK",
+                            "createdDate": 1757844164084,
                             "name": "speedaf",
                             "color": "#FCFCFC"
                         },
                         {
                             "type": "EnumOption",
-                            "key": "mx6-XxW6V9O1",
-                            "createdDate": 1757363703384,
+                            "key": "0hJ-G03SObck",
+                            "createdDate": 1757844164084,
                             "name": "general",
                             "color": "#FCFCFC"
                         }
@@ -10251,6 +10251,105 @@ _export(exports, {
             "stateInActionCode": false,
             "childStates": []
         }
+    },
+    "BlacklistedPhone": {
+        "key": "BlacklistedPhoneKey",
+        "name": "blacklistedPhone",
+        "apiIdentifier": "blacklistedPhone",
+        "namespace": [],
+        "fields": {
+            "BlacklistedPhoneKey-system-id": {
+                "fieldType": "ID",
+                "key": "BlacklistedPhoneKey-system-id",
+                "name": "ID",
+                "apiIdentifier": "id",
+                "configuration": {
+                    "type": "IDConfig",
+                    "key": "dWV94Ew8EgOO",
+                    "createdDate": "2025-09-14T09:17:57.680Z"
+                },
+                "internalWritable": true
+            },
+            "BlacklistedPhoneKey-system-createdAt": {
+                "fieldType": "DateTime",
+                "key": "BlacklistedPhoneKey-system-createdAt",
+                "name": "Created At",
+                "apiIdentifier": "createdAt",
+                "configuration": {
+                    "type": "DateTimeConfig",
+                    "key": "GFe_p174CJlr",
+                    "createdDate": "2025-09-14T09:17:57.681Z",
+                    "includeTime": true,
+                    "default": null
+                },
+                "internalWritable": true
+            },
+            "BlacklistedPhoneKey-system-updatedAt": {
+                "fieldType": "DateTime",
+                "key": "BlacklistedPhoneKey-system-updatedAt",
+                "name": "Updated At",
+                "apiIdentifier": "updatedAt",
+                "configuration": {
+                    "type": "DateTimeConfig",
+                    "key": "OuPC1pAj8d8E",
+                    "createdDate": "2025-09-14T09:17:57.681Z",
+                    "includeTime": true,
+                    "default": null
+                },
+                "internalWritable": true
+            },
+            "BlacklistedPhoneAddedAt": {
+                "fieldType": "DateTime",
+                "key": "BlacklistedPhoneAddedAt",
+                "name": "addedAt",
+                "apiIdentifier": "addedAt",
+                "configuration": {
+                    "type": "DateTimeConfig",
+                    "key": "l7kkTJmBStRj",
+                    "createdDate": "2025-09-14T09:17:57.682Z",
+                    "includeTime": true,
+                    "default": null
+                },
+                "internalWritable": true
+            },
+            "BlacklistedPhoneNumber": {
+                "fieldType": "String",
+                "key": "BlacklistedPhoneNumber",
+                "name": "phone",
+                "apiIdentifier": "phone",
+                "configuration": {
+                    "type": "StringConfig",
+                    "key": "QOS7EON25HV_",
+                    "createdDate": "2025-09-14T09:17:57.683Z",
+                    "default": null
+                },
+                "internalWritable": true
+            },
+            "BlacklistedPhoneShopId": {
+                "fieldType": "BelongsTo",
+                "key": "BlacklistedPhoneShopId",
+                "name": "shop",
+                "apiIdentifier": "shop",
+                "configuration": {
+                    "type": "BelongsToConfig",
+                    "key": "6zu39C28INu1",
+                    "createdDate": "2025-09-14T09:17:57.684Z",
+                    "relatedModelKey": "DataModel-Shopify-Shop",
+                    "relatedModelApiIdentifier": "shopifyShop"
+                },
+                "internalWritable": true
+            }
+        },
+        "graphqlTypeName": "BlacklistedPhone",
+        "stateChart": {
+            "type": "StateChart",
+            "key": "PcFAAu1nSyqB",
+            "createdDate": 1757841477678,
+            "actions": {},
+            "transitions": {},
+            "stateInActionCode": false,
+            "childStates": []
+        }
     }
 };
 /**
@@ -10272,5 +10371,6 @@ _export(exports, {
     "api:senditConfig": "SenditConfig",
     "api:speedafConfig": "SpeedafConfig",
     "api:customCity": "CustomCity",
-    "api:deliveryCharges": "DeliveryCharges"
+    "api:deliveryCharges": "DeliveryCharges",
+    "api:blacklistedPhone": "BlacklistedPhone"
 };

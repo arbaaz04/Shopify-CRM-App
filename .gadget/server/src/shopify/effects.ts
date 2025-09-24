@@ -49,17 +49,25 @@ export async function shopifySync(params: AnyParams, record: GadgetRecord<any>):
   const context = getActionContextFromLocalStorage();
   const effectAPIs = context.effectAPIs;
 
-  const syncRecord: { syncSince?: Date; syncSinceBy?: string; id: bigint; shopId: string; models: any; force: boolean } = assert(
-    record,
-    "cannot start a shop sync from this action"
-  );
+  const syncRecord: {
+    syncSince?: Date;
+    syncSinceBy?: string;
+    id: bigint;
+    shopId: string;
+    models: any;
+    force: boolean;
+    syncLast?: number;
+    syncLastBy?: string;
+  } = assert(record, "cannot start a shop sync from this action");
 
   const shopId = assert(syncRecord.shopId, "a shop is required to start a sync");
 
   if (syncRecord.syncSinceBy && syncRecord.syncSinceBy !== "created_at" && syncRecord.syncSinceBy !== "updated_at") {
     throw new InvalidActionInputError("syncSinceBy must be either 'created_at' or 'updated_at'");
   }
-
+  if (syncRecord.syncLastBy && syncRecord.syncLastBy !== "created_at" && syncRecord.syncLastBy !== "updated_at") {
+    throw new InvalidActionInputError("syncLastBy must be either 'created_at' or 'updated_at'");
+  }
   if (!syncRecord.models || (Array.isArray(syncRecord.models) && syncRecord.models.every((m) => typeof m == "string"))) {
     try {
       await effectAPIs.sync(
@@ -69,7 +77,9 @@ export async function shopifySync(params: AnyParams, record: GadgetRecord<any>):
         syncRecord.models,
         syncRecord.force,
         params.startReason,
-        syncRecord.syncSinceBy
+        syncRecord.syncSinceBy,
+        syncRecord.syncLast,
+        syncRecord.syncLastBy
       );
     } catch (error) {
       context.logger.error({ error, connectionSyncId: syncRecord.id }, "an error occurred starting shop sync");
@@ -220,6 +230,9 @@ export function validShopsFilter(
  *
  * @param params - list of Shopify app credentials to sync data from
  * @param syncSince - starting point for data sync (default: all time)
+ * @param syncSinceBy - field name to use for the syncSince timestamp filter ("created_at" or "updated_at")
+ * @param syncLast - syncs the last N records
+ * @param syncLastBy - field name to use for the syncLast timestamp filter ("created_at" or "updated_at")
  * @param models - list of model names to sync data from
  * @param force - enforces syncswithout checking if they're up to date
  * @param startReason - a string reason stored on the created 'shopifySync' records
@@ -229,13 +242,16 @@ export async function globalShopifySync(params: {
   syncSince: string | Date;
   models: string[];
   force?: boolean;
+  syncSinceBy?: string;
+  syncLast?: number;
+  syncLastBy?: string;
   startReason?: string;
 }): Promise<void> {
   const context = getCurrentContext();
   const effectAPIs = assert(context.effectAPIs, "effect apis is missing from the current context");
   const api = assert(context.api, "api client is missing from the current context");
 
-  const { apiKeys, syncSince, models, force, startReason } = params;
+  const { apiKeys, syncSince, models, force, syncSinceBy, syncLast, syncLastBy, startReason } = params;
 
   if (!apiKeys || apiKeys.length === 0) {
     throw new InvalidActionInputError("missing at least 1 api key");
@@ -298,7 +314,10 @@ export async function globalShopifySync(params: {
           },
           domain,
           syncSince,
+          syncSinceBy,
           models,
+          syncLast,
+          syncLastBy,
           ...(forceFieldIdentifier ? { force } : undefined),
         },
         startReason,

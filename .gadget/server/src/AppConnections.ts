@@ -56,6 +56,13 @@
             userId?: string;
         }
         /**
+        * The Shopify App Proxy details for the current request, if present. A request must be made through a Shopify App Proxy for this to be present. Gadget validates the HMAC signature to ensure the request is coming from Shopify and if verifed sets the path prefix and logged in customer id if they are present.
+        */
+        currentAppProxy?: {
+            pathPrefix: string | null;
+            loggedInCustomerId: string | null;
+        };
+        /**
         * The ID of the shop set up as the current in-context tenant for this context. The current shop is inferred from the request context.
         */
         currentShopId?: bigint;

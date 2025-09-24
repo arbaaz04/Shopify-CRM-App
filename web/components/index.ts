@@ -1,6 +1,7 @@
 export * from './AdaptorLink';
 export * from './App';
 export * from './BulkOrderInput';
+export * from './BulkPhoneInput';
 export * from './BulkProcessingResults';
 export * from './BulkReturnInterface';
 export * from './BulkReturnResults';

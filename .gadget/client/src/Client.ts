@@ -5,8 +5,8 @@
   import type { ClientOptions as ApiClientOptions, AnyClient, AuthenticationModeOptions, EnqueueBackgroundActionOptions, AnyActionFunction } from '@gadgetinc/api-client-core';
   import type { DocumentNode } from 'graphql';
 
+  import { Scalars, CalculateRefundLineItemsElementTypeInput, ProcessBulkReturnsOrderSelectionsElementTypeInput, ProcessOrderReturnLineItemsElementTypeInput, SyncOrdersOrdersElementTypeInput, WriteSpeedafDataToSheetsTrackingDataElementTypeInput } from "./types.js";
   import { buildGlobalAction } from "./builder.js";
-  import { CalculateRefundLineItemsElementTypeInput, Scalars, ProcessBulkReturnsOrderSelectionsElementTypeInput, ProcessOrderReturnLineItemsElementTypeInput, SyncOrdersOrdersElementTypeInput, WriteSpeedafDataToSheetsTrackingDataElementTypeInput } from "./types.js";
   import { DefaultShopifyCustomerSelection, ShopifyCustomerManager } from "./models/ShopifyCustomer.js";
   import { DefaultShopifyGdprRequestSelection, ShopifyGdprRequestManager } from "./models/ShopifyGdprRequest.js";
   import { DefaultShopifyOrderSelection, ShopifyOrderManager } from "./models/ShopifyOrder.js";
@@ -24,6 +24,7 @@
   import { DefaultSpeedafConfigSelection, SpeedafConfigManager } from "./models/SpeedafConfig.js";
   import { DefaultCustomCitySelection, CustomCityManager } from "./models/CustomCity.js";
   import { DefaultDeliveryChargesSelection, DeliveryChargesManager } from "./models/DeliveryCharges.js";
+  import { DefaultBlacklistedPhoneSelection, BlacklistedPhoneManager } from "./models/BlacklistedPhone.js";
   export { DefaultShopifyCustomerSelection, type ShopifyCustomerRecord } from "./models/ShopifyCustomer.js";
   export { DefaultShopifyGdprRequestSelection, type ShopifyGdprRequestRecord } from "./models/ShopifyGdprRequest.js";
   export { DefaultShopifyOrderSelection, type ShopifyOrderRecord } from "./models/ShopifyOrder.js";
@@ -40,6 +41,7 @@
   export { DefaultSpeedafConfigSelection, type SpeedafConfigRecord } from "./models/SpeedafConfig.js";
   export { DefaultCustomCitySelection, type CustomCityRecord } from "./models/CustomCity.js";
   export { DefaultDeliveryChargesSelection, type DeliveryChargesRecord } from "./models/DeliveryCharges.js";
+  export { DefaultBlacklistedPhoneSelection, type BlacklistedPhoneRecord } from "./models/BlacklistedPhone.js";
 
   type BaseClientOptions = Omit<ApiClientOptions, "authenticationMode">;
   export type ClientOptions = BaseClientOptions &
@@ -92,6 +94,8 @@
      customCity: InternalModelManager;
      /** The internal API model manager for the deliveryCharges model */
      deliveryCharges: InternalModelManager;
+     /** The internal API model manager for the blacklistedPhone model */
+     blacklistedPhone: InternalModelManager;
    };
 
   const productionEnv = "production";
@@ -154,6 +158,38 @@ Note: When declaring authentication modes, you can only declare authentication m
     connection!: GadgetConnection;
     readonly options: ClientOptions | undefined;
 
+    /** Executes the applyDiscountsAndShipping global action. */
+    applyDiscountsAndShipping = buildGlobalAction(this, {
+                         type: 'globalAction',
+                         functionName: 'applyDiscountsAndShipping',
+                         operationName: 'applyDiscountsAndShipping',
+                         operationReturnType: 'ApplyDiscountsAndShipping',
+                         namespace: null,
+                         variables: {
+                           orderId: { required: false, type: 'String' },
+                           testMode: { required: false, type: 'Boolean' }
+                         }
+                       } as const) as unknown as {
+                       (variables?: {
+                                          orderId?: (Scalars['String'] | null) | null;
+                                          testMode?: (Scalars['Boolean'] | null) | null;
+                                        } | null): Promise<any>;
+                       type: 'globalAction';
+                       operationName: 'applyDiscountsAndShipping';
+                       operationReturnType: 'ApplyDiscountsAndShipping';
+                       namespace: null;
+                       typesImports: [ 'Scalars' ];
+                       variables: {
+                           orderId: { required: false, type: 'String' },
+                           testMode: { required: false, type: 'Boolean' }
+                         };
+                       variablesType: {
+                               orderId?: (Scalars['String'] | null) | null;
+                               testMode?: (Scalars['Boolean'] | null) | null;
+                             }
+                               | null
+                               | undefined;
+                     };
     /** Executes the applyShippingCostAbsorption global action. */
     applyShippingCostAbsorption = buildGlobalAction(this, {
                          type: 'globalAction',
@@ -257,6 +293,56 @@ Note: When declaring authentication modes, you can only declare authentication m
                        typesImports: [];
                        variables: {};
                        variablesType: Record<string, never>;
+                     };
+    /** Executes the deleteSenditRecord global action. */
+    deleteSenditRecord = buildGlobalAction(this, {
+                         type: 'globalAction',
+                         functionName: 'deleteSenditRecord',
+                         operationName: 'deleteSenditRecord',
+                         operationReturnType: 'DeleteSenditRecord',
+                         namespace: null,
+                         variables: {}
+                       } as const) as unknown as {
+                       (): Promise<any>;
+                       type: 'globalAction';
+                       operationName: 'deleteSenditRecord';
+                       operationReturnType: 'DeleteSenditRecord';
+                       namespace: null;
+                       typesImports: [];
+                       variables: {};
+                       variablesType: Record<string, never>;
+                     };
+    /** Executes the deleteSheetRowsByTrackingNumber global action. */
+    deleteSheetRowsByTrackingNumber = buildGlobalAction(this, {
+                         type: 'globalAction',
+                         functionName: 'deleteSheetRowsByTrackingNumber',
+                         operationName: 'deleteSheetRowsByTrackingNumber',
+                         operationReturnType: 'DeleteSheetRowsByTrackingNumber',
+                         namespace: null,
+                         variables: {
+                           trackingNumbers: { required: false, type: 'String' },
+                           shopId: { required: false, type: 'String' }
+                         }
+                       } as const) as unknown as {
+                       (variables?: {
+                                          trackingNumbers?: (Scalars['String'] | null) | null;
+                                          shopId?: (Scalars['String'] | null) | null;
+                                        } | null): Promise<any>;
+                       type: 'globalAction';
+                       operationName: 'deleteSheetRowsByTrackingNumber';
+                       operationReturnType: 'DeleteSheetRowsByTrackingNumber';
+                       namespace: null;
+                       typesImports: [ 'Scalars' ];
+                       variables: {
+                           trackingNumbers: { required: false, type: 'String' },
+                           shopId: { required: false, type: 'String' }
+                         };
+                       variablesType: {
+                               trackingNumbers?: (Scalars['String'] | null) | null;
+                               shopId?: (Scalars['String'] | null) | null;
+                             }
+                               | null
+                               | undefined;
                      };
     /** Executes the directOrderTest global action. */
     directOrderTest = buildGlobalAction(this, {
@@ -405,6 +491,24 @@ Note: When declaring authentication modes, you can only declare authentication m
                              }
                                | null
                                | undefined;
+                     };
+    /** Executes the listRecentOrders global action. */
+    listRecentOrders = buildGlobalAction(this, {
+                         type: 'globalAction',
+                         functionName: 'listRecentOrders',
+                         operationName: 'listRecentOrders',
+                         operationReturnType: 'ListRecentOrders',
+                         namespace: null,
+                         variables: {}
+                       } as const) as unknown as {
+                       (): Promise<any>;
+                       type: 'globalAction';
+                       operationName: 'listRecentOrders';
+                       operationReturnType: 'ListRecentOrders';
+                       namespace: null;
+                       typesImports: [];
+                       variables: {};
+                       variablesType: Record<string, never>;
                      };
     /** Executes the processBulkReturns global action. */
     processBulkReturns = buildGlobalAction(this, {
@@ -788,6 +892,24 @@ Note: When declaring authentication modes, you can only declare authentication m
                                | null
                                | undefined;
                      };
+    /** Executes the testSenditDeletion global action. */
+    testSenditDeletion = buildGlobalAction(this, {
+                         type: 'globalAction',
+                         functionName: 'testSenditDeletion',
+                         operationName: 'testSenditDeletion',
+                         operationReturnType: 'TestSenditDeletion',
+                         namespace: null,
+                         variables: {}
+                       } as const) as unknown as {
+                       (): Promise<any>;
+                       type: 'globalAction';
+                       operationName: 'testSenditDeletion';
+                       operationReturnType: 'TestSenditDeletion';
+                       namespace: null;
+                       typesImports: [];
+                       variables: {};
+                       variablesType: Record<string, never>;
+                     };
     /** Executes the testTrackingDetection global action. */
     testTrackingDetection = buildGlobalAction(this, {
                          type: 'globalAction',
@@ -1052,56 +1174,6 @@ Note: When declaring authentication modes, you can only declare authentication m
                                | null
                                | undefined;
                      };
-    /** Executes the listRecentOrders global action. */
-    listRecentOrders = buildGlobalAction(this, {
-                         type: 'globalAction',
-                         functionName: 'listRecentOrders',
-                         operationName: 'listRecentOrders',
-                         operationReturnType: 'ListRecentOrders',
-                         namespace: null,
-                         variables: {}
-                       } as const) as unknown as {
-                       (): Promise<any>;
-                       type: 'globalAction';
-                       operationName: 'listRecentOrders';
-                       operationReturnType: 'ListRecentOrders';
-                       namespace: null;
-                       typesImports: [];
-                       variables: {};
-                       variablesType: Record<string, never>;
-                     };
-    /** Executes the applyDiscountsAndShipping global action. */
-    applyDiscountsAndShipping = buildGlobalAction(this, {
-                         type: 'globalAction',
-                         functionName: 'applyDiscountsAndShipping',
-                         operationName: 'applyDiscountsAndShipping',
-                         operationReturnType: 'ApplyDiscountsAndShipping',
-                         namespace: null,
-                         variables: {
-                           orderId: { required: false, type: 'String' },
-                           testMode: { required: false, type: 'Boolean' }
-                         }
-                       } as const) as unknown as {
-                       (variables?: {
-                                          orderId?: (Scalars['String'] | null) | null;
-                                          testMode?: (Scalars['Boolean'] | null) | null;
-                                        } | null): Promise<any>;
-                       type: 'globalAction';
-                       operationName: 'applyDiscountsAndShipping';
-                       operationReturnType: 'ApplyDiscountsAndShipping';
-                       namespace: null;
-                       typesImports: [ 'Scalars' ];
-                       variables: {
-                           orderId: { required: false, type: 'String' },
-                           testMode: { required: false, type: 'Boolean' }
-                         };
-                       variablesType: {
-                               orderId?: (Scalars['String'] | null) | null;
-                               testMode?: (Scalars['Boolean'] | null) | null;
-                             }
-                               | null
-                               | undefined;
-                     };
     shopifyCustomer!: ShopifyCustomerManager;
     shopifyGdprRequest!: ShopifyGdprRequestManager;
     shopifyOrder!: ShopifyOrderManager;
@@ -1119,6 +1191,7 @@ Note: When declaring authentication modes, you can only declare authentication m
     speedafConfig!: SpeedafConfigManager;
     customCity!: CustomCityManager;
     deliveryCharges!: DeliveryChargesManager;
+    blacklistedPhone!: BlacklistedPhoneManager;
 
     /**
     * Namespaced object for accessing models via the Gadget internal APIs, which provide lower level and higher privileged operations directly against the database. Useful for maintenance operations like migrations or correcting broken data, and for implementing the high level actions.
@@ -1263,6 +1336,7 @@ Note: When declaring authentication modes, you can only declare authentication m
       this.speedafConfig = new SpeedafConfigManager(this.connection);
       this.customCity = new CustomCityManager(this.connection);
       this.deliveryCharges = new DeliveryChargesManager(this.connection);
+      this.blacklistedPhone = new BlacklistedPhoneManager(this.connection);
 
       this.internal = {
                         shopifyCustomer: new InternalModelManager("shopifyCustomer", this.connection, {"pluralApiIdentifier":"shopifyCustomers","hasAmbiguousIdentifiers":false,"namespace":[]}),
@@ -1281,6 +1355,7 @@ Note: When declaring authentication modes, you can only declare authentication m
                         speedafConfig: new InternalModelManager("speedafConfig", this.connection, {"pluralApiIdentifier":"speedafConfigs","hasAmbiguousIdentifiers":false,"namespace":[]}),
                         customCity: new InternalModelManager("customCity", this.connection, {"pluralApiIdentifier":"customCities","hasAmbiguousIdentifiers":false,"namespace":[]}),
                         deliveryCharges: new InternalModelManager("deliveryCharges", this.connection, {"pluralApiIdentifier":"deliveryChargess","hasAmbiguousIdentifiers":false,"namespace":[]}),
+                        blacklistedPhone: new InternalModelManager("blacklistedPhone", this.connection, {"pluralApiIdentifier":"blacklistedPhones","hasAmbiguousIdentifiers":false,"namespace":[]}),
                       };
     }
 
@@ -1539,7 +1614,7 @@ Note: When declaring authentication modes, you can only declare authentication m
     }
   }
 
-  (BambeCrmAppClient.prototype as any)[Symbol.for("gadget/modelRelationships")] = {"shopifyCustomer":{"orders":{"type":"HasMany","model":"shopifyOrder"},"lastOrder":{"type":"BelongsTo","model":"shopifyOrder"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyGdprRequest":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyOrder":{"customer":{"type":"BelongsTo","model":"shopifyCustomer"},"fulfillments":{"type":"HasMany","model":"shopifyFulfillment"},"shopifyShop":{"type":"BelongsTo","model":"shopifyShop"},"fulfillmentOrders":{"type":"HasMany","model":"shopifyFulfillmentOrder"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyShop":{"syncs":{"type":"HasMany","model":"shopifySync"},"gdprRequests":{"type":"HasMany","model":"shopifyGdprRequest"},"fulfillmentOrders":{"type":"HasMany","model":"shopifyFulfillmentOrder"},"fulfillmentServices":{"type":"HasMany","model":"shopifyFulfillmentService"},"fulfillments":{"type":"HasMany","model":"shopifyFulfillment"},"customers":{"type":"HasMany","model":"shopifyCustomer"},"orders":{"type":"HasMany","model":"shopifyOrder"},"productVariants":{"type":"HasMany","model":"shopifyProductVariant"},"products":{"type":"HasMany","model":"shopifyProduct"}},"shopifySync":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"googleSheetConfig":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"session":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyFulfillment":{"order":{"type":"BelongsTo","model":"shopifyOrder"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyFulfillmentOrder":{"order":{"type":"BelongsTo","model":"shopifyOrder"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyFulfillmentService":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyProduct":{"variants":{"type":"HasMany","model":"shopifyProductVariant"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyProductVariant":{"product":{"type":"BelongsTo","model":"shopifyProduct"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"senditConfig":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"speedafConfig":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"customCity":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"deliveryCharges":{"shop":{"type":"BelongsTo","model":"shopifyShop"}}};
+  (BambeCrmAppClient.prototype as any)[Symbol.for("gadget/modelRelationships")] = {"shopifyCustomer":{"orders":{"type":"HasMany","model":"shopifyOrder"},"lastOrder":{"type":"BelongsTo","model":"shopifyOrder"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyGdprRequest":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyOrder":{"customer":{"type":"BelongsTo","model":"shopifyCustomer"},"fulfillments":{"type":"HasMany","model":"shopifyFulfillment"},"shopifyShop":{"type":"BelongsTo","model":"shopifyShop"},"fulfillmentOrders":{"type":"HasMany","model":"shopifyFulfillmentOrder"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyShop":{"syncs":{"type":"HasMany","model":"shopifySync"},"gdprRequests":{"type":"HasMany","model":"shopifyGdprRequest"},"fulfillmentOrders":{"type":"HasMany","model":"shopifyFulfillmentOrder"},"fulfillmentServices":{"type":"HasMany","model":"shopifyFulfillmentService"},"fulfillments":{"type":"HasMany","model":"shopifyFulfillment"},"customers":{"type":"HasMany","model":"shopifyCustomer"},"orders":{"type":"HasMany","model":"shopifyOrder"},"productVariants":{"type":"HasMany","model":"shopifyProductVariant"},"products":{"type":"HasMany","model":"shopifyProduct"}},"shopifySync":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"googleSheetConfig":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"session":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyFulfillment":{"order":{"type":"BelongsTo","model":"shopifyOrder"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyFulfillmentOrder":{"order":{"type":"BelongsTo","model":"shopifyOrder"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyFulfillmentService":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyProduct":{"variants":{"type":"HasMany","model":"shopifyProductVariant"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"shopifyProductVariant":{"product":{"type":"BelongsTo","model":"shopifyProduct"},"shop":{"type":"BelongsTo","model":"shopifyShop"}},"senditConfig":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"speedafConfig":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"customCity":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"deliveryCharges":{"shop":{"type":"BelongsTo","model":"shopifyShop"}},"blacklistedPhone":{"shop":{"type":"BelongsTo","model":"shopifyShop"}}};
 
   /** Legacy export under the `Client` name for backwards compatibility. */
   export const Client: typeof BambeCrmAppClient = BambeCrmAppClient;
