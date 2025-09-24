@@ -50,7 +50,7 @@
   "gadget": {
     "applicationName": "bambe-crm-app",
     "environmentName": "Development",
-    "environmentVersion": "2613"
+    "environmentVersion": "2628"
   },
   "main": "./dist-cjs/index.js",
   "module": "./dist-esm/index.js",
@@ -87,5 +87,5 @@
       ]
     }
   },
-  "version": "1.116.0-development.2613"
+  "version": "1.117.0-development.2628"
 }

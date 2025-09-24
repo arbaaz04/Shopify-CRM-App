@@ -1160,13 +1160,35 @@ export const GoogleSheetConfigPage = () => {
     setPhoneError("");
 
     try {
-      // @ts-ignore - API type not available yet but works at runtime
-      const phones = await api.blacklistedPhone.findMany({
-        filter: { shop: { id: { equals: shop.id } } },
-        sort: [{ createdAt: "Descending" }]
-      });
+      const allPhones: any[] = [];
+      let lastId: string | undefined = undefined;
+      let hasMore = true;
 
-      setBlacklistedPhones(phones || []);
+      while (hasMore) {
+        // @ts-ignore - API type not available yet but works at runtime
+        const response = await api.blacklistedPhone.findMany({
+          filter: { 
+            shop: { id: { equals: shop.id } },
+            ...(lastId && { id: { greaterThan: lastId } })
+          },
+          sort: [{ id: "Ascending" }],
+          first: 250
+        });
+
+        // Check if response is an array or has data property
+        const phones = Array.isArray(response) ? response : response.data || [];
+        allPhones.push(...phones);
+
+        // If we got less than 250, we've reached the end
+        hasMore = phones.length === 250;
+
+        // Get the last id for next iteration
+        if (hasMore && phones.length > 0) {
+          lastId = phones[phones.length - 1].id;
+        }
+      }
+
+      setBlacklistedPhones(allPhones);
     } catch (error: any) {
       console.error("Error loading blacklisted phones:", error);
       setPhoneError(`Error loading blacklisted phones: ${error.message || "Unknown error"}`);

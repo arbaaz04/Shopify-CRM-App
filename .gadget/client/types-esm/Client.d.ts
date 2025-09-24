@@ -2,7 +2,7 @@ import type { OperationContext } from "@urql/core";
 import { GadgetConnection, GadgetTransaction, InternalModelManager, ActionFunctionMetadata, GlobalActionFunction, BackgroundActionHandle } from "@gadgetinc/api-client-core";
 import type { ClientOptions as ApiClientOptions, AnyClient, AuthenticationModeOptions, EnqueueBackgroundActionOptions, AnyActionFunction } from '@gadgetinc/api-client-core';
 import type { DocumentNode } from 'graphql';
-import { Scalars, CalculateRefundLineItemsElementTypeInput, ProcessBulkReturnsOrderSelectionsElementTypeInput, ProcessOrderReturnLineItemsElementTypeInput, SyncOrdersOrdersElementTypeInput, WriteSpeedafDataToSheetsTrackingDataElementTypeInput } from "./types.js";
+import { Scalars, CalculateRefundLineItemsElementTypeInput, ProcessBulkReturnsOrderSelectionsElementTypeInput, ProcessOrderReturnLineItemsElementTypeInput, SyncOrdersOrdersElementTypeInput, WriteSpeedafDataToSheetsTrackingDataElementTypeInput, ProcessBulkReturnsOldOrderSelectionsElementTypeInput, ProcessOrderReturnOldLineItemsElementTypeInput } from "./types.js";
 import { ShopifyCustomerManager } from "./models/ShopifyCustomer.js";
 import { ShopifyGdprRequestManager } from "./models/ShopifyGdprRequest.js";
 import { ShopifyOrderManager } from "./models/ShopifyOrder.js";
@@ -906,6 +906,88 @@ export declare class BambeCrmAppClient implements AnyClient {
             shopId?: (Scalars["String"] | null) | null;
             mutation?: (Scalars["String"] | null) | null;
             variables?: (Scalars["JSONObject"] | null) | null;
+        } | null | undefined;
+    };
+    /** Executes the processBulkReturns_old global action. */
+    processBulkReturns_old: {
+        (variables?: {
+            orderSelections?: (ProcessBulkReturnsOldOrderSelectionsElementTypeInput)[];
+            shopId?: (Scalars["String"] | null) | null;
+        } | null): Promise<any>;
+        type: "globalAction";
+        operationName: "processBulkReturns_old";
+        operationReturnType: "ProcessBulkReturnsOld";
+        namespace: null;
+        typesImports: ["ProcessBulkReturnsOldOrderSelectionsElementTypeInput", "Scalars"];
+        variables: {
+            orderSelections: {
+                required: false;
+                type: "[ProcessBulkReturnsOldOrderSelectionsElementTypeInput!]";
+            };
+            shopId: {
+                required: false;
+                type: "String";
+            };
+        };
+        variablesType: {
+            orderSelections?: (ProcessBulkReturnsOldOrderSelectionsElementTypeInput)[];
+            shopId?: (Scalars["String"] | null) | null;
+        } | null | undefined;
+    };
+    /** Executes the processOrderReturn_old global action. */
+    processOrderReturn_old: {
+        (variables?: {
+            orderId?: (Scalars["String"] | null) | null;
+            shopId?: (Scalars["String"] | null) | null;
+            lineItems?: (ProcessOrderReturnOldLineItemsElementTypeInput)[];
+            refundShipping?: (Scalars["Boolean"] | null) | null;
+            reason?: (Scalars["String"] | null) | null;
+            notify?: (Scalars["Boolean"] | null) | null;
+            skipRefund?: (Scalars["Boolean"] | null) | null;
+        } | null): Promise<any>;
+        type: "globalAction";
+        operationName: "processOrderReturn_old";
+        operationReturnType: "ProcessOrderReturnOld";
+        namespace: null;
+        typesImports: ["ProcessOrderReturnOldLineItemsElementTypeInput", "Scalars"];
+        variables: {
+            orderId: {
+                required: false;
+                type: "String";
+            };
+            shopId: {
+                required: false;
+                type: "String";
+            };
+            lineItems: {
+                required: false;
+                type: "[ProcessOrderReturnOldLineItemsElementTypeInput!]";
+            };
+            refundShipping: {
+                required: false;
+                type: "Boolean";
+            };
+            reason: {
+                required: false;
+                type: "String";
+            };
+            notify: {
+                required: false;
+                type: "Boolean";
+            };
+            skipRefund: {
+                required: false;
+                type: "Boolean";
+            };
+        };
+        variablesType: {
+            orderId?: (Scalars["String"] | null) | null;
+            shopId?: (Scalars["String"] | null) | null;
+            lineItems?: (ProcessOrderReturnOldLineItemsElementTypeInput)[];
+            refundShipping?: (Scalars["Boolean"] | null) | null;
+            reason?: (Scalars["String"] | null) | null;
+            notify?: (Scalars["Boolean"] | null) | null;
+            skipRefund?: (Scalars["Boolean"] | null) | null;
         } | null | undefined;
     };
     shopifyCustomer: ShopifyCustomerManager;

@@ -1,6 +1,6 @@
 {
   "name": "@gadget-client/bambe-crm-app",
-  "version": "1.116.0-development.2613",
+  "version": "1.117.0-development.2628",
   "files": [
     "dist-cjs",
     "dist-esm",
@@ -41,6 +41,6 @@
   "gadget": {
     "applicationName": "bambe-crm-app",
     "environmentName": "Development",
-    "environmentVersion": "2613"
+    "environmentVersion": "2628"
   }
 }

@@ -173,10 +173,10 @@ export type InternalDeliveryChargesRecord = Scalars["JSONObject"];
 export type InternalBlacklistedPhoneRecord = Scalars["JSONObject"];
 
 
-export type BackgroundActionResult = AvailableApplyDiscountsAndShippingResultSelection | AvailableApplyShippingCostAbsorptionResultSelection | AvailableCalculateRefundResultSelection | AvailableCreateSenditOrderResultSelection | AvailableDebugOrderShippingResultSelection | AvailableDeleteSenditRecordResultSelection | AvailableDeleteSheetRowsByTrackingNumberResultSelection | AvailableDirectOrderTestResultSelection | AvailableExtractOrderSKUsResultSelection | AvailableGetCustomCitiesResultSelection | AvailableGetDeliveryChargesResultSelection | AvailableGetSenditDistrictIdResultSelection | AvailableGetShippingCostResultSelection | AvailableListRecentOrdersResultSelection | AvailableProcessBulkReturnsResultSelection | AvailableProcessOrderReturnResultSelection | AvailableProcessSpeedafAPIResultSelection | AvailableRemoveOrderFromSheetsResultSelection | AvailableSearchBulkOrdersForReturnResultSelection | AvailableSearchOrderForReturnResultSelection | AvailableStandardizeMoroccanCityResultSelection | AvailableSyncOrdersResultSelection | AvailableTestGoogleAuthResultSelection | AvailableTestLocationQueryResultSelection | AvailableTestSenditConnectionResultSelection | AvailableTestSenditDeletionResultSelection | AvailableTestTrackingDetectionResultSelection | AvailableTestWriteToSheetResultSelection | AvailableTrackSpeedafOrdersResultSelection | AvailableUpdateDeliveryChargeResultSelection | AvailableUpdateReferenceTrackingResultSelection | AvailableWriteBatchOrdersToSheetsResultSelection | AvailableWriteSpeedafDataToSheetsResultSelection | AvailableWriteToShopifyResultSelection | AvailableUpdateShopifyOrderResultSelection | AvailableAbortShopifySyncResultSelection | AvailableCompleteShopifySyncResultSelection | AvailableErrorShopifySyncResultSelection | AvailableRunShopifySyncResultSelection | AvailableCreateGoogleSheetConfigResultSelection | AvailableUpdateGoogleSheetConfigResultSelection | AvailableDeleteGoogleSheetConfigResultSelection | AvailableCreateSenditConfigResultSelection | AvailableUpdateSenditConfigResultSelection | AvailableDeleteSenditConfigResultSelection | AvailableCreateSpeedafConfigResultSelection | AvailableUpdateSpeedafConfigResultSelection | AvailableDeleteSpeedafConfigResultSelection | AvailableFindFirstSpeedafConfigResultSelection | AvailableCreateCustomCityResultSelection | AvailableUpdateCustomCityResultSelection | AvailableDeleteCustomCityResultSelection | AvailableCreateDeliveryChargesResultSelection | AvailableUpdateDeliveryChargesResultSelection | AvailableDeleteDeliveryChargesResultSelection | AvailableCreateBlacklistedPhoneResultSelection | AvailableDeleteBlacklistedPhoneResultSelection;
+export type BackgroundActionResult = AvailableApplyDiscountsAndShippingResultSelection | AvailableApplyShippingCostAbsorptionResultSelection | AvailableCalculateRefundResultSelection | AvailableCreateSenditOrderResultSelection | AvailableDebugOrderShippingResultSelection | AvailableDeleteSenditRecordResultSelection | AvailableDeleteSheetRowsByTrackingNumberResultSelection | AvailableDirectOrderTestResultSelection | AvailableExtractOrderSKUsResultSelection | AvailableGetCustomCitiesResultSelection | AvailableGetDeliveryChargesResultSelection | AvailableGetSenditDistrictIdResultSelection | AvailableGetShippingCostResultSelection | AvailableListRecentOrdersResultSelection | AvailableProcessBulkReturnsResultSelection | AvailableProcessOrderReturnResultSelection | AvailableProcessSpeedafAPIResultSelection | AvailableRemoveOrderFromSheetsResultSelection | AvailableSearchBulkOrdersForReturnResultSelection | AvailableSearchOrderForReturnResultSelection | AvailableStandardizeMoroccanCityResultSelection | AvailableSyncOrdersResultSelection | AvailableTestGoogleAuthResultSelection | AvailableTestLocationQueryResultSelection | AvailableTestSenditConnectionResultSelection | AvailableTestSenditDeletionResultSelection | AvailableTestTrackingDetectionResultSelection | AvailableTestWriteToSheetResultSelection | AvailableTrackSpeedafOrdersResultSelection | AvailableUpdateDeliveryChargeResultSelection | AvailableUpdateReferenceTrackingResultSelection | AvailableWriteBatchOrdersToSheetsResultSelection | AvailableWriteSpeedafDataToSheetsResultSelection | AvailableWriteToShopifyResultSelection | AvailableProcessBulkReturnsOldResultSelection | AvailableProcessOrderReturnOldResultSelection | AvailableUpdateShopifyOrderResultSelection | AvailableAbortShopifySyncResultSelection | AvailableCompleteShopifySyncResultSelection | AvailableErrorShopifySyncResultSelection | AvailableRunShopifySyncResultSelection | AvailableCreateGoogleSheetConfigResultSelection | AvailableUpdateGoogleSheetConfigResultSelection | AvailableDeleteGoogleSheetConfigResultSelection | AvailableCreateSenditConfigResultSelection | AvailableUpdateSenditConfigResultSelection | AvailableDeleteSenditConfigResultSelection | AvailableCreateSpeedafConfigResultSelection | AvailableUpdateSpeedafConfigResultSelection | AvailableDeleteSpeedafConfigResultSelection | AvailableFindFirstSpeedafConfigResultSelection | AvailableCreateCustomCityResultSelection | AvailableUpdateCustomCityResultSelection | AvailableDeleteCustomCityResultSelection | AvailableCreateDeliveryChargesResultSelection | AvailableUpdateDeliveryChargesResultSelection | AvailableDeleteDeliveryChargesResultSelection | AvailableCreateBlacklistedPhoneResultSelection | AvailableDeleteBlacklistedPhoneResultSelection;
 
 
-export type AvailableBackgroundActionResultSelection = ApplyDiscountsAndShippingResult | ApplyShippingCostAbsorptionResult | CalculateRefundResult | CreateSenditOrderResult | DebugOrderShippingResult | DeleteSenditRecordResult | DeleteSheetRowsByTrackingNumberResult | DirectOrderTestResult | ExtractOrderSKUsResult | GetCustomCitiesResult | GetDeliveryChargesResult | GetSenditDistrictIdResult | GetShippingCostResult | ListRecentOrdersResult | ProcessBulkReturnsResult | ProcessOrderReturnResult | ProcessSpeedafAPIResult | RemoveOrderFromSheetsResult | SearchBulkOrdersForReturnResult | SearchOrderForReturnResult | StandardizeMoroccanCityResult | SyncOrdersResult | TestGoogleAuthResult | TestLocationQueryResult | TestSenditConnectionResult | TestSenditDeletionResult | TestTrackingDetectionResult | TestWriteToSheetResult | TrackSpeedafOrdersResult | UpdateDeliveryChargeResult | UpdateReferenceTrackingResult | WriteBatchOrdersToSheetsResult | WriteSpeedafDataToSheetsResult | WriteToShopifyResult | UpdateShopifyOrderResult | AbortShopifySyncResult | CompleteShopifySyncResult | ErrorShopifySyncResult | RunShopifySyncResult | CreateGoogleSheetConfigResult | UpdateGoogleSheetConfigResult | DeleteGoogleSheetConfigResult | CreateSenditConfigResult | UpdateSenditConfigResult | DeleteSenditConfigResult | CreateSpeedafConfigResult | UpdateSpeedafConfigResult | DeleteSpeedafConfigResult | FindFirstSpeedafConfigResult | CreateCustomCityResult | UpdateCustomCityResult | DeleteCustomCityResult | CreateDeliveryChargesResult | UpdateDeliveryChargesResult | DeleteDeliveryChargesResult | CreateBlacklistedPhoneResult | DeleteBlacklistedPhoneResult;
+export type AvailableBackgroundActionResultSelection = ApplyDiscountsAndShippingResult | ApplyShippingCostAbsorptionResult | CalculateRefundResult | CreateSenditOrderResult | DebugOrderShippingResult | DeleteSenditRecordResult | DeleteSheetRowsByTrackingNumberResult | DirectOrderTestResult | ExtractOrderSKUsResult | GetCustomCitiesResult | GetDeliveryChargesResult | GetSenditDistrictIdResult | GetShippingCostResult | ListRecentOrdersResult | ProcessBulkReturnsResult | ProcessOrderReturnResult | ProcessSpeedafAPIResult | RemoveOrderFromSheetsResult | SearchBulkOrdersForReturnResult | SearchOrderForReturnResult | StandardizeMoroccanCityResult | SyncOrdersResult | TestGoogleAuthResult | TestLocationQueryResult | TestSenditConnectionResult | TestSenditDeletionResult | TestTrackingDetectionResult | TestWriteToSheetResult | TrackSpeedafOrdersResult | UpdateDeliveryChargeResult | UpdateReferenceTrackingResult | WriteBatchOrdersToSheetsResult | WriteSpeedafDataToSheetsResult | WriteToShopifyResult | ProcessBulkReturnsOldResult | ProcessOrderReturnOldResult | UpdateShopifyOrderResult | AbortShopifySyncResult | CompleteShopifySyncResult | ErrorShopifySyncResult | RunShopifySyncResult | CreateGoogleSheetConfigResult | UpdateGoogleSheetConfigResult | DeleteGoogleSheetConfigResult | CreateSenditConfigResult | UpdateSenditConfigResult | DeleteSenditConfigResult | CreateSpeedafConfigResult | UpdateSpeedafConfigResult | DeleteSpeedafConfigResult | FindFirstSpeedafConfigResult | CreateCustomCityResult | UpdateCustomCityResult | DeleteCustomCityResult | CreateDeliveryChargesResult | UpdateDeliveryChargesResult | DeleteDeliveryChargesResult | CreateBlacklistedPhoneResult | DeleteBlacklistedPhoneResult;
 
 
 
@@ -3813,6 +3813,36 @@ export type WriteSpeedafDataToSheetsTrackingDataElementTypeInput = {
   trackingNumber?: (Scalars['String'] | null) | null;
 
   latestStatus?: (Scalars['String'] | null) | null;
+};
+
+
+
+export type ProcessBulkReturnsOldOrderSelectionsElementTypeInput = {
+
+  orderId?: (Scalars['String'] | null) | null;
+
+  /** An array of ProcessBulkReturnsOldOrderSelectionsElementTypeSelectedItemsElementTypeInputs */
+  selectedItems?: (ProcessBulkReturnsOldOrderSelectionsElementTypeSelectedItemsElementTypeInput)[];
+};
+
+
+
+export type ProcessBulkReturnsOldOrderSelectionsElementTypeSelectedItemsElementTypeInput = {
+
+  lineItemId?: (Scalars['String'] | null) | null;
+
+  quantity?: (Scalars['Float'] | null) | null;
+};
+
+
+
+export type ProcessOrderReturnOldLineItemsElementTypeInput = {
+
+  lineItemId?: (Scalars['String'] | null) | null;
+
+  quantity?: (Scalars['Float'] | null) | null;
+
+  reason?: (Scalars['String'] | null) | null;
 };
 
 
@@ -10502,6 +10532,10 @@ export type Mutation = {
 
   writeToShopify: (WriteToShopifyResult | null);
 
+  processBulkReturns_old: (ProcessBulkReturnsOldResult | null);
+
+  processOrderReturn_old: (ProcessOrderReturnOldResult | null);
+
   shopifyConnection: (ShopifyConnectionMutations | null);
 
   background: BackgroundMutations;
@@ -10698,6 +10732,10 @@ export type AvailableMutationSelection = {
   writeSpeedafDataToSheets?: AvailableWriteSpeedafDataToSheetsResultSelection;
 
   writeToShopify?: AvailableWriteToShopifyResultSelection;
+
+  processBulkReturns_old?: AvailableProcessBulkReturnsOldResultSelection;
+
+  processOrderReturn_old?: AvailableProcessOrderReturnOldResultSelection;
 
   shopifyConnection?: AvailableShopifyConnectionMutationsSelection;
 
@@ -13085,6 +13123,58 @@ export type AvailableWriteToShopifyResultSelection = {
 
 
 
+export type ProcessBulkReturnsOldResult = {
+
+  __typename: 'ProcessBulkReturnsOldResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  result: (Scalars['JSON'] | null);
+};
+
+
+
+export type AvailableProcessBulkReturnsOldResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  result?: boolean | null | undefined;
+};
+
+
+
+export type ProcessOrderReturnOldResult = {
+
+  __typename: 'ProcessOrderReturnOldResult';
+
+  success: Scalars['Boolean'];
+
+  errors: ExecutionError[];
+
+  result: (Scalars['JSON'] | null);
+};
+
+
+
+export type AvailableProcessOrderReturnOldResultSelection = {
+
+  __typename?: boolean | null | undefined;
+
+  success?: boolean | null | undefined;
+
+  errors?: AvailableExecutionErrorSelection;
+
+  result?: boolean | null | undefined;
+};
+
+
+
 export type ShopifyConnectionMutations = {
 
   __typename: 'ShopifyConnectionMutations';
@@ -13317,6 +13407,10 @@ export type BackgroundMutations = {
 
   writeToShopify: EnqueueBackgroundActionResult;
 
+  processBulkReturns_old: EnqueueBackgroundActionResult;
+
+  processOrderReturn_old: EnqueueBackgroundActionResult;
+
   cancel: BackgroundCancelBackgroundActionResult;
 
   bulkCancel: BackgroundBulkCancelBackgroundActionResult;
@@ -13511,6 +13605,10 @@ export type AvailableBackgroundMutationsSelection = {
   writeSpeedafDataToSheets?: AvailableEnqueueBackgroundActionResultSelection;
 
   writeToShopify?: AvailableEnqueueBackgroundActionResultSelection;
+
+  processBulkReturns_old?: AvailableEnqueueBackgroundActionResultSelection;
+
+  processOrderReturn_old?: AvailableEnqueueBackgroundActionResultSelection;
 
   cancel?: AvailableBackgroundCancelBackgroundActionResultSelection;
 
@@ -14022,6 +14120,10 @@ export type InternalMutations = {
 
   triggerWriteToShopify: (WriteToShopifyResult | null);
 
+  triggerProcessBulkReturnsOld: (ProcessBulkReturnsOldResult | null);
+
+  triggerProcessOrderReturnOld: (ProcessOrderReturnOldResult | null);
+
   /** @deprecated Use background.cancelBackgroundAction */
   cancelBackgroundAction: CancelBackgroundActionResult;
 
@@ -14413,6 +14515,10 @@ export type AvailableInternalMutationsSelection = {
   triggerWriteSpeedafDataToSheets?: AvailableWriteSpeedafDataToSheetsResultSelection;
 
   triggerWriteToShopify?: AvailableWriteToShopifyResultSelection;
+
+  triggerProcessBulkReturnsOld?: AvailableProcessBulkReturnsOldResultSelection;
+
+  triggerProcessOrderReturnOld?: AvailableProcessOrderReturnOldResultSelection;
 
   /** @deprecated Use background.cancelBackgroundAction */
   cancelBackgroundAction?: AvailableCancelBackgroundActionResultSelection;

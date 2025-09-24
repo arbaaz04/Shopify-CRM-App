@@ -474,10 +474,45 @@ class BambeCrmAppClient {
         variables: { required: false, type: "JSONObject" }
       }
     });
+    /** Executes the processBulkReturns_old global action. */
+    this.processBulkReturns_old = buildGlobalAction(this, {
+      type: "globalAction",
+      functionName: "processBulkReturns_old",
+      operationName: "processBulkReturns_old",
+      operationReturnType: "ProcessBulkReturnsOld",
+      namespace: null,
+      variables: {
+        orderSelections: {
+          required: false,
+          type: "[ProcessBulkReturnsOldOrderSelectionsElementTypeInput!]"
+        },
+        shopId: { required: false, type: "String" }
+      }
+    });
+    /** Executes the processOrderReturn_old global action. */
+    this.processOrderReturn_old = buildGlobalAction(this, {
+      type: "globalAction",
+      functionName: "processOrderReturn_old",
+      operationName: "processOrderReturn_old",
+      operationReturnType: "ProcessOrderReturnOld",
+      namespace: null,
+      variables: {
+        orderId: { required: false, type: "String" },
+        shopId: { required: false, type: "String" },
+        lineItems: {
+          required: false,
+          type: "[ProcessOrderReturnOldLineItemsElementTypeInput!]"
+        },
+        refundShipping: { required: false, type: "Boolean" },
+        reason: { required: false, type: "String" },
+        notify: { required: false, type: "Boolean" },
+        skipRefund: { required: false, type: "Boolean" }
+      }
+    });
     /**
      * The list of environments with a customized API root endpoint
      */
-    this.apiRoots = { "development": "https://bambe-crm-app--development.gadget.app/", "production": "https://bambe-crm-app.gadget.app/" };
+    this.apiRoots = { "production": "https://bambe-crm-app.gadget.app/", "development": "https://bambe-crm-app--development.gadget.app/" };
     this.applicationId = "222569";
     /** Start a transaction against the Gadget backend which will atomically commit (or rollback). */
     this.transaction = async (callback) => {

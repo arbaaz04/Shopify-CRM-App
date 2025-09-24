@@ -166,6 +166,10 @@ import { WriteSpeedafDataToSheetsGlobalActionContext } from "./global-actions.js
 
 import { WriteToShopifyGlobalActionContext } from "./global-actions.js";
 
+import { ProcessBulkReturnsOldGlobalActionContext } from "./global-actions.js";
+
+import { ProcessOrderReturnOldGlobalActionContext } from "./global-actions.js";
+
 
 
 
@@ -664,5 +668,17 @@ declare module "../../../api/actions/writeSpeedafDataToSheets" {
 declare module "../../../api/actions/writeToShopify" {
   export type ActionRun = (params: WriteToShopifyGlobalActionContext) => Promise<any>;
   export type ActionOnSuccess = (params: WriteToShopifyGlobalActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/actions/processBulkReturns_old" {
+  export type ActionRun = (params: ProcessBulkReturnsOldGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: ProcessBulkReturnsOldGlobalActionContext) => Promise<any>;
+}
+
+
+declare module "../../../api/actions/processOrderReturn_old" {
+  export type ActionRun = (params: ProcessOrderReturnOldGlobalActionContext) => Promise<any>;
+  export type ActionOnSuccess = (params: ProcessOrderReturnOldGlobalActionContext) => Promise<any>;
 }
 

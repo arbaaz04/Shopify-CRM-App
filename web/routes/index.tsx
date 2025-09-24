@@ -162,18 +162,41 @@ export const IndexPage = () => {
     try {
       console.log("🚫 [fetchBlacklistedPhones] Fetching blacklisted phone numbers...");
       
-      const response = await api.blacklistedPhone.findMany({
-        filter: { shop: { id: { equals: shop.id } } },
-        select: { phone: true }
-      });
+      const allPhones: any[] = [];
+      let lastId: string | undefined = undefined;
+      let hasMore = true;
+
+      while (hasMore) {
+        const response = await api.blacklistedPhone.findMany({
+          filter: { 
+            shop: { id: { equals: shop.id } },
+            ...(lastId && { id: { greaterThan: lastId } })
+          },
+          select: { phone: true },
+          sort: [{ id: "Ascending" }],
+          first: 250
+        });
+
+        // Check if response is an array or has data property
+        const phones = Array.isArray(response) ? response : response.data || [];
+        allPhones.push(...phones);
+
+        // If we got less than 250, we've reached the end
+        hasMore = phones.length === 250;
+
+        // Get the last id for next iteration
+        if (hasMore && phones.length > 0) {
+          lastId = phones[phones.length - 1].id;
+        }
+      }
       
-      console.log(`🚫 [fetchBlacklistedPhones] Raw response:`, response);
-      console.log(`🚫 [fetchBlacklistedPhones] First item:`, response[0]);
+      console.log(`🚫 [fetchBlacklistedPhones] Raw response:`, allPhones);
+      console.log(`🚫 [fetchBlacklistedPhones] First item:`, allPhones[0]);
       
       // Convert to Set for O(1) lookup performance
       const phoneSet = new Set<string>();
       
-      response.forEach(item => {
+      allPhones.forEach(item => {
         if (item.phone) {
           // Add original version
           phoneSet.add(item.phone);

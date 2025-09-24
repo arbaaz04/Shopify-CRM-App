@@ -806,3 +806,64 @@ export interface WriteToShopifyGlobalActionContext extends AmbientContext {
 	*/
 	context: WriteToShopifyGlobalActionContext;
 }
+/** Context of the `processBulkReturns_old` action. */
+export interface ProcessBulkReturnsOldGlobalActionContext extends AmbientContext {
+	/**
+	* @deprecated Use 'returnType' instead.
+	* Useful for returning data from this action by setting `scope.result`.
+	*/
+	scope: ActionExecutionScope;
+	/**
+	* An object specifying the trigger to this action (e.g. API call, custom params).
+	*/
+	params: {
+		orderSelections?: {
+			orderId?: string
+			selectedItems?: {
+				lineItemId?: string
+				quantity?: number
+			}[]
+		}[]
+		shopId?: string
+	};
+	/**
+	* An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+	*/
+	trigger: TriggerWithType<"api"> | TriggerWithType<"background-action">;
+	/**
+	* @private The context of this action.
+	*/
+	context: ProcessBulkReturnsOldGlobalActionContext;
+}
+/** Context of the `processOrderReturn_old` action. */
+export interface ProcessOrderReturnOldGlobalActionContext extends AmbientContext {
+	/**
+	* @deprecated Use 'returnType' instead.
+	* Useful for returning data from this action by setting `scope.result`.
+	*/
+	scope: ActionExecutionScope;
+	/**
+	* An object specifying the trigger to this action (e.g. API call, custom params).
+	*/
+	params: {
+		orderId?: string
+		shopId?: string
+		lineItems?: {
+			lineItemId?: string
+			quantity?: number
+			reason?: string
+		}[]
+		refundShipping?: boolean
+		reason?: string
+		notify?: boolean
+		skipRefund?: boolean
+	};
+	/**
+	* An object specifying the trigger to this action (e.g. api call, scheduler etc.)
+	*/
+	trigger: TriggerWithType<"api"> | TriggerWithType<"background-action">;
+	/**
+	* @private The context of this action.
+	*/
+	context: ProcessOrderReturnOldGlobalActionContext;
+}

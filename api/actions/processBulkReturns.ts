@@ -116,7 +116,7 @@ export const run = async ({ params, api, logger, connections }: ActionContext) =
           refundShipping: false,
           reason: "Bulk return processing",
           notify: false, // Don't notify customers for bulk processing
-          skipRefund: isPaymentPending // Skip refund for payment pending orders
+          inventoryOnlyReturn: isPaymentPending // Use inventory-only return for payment pending orders
         });
 
         if (returnResult.success) {

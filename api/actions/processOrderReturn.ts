@@ -353,9 +353,43 @@ export const run = async ({ params, api, logger, connections }: ActionContext) =
       };
     }
 
+    // Get order to check financial status and automatically handle payment pending orders
+    const order = await api.shopifyOrder.findFirst({
+      filter: { id: { equals: orderId } }
+    });
+
+    if (!order) {
+      return {
+        success: false,
+        error: "Order not found"
+      };
+    }
+
+    const financialStatus = order.financialStatus || '';
+    const isPaymentPending = financialStatus === 'PENDING' ||
+                             financialStatus === 'PAYMENT_PENDING' ||
+                             financialStatus === 'pending' ||
+                             financialStatus === 'payment_pending' ||
+                             financialStatus === 'AUTHORIZED' ||
+                             financialStatus === 'authorized';
+
+    // If payment is pending and no explicit flags are set, automatically handle as skip refund
+    let effectiveSkipRefund = skipRefund;
+    let effectiveInventoryOnlyReturn = inventoryOnlyReturn;
+    
+    if (isPaymentPending && !skipRefund && !inventoryOnlyReturn) {
+      effectiveSkipRefund = true;
+      logger.info('Automatically setting skipRefund for payment pending order', { 
+        orderId, 
+        financialStatus,
+        originalSkipRefund: skipRefund,
+        originalInventoryOnlyReturn: inventoryOnlyReturn
+      });
+    }
+
     // First, calculate the refund to validate everything (unless skipping refund or doing inventory-only return)
     let calculationResult;
-    if (!skipRefund && !inventoryOnlyReturn) {
+    if (!effectiveSkipRefund && !effectiveInventoryOnlyReturn) {
       calculationResult = await api.calculateRefund({
         orderId,
         shopId,
@@ -386,7 +420,7 @@ export const run = async ({ params, api, logger, connections }: ActionContext) =
         }
         return calculationResult;
       }
-    } else if (inventoryOnlyReturn) {
+    } else if (effectiveInventoryOnlyReturn) {
       // For inventory-only returns, we need to calculate available refund amount but proceed with limited refund
       logger.info('Processing inventory-only return - calculating available refund amount', { orderId });
       
@@ -512,11 +546,11 @@ export const run = async ({ params, api, logger, connections }: ActionContext) =
 
     // Ensure we have a valid calculation result (except for skipRefund or failed inventory-only returns)
     if (!calculationResult || !calculationResult.calculation) {
-      if (skipRefund || inventoryOnlyReturn) {
+      if (effectiveSkipRefund || effectiveInventoryOnlyReturn) {
         logger.info('No calculation result for skipRefund or inventoryOnlyReturn - proceeding with sheets update only', { 
           orderId, 
-          skipRefund, 
-          inventoryOnlyReturn 
+          effectiveSkipRefund, 
+          effectiveInventoryOnlyReturn 
         });
         // We'll handle this case in the sheets update section below
       } else {
@@ -589,7 +623,7 @@ export const run = async ({ params, api, logger, connections }: ActionContext) =
     let actualRefundAmount = 0;
     let effectiveRefundAmount = 0;
     let refundNote = reason;
-    let shouldSkipRefund = skipRefund;
+    let shouldSkipRefund = effectiveSkipRefund;
     let currency = 'MAD'; // Default currency, will be updated from calculation if available
     let refundLineItems: any[] = []; // Will store line items for refund processing
     
@@ -690,7 +724,7 @@ export const run = async ({ params, api, logger, connections }: ActionContext) =
       }
     }
 
-    if (!shouldSkipRefund && !inventoryOnlyReturn) {
+    if (!shouldSkipRefund && !effectiveInventoryOnlyReturn) {
       // Normal refund processing
       if (!calculation) {
         return {
@@ -708,7 +742,7 @@ export const run = async ({ params, api, logger, connections }: ActionContext) =
         refundAmount: effectiveRefundAmount,
         lineItemsCount: refundLineItems.length
       });
-    } else if (inventoryOnlyReturn && calculation) {
+    } else if (effectiveInventoryOnlyReturn && calculation) {
       // For inventory-only returns with successful calculation, refund available amount
       effectiveRefundAmount = calculation.remainingRefundable > 0 ? calculation.remainingRefundable : 0;
       refundNote = `${reason} (Inventory-only return: refunded available amount of ${currency} ${effectiveRefundAmount.toFixed(2)})`;
@@ -734,7 +768,7 @@ export const run = async ({ params, api, logger, connections }: ActionContext) =
         // Skip refund processing but continue with inventory update
         shouldSkipRefund = true;
       }
-    } else if (inventoryOnlyReturn && !calculation) {
+    } else if (effectiveInventoryOnlyReturn && !calculation) {
       // For inventory-only returns without calculation, skip refund but update inventory
       logger.info('Processing inventory-only return without refund (no calculation available)', { orderId });
       shouldSkipRefund = true;
@@ -1134,7 +1168,7 @@ export const run = async ({ params, api, logger, connections }: ActionContext) =
       message: shouldSkipRefund
         ? `Return processed successfully. Items have been automatically restocked to inventory.`
         : `Refund of ${actualRefundAmount.toFixed(2)} ${finalCurrency} processed successfully. Items have been automatically restocked to inventory.`,
-      isInventoryOnly: inventoryOnlyReturn || (shouldSkipRefund && actualRefundAmount === 0),
+      isInventoryOnly: effectiveInventoryOnlyReturn || (shouldSkipRefund && actualRefundAmount === 0),
       refund: createdRefund ? {
         id: createdRefund.id,
         orderId,
